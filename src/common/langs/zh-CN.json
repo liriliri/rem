@@ -1,0 +1,18 @@
+{
+  "hideRin": "隐藏 RIN",
+  "hideOthers": "隐藏其他",
+  "showAll": "显示全部",
+  "quitRin": "退出 RIN",
+  "aboutRin": "关于 RIN",
+  "edit": "编辑",
+  "cut": "剪切",
+  "copy": "复制",
+  "paste": "粘贴",
+  "delete": "删除",
+  "selectAll": "全选",
+  "help": "帮助",
+  "toggleDevtools": "切换开发人员工具",
+  "reportIssue": "报告问题",
+  "checkUpdate": "检查更新",
+  "donate": "捐赠"
+}

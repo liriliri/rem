@@ -1,0 +1,18 @@
+{
+  "hideRin": "Hide RIN",
+  "hideOthers": "Hide Others",
+  "showAll": "Show All",
+  "quitRin": "Quit RIN",
+  "aboutRin": "About RIN",
+  "edit": "Edit",
+  "cut": "Cut",
+  "copy": "Copy",
+  "paste": "Paste",
+  "delete": "Delete",
+  "selectAll": "Select All",
+  "help": "Help",
+  "toggleDevtools": "Toggle Developer Tools",
+  "reportIssue": "Report Issue",
+  "checkUpdate": "Check for Updates",
+  "donate": "Donate"
+}
