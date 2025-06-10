@@ -14,5 +14,8 @@
   "toggleDevtools": "切换开发人员工具",
   "reportIssue": "报告问题",
   "checkUpdate": "检查更新",
-  "donate": "捐赠"
+  "donate": "捐赠",
+  "tools": "工具",
+  "terminal": "控制台",
+  "clear": "清空"
 }

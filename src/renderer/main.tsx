@@ -1,8 +1,11 @@
-import hotKey from 'licia/hotKey'
+import { t } from '../common/util'
+import getUrlParam from 'licia/getUrlParam'
 import { lazy } from 'react'
 import { createRoot } from 'react-dom/client'
 import log from 'share/common/log'
-import { isDev } from 'share/common/util'
+import 'share/renderer/main'
+import 'share/renderer/main.scss'
+import './main.scss'
 
 const logger = log('renderer')
 logger.info('start')
@@ -12,17 +15,19 @@ function renderApp() {
 
   const container: HTMLElement = document.getElementById('app') as HTMLElement
 
-  const App = lazy(() => import('./main/App.js') as Promise<any>)
-  const title = 'RIN'
+  let App = lazy(() => import('./main/App.js') as Promise<any>)
+  let title = 'RIN'
+
+  switch (getUrlParam('page')) {
+    case 'terminal':
+      App = lazy(() => import('share/renderer/terminal/App.js') as Promise<any>)
+      title = t('terminal')
+      break
+  }
 
   preload.setTitle(title)
 
   createRoot(container).render(<App />)
-}
-
-if (isDev()) {
-  hotKey.on('f5', () => location.reload())
-  hotKey.on('f12', () => main.toggleDevTools())
 }
 
 ;(async function () {

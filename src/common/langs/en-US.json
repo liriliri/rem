@@ -14,5 +14,8 @@
   "toggleDevtools": "Toggle Developer Tools",
   "reportIssue": "Report Issue",
   "checkUpdate": "Check for Updates",
-  "donate": "Donate"
+  "donate": "Donate",
+  "tools": "Tools",
+  "terminal": "Terminal",
+  "clear": "Clear"
 }
