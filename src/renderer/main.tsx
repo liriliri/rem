@@ -4,8 +4,11 @@ import { lazy } from 'react'
 import { createRoot } from 'react-dom/client'
 import log from 'share/common/log'
 import 'share/renderer/main'
+import 'luna-toolbar/css'
+import 'share/renderer/luna.scss'
 import 'share/renderer/main.scss'
 import './main.scss'
+import './icon.css'
 
 const logger = log('renderer')
 logger.info('start')

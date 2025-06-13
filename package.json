@@ -12,6 +12,7 @@
     "start": "electron ./dist/main/index.js",
     "lint": "eslint \"src/**/*.{ts,tsx}\"",
     "format": "lsla prettier \"src/**/*.{ts,tsx,scss,css,json}\" \"*.{js,ts,json}\" \"script/*.mjs\" --write",
+    "genIcon": "lsla genIcon --input src/renderer/ --output src/renderer/icon.css --name rin-icon --source src/share/renderer/icon/",
     "genTheme": "lsla genTheme --input src/common/theme.json --output src/renderer/theme.scss && lsla genTheme --input src/common/theme.json --output src/common/theme.ts"
   },
   "repository": {
@@ -47,6 +48,7 @@
     "globals": "^16.2.0",
     "licia": "^1.48.0",
     "luna-menu": "^0.1.3",
+    "luna-toolbar": "^0.9.2",
     "mobx": "^6.13.7",
     "mobx-react-lite": "^4.1.0",
     "react": "^19.1.0",
