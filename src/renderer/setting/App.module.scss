@@ -1,0 +1,7 @@
+@use '../theme' as *;
+
+.settings {
+  width: 400px;
+  margin: 0 auto;
+  padding: #{$padding-l-g}px 0;
+}

@@ -1,10 +1,12 @@
-import { t } from '../common/util'
+import { t, i18n } from '../common/util'
 import getUrlParam from 'licia/getUrlParam'
 import { lazy } from 'react'
 import { createRoot } from 'react-dom/client'
 import log from 'share/common/log'
 import 'share/renderer/main'
 import 'luna-toolbar/css'
+import 'luna-setting/css'
+import 'luna-notification/css'
 import 'share/renderer/luna.scss'
 import 'share/renderer/main.scss'
 import './main.scss'
@@ -26,6 +28,10 @@ function renderApp() {
       App = lazy(() => import('share/renderer/terminal/App.js') as Promise<any>)
       title = t('terminal')
       break
+    case 'settings':
+      App = lazy(() => import('./setting/App.js') as Promise<any>)
+      title = t('settings')
+      break
   }
 
   preload.setTitle(title)
@@ -34,5 +40,8 @@ function renderApp() {
 }
 
 ;(async function () {
+  const language = await main.getLanguage()
+  i18n.locale(language)
+
   renderApp()
 })()

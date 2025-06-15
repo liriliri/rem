@@ -18,5 +18,13 @@
   "tools": "Tools",
   "terminal": "Terminal",
   "clear": "Clear",
-  "settings": "Settings"
+  "settings": "Settings",
+  "appearance": "Appearance",
+  "theme": "Theme",
+  "light": "Light",
+  "dark": "Dark",
+  "sysPreference": "System Preference",
+  "language": "Language",
+  "restartRin": "Restart RIN",
+  "requireReload": "Requires reload"
 }
