@@ -5,6 +5,7 @@ import * as main from './window/main'
 import * as language from 'share/main/lib/language'
 import * as theme from 'share/main/lib/theme'
 import * as terminal from 'share/main/window/terminal'
+import * as rclone from './lib/rclone'
 import { setupTitlebar } from 'custom-electron-titlebar/main'
 import log from 'share/common/log'
 import * as updater from 'share/main/lib/updater'
@@ -27,6 +28,7 @@ app.on('ready', () => {
   language.init()
   theme.init()
   ipc.init()
+  rclone.start()
   main.showWin()
   menu.init()
   updater.init()
