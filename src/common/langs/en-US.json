@@ -26,5 +26,12 @@
   "sysPreference": "System Preference",
   "language": "Language",
   "restartRin": "Restart RIN",
-  "requireReload": "Requires reload"
+  "requireReload": "Requires reload",
+  "config": "Config",
+  "back": "Back",
+  "forward": "Forward",
+  "up": "Up",
+  "refresh": "Refresh",
+  "iconView": "Icon View",
+  "listView": "List View"
 }

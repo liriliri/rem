@@ -26,5 +26,12 @@
   "sysPreference": "系统设置",
   "language": "语言",
   "restartRin": "重启 RIN",
-  "requireReload": "需要重新启动"
+  "requireReload": "需要重新启动",
+  "config": "配置",
+  "back": "返回",
+  "forward": "前进",
+  "up": "上一级",
+  "refresh": "刷新",
+  "iconView": "图标视图",
+  "listView": "列表视图"
 }
