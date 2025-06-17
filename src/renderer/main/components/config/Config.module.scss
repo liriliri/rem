@@ -1,5 +1,8 @@
 .container {
+  position: relative;
   background: var(--color-bg-container);
   border-right: 1px solid var(--color-border);
-  width: 250px;
+  width: 200px;
+  padding-top: 31px;
+  overflow-y: auto;
 }

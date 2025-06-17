@@ -3,11 +3,14 @@ import BaseStore from 'share/renderer/store/BaseStore'
 
 class Store extends BaseStore {
   listView = false
+  showConfig = true
   constructor() {
     super()
 
     makeObservable(this, {
       listView: observable,
+      showConfig: observable,
+      toggleConfig: action,
       setViewMode: action,
     })
   }
@@ -17,6 +20,9 @@ class Store extends BaseStore {
     } else {
       this.listView = false
     }
+  }
+  toggleConfig() {
+    this.showConfig = !this.showConfig
   }
 }
 

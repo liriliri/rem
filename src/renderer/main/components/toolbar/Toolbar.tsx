@@ -19,7 +19,10 @@ export default observer(function Toolbar() {
         <ToolbarIcon
           icon="remote-explorer"
           title={t('config')}
-          onClick={() => {}}
+          state={store.showConfig ? 'hover' : ''}
+          onClick={() => {
+            store.toggleConfig()
+          }}
         />
         <LunaToolbarSeparator />
         <ToolbarIcon icon="arrow-left" title={t('back')} onClick={() => {}} />
