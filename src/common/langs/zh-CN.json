@@ -33,5 +33,6 @@
   "up": "上一级",
   "refresh": "刷新",
   "iconView": "图标视图",
-  "listView": "列表视图"
+  "listView": "列表视图",
+  "localDisk": "本地磁盘"
 }

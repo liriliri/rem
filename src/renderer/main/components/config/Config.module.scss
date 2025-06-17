@@ -1,8 +1,36 @@
+@use '../../../theme' as *;
+
 .container {
   position: relative;
   background: var(--color-bg-container);
   border-right: 1px solid var(--color-border);
   width: 200px;
   padding-top: 31px;
+}
+
+.config-list {
+  width: 100%;
+  height: 100%;
   overflow-y: auto;
+}
+
+.config {
+  height: 28px;
+  line-height: 28px;
+  padding: 0 #{$padding-x-s}px;
+  display: flex;
+  &:hover {
+    background-color: var(--color-fill);
+  }
+}
+
+.config-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: #{$margin-x-s}px;
+  img {
+    width: 16px;
+    height: 16px;
+  }
 }

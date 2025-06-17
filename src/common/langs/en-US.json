@@ -33,5 +33,6 @@
   "up": "Up",
   "refresh": "Refresh",
   "iconView": "Icon View",
-  "listView": "List View"
+  "listView": "List View",
+  "localDisk": "Local Disk"
 }

@@ -1,7 +1,7 @@
 import once from 'licia/once'
 import childProcess, { ChildProcessByStdio } from 'node:child_process'
 import { Readable } from 'node:stream'
-import { resolveUnpack } from 'share/main/lib/util'
+import { handleEvent, resolveUnpack } from 'share/main/lib/util'
 import getPort from 'licia/getPort'
 import log from 'share/common/log'
 import { app } from 'electron'
@@ -36,4 +36,6 @@ export async function start() {
   app.on('will-quit', () => subprocess.kill())
 }
 
-const initRpc = once(() => {})
+const initRpc = once(() => {
+  handleEvent('getRclonePort', () => port)
+})

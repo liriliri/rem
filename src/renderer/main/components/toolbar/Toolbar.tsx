@@ -7,11 +7,10 @@ import ToolbarIcon from 'share/renderer/components/ToolbarIcon'
 import { t } from '../../../../common/util'
 import Style from './Toolbar.module.scss'
 import className from 'licia/className'
-import { useState } from 'react'
 import store from '../../store'
 
 export default observer(function Toolbar() {
-  const [customPath, setCustomPath] = useState('')
+  const { remote } = store
 
   return (
     <>
@@ -25,25 +24,40 @@ export default observer(function Toolbar() {
           }}
         />
         <LunaToolbarSeparator />
-        <ToolbarIcon icon="arrow-left" title={t('back')} onClick={() => {}} />
+        <ToolbarIcon
+          icon="arrow-left"
+          title={t('back')}
+          onClick={() => remote.back()}
+          disabled={remote.historyIdx <= 0}
+        />
         <ToolbarIcon
           icon="arrow-right"
           title={t('forward')}
-          onClick={() => {}}
+          onClick={() => remote.forward()}
+          disabled={remote.historyIdx >= remote.history.length - 1}
         />
-        <ToolbarIcon icon="arrow-up" title={t('up')} onClick={() => {}} />
+        <ToolbarIcon
+          icon="arrow-up"
+          title={t('up')}
+          onClick={() => remote.up()}
+          disabled={!remote.remote}
+        />
         <LunaToolbarHtml
           className={className(Style.path, 'luna-toolbar-item-input')}
         >
           <input
-            value={customPath}
+            value={remote.customRemote}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-              setCustomPath(e.target.value)
+              remote.setCustomRemote(e.target.value)
             }}
             onKeyDown={async () => {}}
           />
         </LunaToolbarHtml>
-        <ToolbarIcon icon="refresh" title={t('refresh')} onClick={() => {}} />
+        <ToolbarIcon
+          icon="refresh"
+          title={t('refresh')}
+          onClick={() => remote.refresh()}
+        />
         <LunaToolbarSeparator />
         <ToolbarIcon
           icon="grid"
