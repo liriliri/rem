@@ -21,6 +21,9 @@
   display: flex;
   &:hover {
     background-color: var(--color-fill);
+    .config-button {
+      display: flex;
+    }
   }
 }
 
@@ -32,5 +35,30 @@
   img {
     width: 16px;
     height: 16px;
+  }
+}
+
+.config-name {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.config-button {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  margin: 0 2px;
+  span {
+    border-radius: #{$border-radius-x-s}px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    &:hover {
+      background-color: var(--color-fill);
+    }
   }
 }

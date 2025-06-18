@@ -17,9 +17,11 @@ class Store extends BaseStore {
     makeObservable(this, {
       listView: observable,
       showConfig: observable,
+      remote: observable,
       configs: observable,
       toggleConfig: action,
       setViewMode: action,
+      openRemote: action,
     })
 
     this.init()
@@ -36,6 +38,9 @@ class Store extends BaseStore {
   }
   toggleConfig() {
     this.showConfig = !this.showConfig
+  }
+  openRemote(config: IConfig) {
+    this.remote = new Remote(config)
   }
   async fetchConfigs() {
     const configDump = await rclone.getConfigDump()

@@ -34,5 +34,7 @@
   "refresh": "刷新",
   "iconView": "图标视图",
   "listView": "列表视图",
-  "localDisk": "本地磁盘"
+  "localDisk": "本地磁盘",
+  "openInCurWin": "在当前窗口打开",
+  "openInNewWin": "在新窗口打开"
 }

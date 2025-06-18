@@ -5,6 +5,8 @@ import store from '../../store'
 import map from 'licia/map'
 import DefaultIcon from '../../../assets/config-icon/default.svg'
 import DriveIcon from '../../../assets/config-icon/drive.svg'
+import DropboxIcon from '../../../assets/config-icon/dropbox.svg'
+import { t } from '../../../../common/util'
 
 export default observer(function Config() {
   const configs = map(store.configs, (config) => {
@@ -13,7 +15,17 @@ export default observer(function Config() {
         <div className={Style.configIcon}>
           <img src={getConfigIcon(config.type)} />
         </div>
-        {config.name}
+        <div className={Style.configName}>{config.name}</div>
+        <div
+          className={Style.configButton}
+          title={t('openInCurWin')}
+          onClick={() => store.openRemote(config)}
+        >
+          <span className="icon-arrow-right"></span>
+        </div>
+        <div className={Style.configButton} title={t('openInNewWin')}>
+          <span className="icon-empty-window"></span>
+        </div>
       </div>
     )
   })
@@ -35,6 +47,8 @@ function getConfigIcon(type: string) {
   switch (type) {
     case 'drive':
       return DriveIcon
+    case 'dropbox':
+      return DropboxIcon
     default:
       return DefaultIcon
   }

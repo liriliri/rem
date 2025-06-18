@@ -10,6 +10,7 @@ export class Remote {
   files: File[] = []
   history: string[] = []
   historyIdx = -1
+  isLoading = false
   private fs: string
   constructor(config: IConfig) {
     const { name, fs } = config
@@ -27,6 +28,7 @@ export class Remote {
       history: observable,
       historyIdx: observable,
       files: observable,
+      isLoading: observable,
       setCustomRemote: action,
     })
 
@@ -79,6 +81,10 @@ export class Remote {
     await this.fetchFileList(this.remote)
   }
   private async fetchFileList(remote: string) {
+    runInAction(() => {
+      this.isLoading = true
+    })
+
     const fileList = await rclone.getFileList({
       fs: this.fs,
       remote,
@@ -88,6 +94,7 @@ export class Remote {
       this.files = fileList
       this.remote = remote
       this.customRemote = this.remote
+      this.isLoading = false
     })
   }
 }

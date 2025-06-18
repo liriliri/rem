@@ -34,5 +34,7 @@
   "refresh": "Refresh",
   "iconView": "Icon View",
   "listView": "List View",
-  "localDisk": "Local Disk"
+  "localDisk": "Local Disk",
+  "openInCurWin": "Open in Current Window",
+  "openInNewWin": "Open in New Window"
 }
