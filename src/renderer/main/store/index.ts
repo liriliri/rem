@@ -6,6 +6,7 @@ import { t } from '../../../common/util'
 import { IConfig } from './types'
 import { Remote } from './remote'
 import { setMainStore } from '../../lib/util'
+import isUndef from 'licia/isUndef'
 
 class Store extends BaseStore {
   listView = false
@@ -32,6 +33,10 @@ class Store extends BaseStore {
     if (listView) {
       runInAction(() => (this.listView = true))
     }
+    const showConfig = await main.getMainStore('showConfig')
+    if (!isUndef(showConfig)) {
+      runInAction(() => (this.showConfig = showConfig))
+    }
 
     await this.fetchConfigs()
   }
@@ -45,6 +50,7 @@ class Store extends BaseStore {
   }
   toggleConfig() {
     this.showConfig = !this.showConfig
+    setMainStore('showConfig', this.showConfig)
   }
   openRemote(config: IConfig) {
     this.remote = new Remote(config)
