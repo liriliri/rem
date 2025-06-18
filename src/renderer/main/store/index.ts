@@ -5,6 +5,7 @@ import map from 'licia/map'
 import { t } from '../../../common/util'
 import { IConfig } from './types'
 import { Remote } from './remote'
+import { setMainStore } from '../../lib/util'
 
 class Store extends BaseStore {
   listView = false
@@ -27,6 +28,11 @@ class Store extends BaseStore {
     this.init()
   }
   async init() {
+    const listView = await main.getMainStore('listView')
+    if (listView) {
+      runInAction(() => (this.listView = true))
+    }
+
     await this.fetchConfigs()
   }
   setViewMode(mode: 'list' | 'icon') {
@@ -35,6 +41,7 @@ class Store extends BaseStore {
     } else {
       this.listView = false
     }
+    setMainStore('listView', this.listView)
   }
   toggleConfig() {
     this.showConfig = !this.showConfig
