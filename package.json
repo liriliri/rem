@@ -1,6 +1,6 @@
 {
-  "name": "rin",
-  "productName": "RIN",
+  "name": "rem",
+  "productName": "REM",
   "version": "0.1.0",
   "description": "File management desktop app based on rclone",
   "main": "rces",
@@ -14,12 +14,12 @@
     "start": "electron ./dist/main/index.js",
     "lint": "eslint \"src/**/*.{ts,tsx}\"",
     "format": "lsla prettier \"src/**/*.{ts,tsx,scss,css,json}\" \"*.{js,ts,json}\" \"script/*.mjs\" --write",
-    "genIcon": "lsla genIcon --input src/renderer/ --output src/renderer/icon.css --name rin-icon --source src/share/renderer/icon/",
+    "genIcon": "lsla genIcon --input src/renderer/ --output src/renderer/icon.css --name rem-icon --source src/share/renderer/icon/",
     "genTheme": "lsla genTheme --input src/common/theme.json --output src/renderer/theme.scss && lsla genTheme --input src/common/theme.json --output src/common/theme.ts"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/liriliri/rin.git"
+    "url": "git+https://github.com/liriliri/rem.git"
   },
   "keywords": [
     "rclone"
@@ -27,9 +27,9 @@
   "author": "surunzi",
   "license": "AGPL-3.0",
   "bugs": {
-    "url": "https://github.com/liriliri/rin/issues"
+    "url": "https://github.com/liriliri/rem/issues"
   },
-  "homepage": "https://github.com/liriliri/rin#readme",
+  "homepage": "https://github.com/liriliri/rem#readme",
   "devDependencies": {
     "@types/node": "^24.0.0",
     "@types/react": "^19.1.7",

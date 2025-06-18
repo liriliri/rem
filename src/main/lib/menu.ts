@@ -30,7 +30,7 @@ function getTemplate(): MenuItemConstructorOptions[] {
       ]
     : []
 
-  const rin = {
+  const rem = {
     label: upperCase(app.name),
     submenu: [
       {
@@ -119,7 +119,7 @@ function getTemplate(): MenuItemConstructorOptions[] {
       {
         label: t('reportIssue'),
         click() {
-          shell.openExternal('https://github.com/liriliri/rin/issues')
+          shell.openExternal('https://github.com/liriliri/rem/issues')
         },
       },
       {
@@ -134,9 +134,9 @@ function getTemplate(): MenuItemConstructorOptions[] {
 
   const template = [tools, help]
   if (isMac) {
-    template.unshift(rin, edit)
+    template.unshift(rem, edit)
   } else {
-    template.unshift(rin)
+    template.unshift(rem)
   }
 
   return template

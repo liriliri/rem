@@ -18,7 +18,7 @@ if (!app.requestSingleInstanceLock()) {
   process.exit(0)
 }
 
-app.setName('Rin')
+app.setName('Rem')
 
 app.on('ready', () => {
   logger.info('app ready')
