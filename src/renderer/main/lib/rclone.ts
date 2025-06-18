@@ -1,5 +1,6 @@
 import axios from 'axios'
 import types from 'licia/types'
+import singleton from 'licia/singleton'
 
 type ConfigDump = types.PlainObj<{
   type: string
@@ -13,6 +14,10 @@ export type File = {
   Size: number
   ModTime: string
   Path: string
+}
+
+export type Stats = {
+  bytes: number
 }
 
 const api = axios.create({
@@ -46,3 +51,27 @@ export async function getFileList(options: {
 
   return response.data.list
 }
+
+export async function stats(): Promise<Stats> {
+  const response = await api.post<Stats>('/core/stats')
+
+  return response.data
+}
+
+export const wait = singleton(async function (checkInterval = 5) {
+  return new Promise((resolve) => {
+    async function check() {
+      if (!(await main.isRcloneRunning())) {
+        return resolve(false)
+      }
+      try {
+        await stats()
+        return resolve(true)
+      } catch {
+        // ignore
+      }
+      setTimeout(check, checkInterval * 1000)
+    }
+    check()
+  })
+})

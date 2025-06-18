@@ -31,14 +31,9 @@ export class Remote {
       isLoading: observable,
       setCustomRemote: action,
     })
-
-    this.init()
   }
   setCustomRemote(customRemote: string) {
     this.customRemote = customRemote
-  }
-  async init() {
-    await this.go('')
   }
   async back() {
     const { historyIdx } = this

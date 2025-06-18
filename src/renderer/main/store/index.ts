@@ -38,7 +38,10 @@ class Store extends BaseStore {
       runInAction(() => (this.showConfig = showConfig))
     }
 
-    await this.fetchConfigs()
+    if (await rclone.wait()) {
+      await this.fetchConfigs()
+      await this.remote.go('')
+    }
   }
   setViewMode(mode: 'list' | 'icon') {
     if (mode === 'list') {
@@ -54,6 +57,7 @@ class Store extends BaseStore {
   }
   openRemote(config: IConfig) {
     this.remote = new Remote(config)
+    this.remote.go('')
   }
   async fetchConfigs() {
     const configDump = await rclone.getConfigDump()

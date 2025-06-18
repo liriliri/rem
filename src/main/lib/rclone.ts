@@ -9,6 +9,7 @@ import { app } from 'electron'
 const logger = log('rclone')
 
 let port = 5572
+let isDead = false
 let subprocess: ChildProcessByStdio<null, Readable, Readable>
 
 export async function start() {
@@ -28,9 +29,13 @@ export async function start() {
   subprocess.stderr.on('data', (data) => process.stderr.write(data))
   subprocess.on('exit', (code, signal) => {
     logger.info('Rclone exit', code, signal)
+    isDead = true
   })
   subprocess.on('error', (err) => {
     logger.info('Rclone error', err)
+    if (!subprocess.pid) {
+      isDead = true
+    }
   })
 
   app.on('will-quit', () => subprocess.kill())
@@ -38,4 +43,5 @@ export async function start() {
 
 const initRpc = once(() => {
   handleEvent('getRclonePort', () => port)
+  handleEvent('isRcloneRunning', () => !isDead)
 })
