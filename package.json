@@ -2,7 +2,7 @@
   "name": "rem",
   "productName": "REM",
   "version": "0.1.0",
-  "description": "File management desktop app based on rclone",
+  "description": "Rclone desktop app",
   "main": "rces",
   "scripts": {
     "dev": "concurrently \"npm run dev:main\" \"npm run dev:preload\" \"npm run dev:renderer\"",
