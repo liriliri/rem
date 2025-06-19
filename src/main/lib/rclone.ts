@@ -17,7 +17,9 @@ let subprocess: ChildProcessByStdio<null, Readable, Readable>
 export async function start() {
   initRpc()
 
-  const rclonePath = resolveUnpack('rclone/rclone')
+  const rclonePath = isWindows
+    ? resolveUnpack('rclone/rclone.exe')
+    : resolveUnpack('rclone/rclone')
 
   port = await getPort(port, '127.0.0.1')
 
