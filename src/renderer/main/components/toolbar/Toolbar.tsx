@@ -28,19 +28,21 @@ export default observer(function Toolbar() {
           icon="arrow-left"
           title={t('back')}
           onClick={() => remote.back()}
-          disabled={remote.historyIdx <= 0}
+          disabled={remote.historyIdx <= 0 || remote.isLoading}
         />
         <ToolbarIcon
           icon="arrow-right"
           title={t('forward')}
           onClick={() => remote.forward()}
-          disabled={remote.historyIdx >= remote.history.length - 1}
+          disabled={
+            remote.historyIdx >= remote.history.length - 1 || remote.isLoading
+          }
         />
         <ToolbarIcon
           icon="arrow-up"
           title={t('up')}
           onClick={() => remote.up()}
-          disabled={!remote.remote}
+          disabled={!remote.remote || remote.isLoading}
         />
         <LunaToolbarHtml
           className={className(Style.path, 'luna-toolbar-item-input')}
@@ -57,6 +59,7 @@ export default observer(function Toolbar() {
           icon="refresh"
           title={t('refresh')}
           onClick={() => remote.refresh()}
+          disabled={remote.isLoading}
         />
         <LunaToolbarSeparator />
         <ToolbarIcon

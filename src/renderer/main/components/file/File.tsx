@@ -31,7 +31,7 @@ export default observer(function File() {
         {
           label: t('open'),
           click: () => open(file),
-        }
+        },
       ]
       contextMenu(e, template)
     }

@@ -47,7 +47,7 @@ export default observer(function App() {
         }}
       />
       <LunaSettingButton
-        description={t('restartRin')}
+        description={t('restartRem')}
         onClick={() => main.relaunch()}
       />
     </LunaSetting>

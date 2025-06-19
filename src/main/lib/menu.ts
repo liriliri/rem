@@ -16,7 +16,7 @@ function getTemplate(): MenuItemConstructorOptions[] {
           type: 'separator',
         },
         {
-          label: t('hideRin'),
+          label: t('hideRem'),
           role: 'hide',
         },
         {
@@ -34,7 +34,7 @@ function getTemplate(): MenuItemConstructorOptions[] {
     label: upperCase(app.name),
     submenu: [
       {
-        label: t('aboutRin'),
+        label: t('aboutRem'),
         click() {
           window.sendTo('main', 'showAbout')
         },
@@ -59,7 +59,7 @@ function getTemplate(): MenuItemConstructorOptions[] {
         type: 'separator',
       },
       {
-        label: t('quitRin'),
+        label: t('quitRem'),
         accelerator: isMac ? 'Command+Q' : 'Ctrl+Q',
         click() {
           app.quit()
