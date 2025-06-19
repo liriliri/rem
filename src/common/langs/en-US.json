@@ -36,5 +36,7 @@
   "listView": "List View",
   "localDisk": "Local Disk",
   "openInCurWin": "Open in Current Window",
-  "openInNewWin": "Open in New Window"
+  "openInNewWin": "Open in New Window",
+  "reqErr": "Request Error",
+  "open": "Open"
 }

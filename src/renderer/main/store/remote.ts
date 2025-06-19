@@ -80,15 +80,21 @@ export class Remote {
       this.isLoading = true
     })
 
-    const fileList = await rclone.getFileList({
-      fs: this.fs,
-      remote,
-    })
+    try {
+      const fileList = await rclone.getFileList({
+        fs: this.fs,
+        remote,
+      })
+      runInAction(() => {
+        this.files = fileList
+        this.remote = remote
+        this.customRemote = this.remote
+      })
+    } catch {
+      // ignore
+    }
 
     runInAction(() => {
-      this.files = fileList
-      this.remote = remote
-      this.customRemote = this.remote
       this.isLoading = false
     })
   }

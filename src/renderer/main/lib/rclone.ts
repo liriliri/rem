@@ -1,9 +1,12 @@
 import axios from 'axios'
 import types from 'licia/types'
 import singleton from 'licia/singleton'
+import { notify } from 'share/renderer/lib/util'
+import { t } from '../../../common/util'
 
 type ConfigDump = types.PlainObj<{
   type: string
+  provider?: string
 }>
 
 export type File = {
@@ -27,6 +30,13 @@ const api = axios.create({
   },
 })
 
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    notify(t('reqErr'), { icon: 'error' })
+    return Promise.reject(error)
+  }
+)
 ;(async () => {
   const port = await main.getRclonePort()
   api.defaults.baseURL = `http://127.0.0.1:${port}`

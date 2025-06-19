@@ -36,5 +36,7 @@
   "listView": "列表视图",
   "localDisk": "本地磁盘",
   "openInCurWin": "在当前窗口打开",
-  "openInNewWin": "在新窗口打开"
+  "openInNewWin": "在新窗口打开",
+  "reqErr": "请求出错",
+  "open": "打开"
 }

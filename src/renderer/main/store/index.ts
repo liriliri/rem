@@ -66,6 +66,7 @@ class Store extends BaseStore {
         return {
           name,
           type: item.type,
+          provider: item.provider,
           fs: `${name}:`,
         }
       })

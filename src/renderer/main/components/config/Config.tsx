@@ -6,6 +6,8 @@ import map from 'licia/map'
 import DefaultIcon from '../../../assets/config-icon/default.svg'
 import DriveIcon from '../../../assets/config-icon/drive.svg'
 import DropboxIcon from '../../../assets/config-icon/dropbox.svg'
+import CloudflareIcon from '../../../assets/config-icon/cloudflare.svg'
+import OneDriveIcon from '../../../assets/config-icon/onedrive.svg'
 import { t } from '../../../../common/util'
 
 export default observer(function Config() {
@@ -13,7 +15,7 @@ export default observer(function Config() {
     return (
       <div key={config.name} className={Style.config}>
         <div className={Style.configIcon}>
-          <img src={getConfigIcon(config.type)} />
+          <img src={getConfigIcon(config.type, config.provider)} />
         </div>
         <div className={Style.configName}>{config.name}</div>
         <div
@@ -43,12 +45,21 @@ export default observer(function Config() {
   )
 })
 
-function getConfigIcon(type: string) {
+function getConfigIcon(type: string, provider?: string) {
+  if (type === 's3') {
+    switch (provider) {
+      case 'Cloudflare':
+        return CloudflareIcon
+    }
+  }
+
   switch (type) {
     case 'drive':
       return DriveIcon
     case 'dropbox':
       return DropboxIcon
+    case 'onedrive':
+      return OneDriveIcon
     default:
       return DefaultIcon
   }

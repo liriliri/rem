@@ -5,6 +5,8 @@ import Style from './File.module.scss'
 import store from '../../store'
 import map from 'licia/map'
 import { LoadingBar } from 'share/renderer/components/loading'
+import { t } from '../../../../common/util'
+import contextMenu from 'share/renderer/lib/contextMenu'
 
 export default observer(function File() {
   const files = map(store.remote.files, (file) => {
@@ -23,6 +25,18 @@ export default observer(function File() {
     }
   }
 
+  function onContextMenu(e: MouseEvent, file?: IFile) {
+    if (file) {
+      const template: any[] = [
+        {
+          label: t('open'),
+          click: () => open(file),
+        }
+      ]
+      contextMenu(e, template)
+    }
+  }
+
   return (
     <div className={Style.container}>
       <LunaFileList
@@ -30,6 +44,7 @@ export default observer(function File() {
         files={files}
         listView={store.listView}
         onDoubleClick={(e: MouseEvent, file: IFile) => open(file)}
+        onContextMenu={onContextMenu}
       />
       {store.remote.isLoading && (
         <div className={Style.loading}>
