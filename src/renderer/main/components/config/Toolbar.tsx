@@ -4,11 +4,26 @@ import Style from './Toolbar.module.scss'
 import ToolbarIcon from 'share/renderer/components/ToolbarIcon'
 import { t } from '../../../../common/util'
 import store from '../../store'
+import LunaModal from 'luna-modal'
 
 export default observer(function Toolbar() {
+  const { selectedConfig } = store
+
   return (
     <LunaToolbar className={Style.container}>
-      <ToolbarIcon icon="editor" title={t('edit')} onClick={() => {}} />
+      <ToolbarIcon
+        icon="delete"
+        title={t('delete')}
+        onClick={async () => {
+          const result = await LunaModal.confirm(
+            t('deleteConfigConfirm', { name: selectedConfig! })
+          )
+          if (result) {
+            store.deleteConfig(selectedConfig!)
+          }
+        }}
+        disabled={!selectedConfig}
+      />
       <LunaToolbarSpace />
       <ToolbarIcon
         icon="refresh"

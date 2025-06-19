@@ -38,5 +38,12 @@
   "openInCurWin": "Open in Current Window",
   "openInNewWin": "Open in New Window",
   "reqErr": "Request Error",
-  "open": "Open"
+  "open": "Open",
+  "rcloneCli": "Rclone Command Line Interface",
+  "duplicate": "Duplicate",
+  "deleteConfigConfirm": "Are you sure you want to delete {{name}}?",
+  "filter": "Filter",
+  "newFolder": "New Folder",
+  "newFolderName": "New Folder Name",
+  "deleteFileConfirm": "Are you sure you want to delete the file {{name}}?"
 }

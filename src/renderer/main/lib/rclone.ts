@@ -23,6 +23,11 @@ export type Stats = {
   bytes: number
 }
 
+export type OperationOptions = {
+  fs: string
+  remote: string
+}
+
 const api = axios.create({
   baseURL: 'http://127.0.1:5572',
   headers: {
@@ -48,18 +53,30 @@ export async function getConfigDump(): Promise<ConfigDump> {
   return response.data
 }
 
-export async function getFileList(options: {
-  fs: string
-  remote: string
-}): Promise<File[]> {
+export async function deleteConfig(name: string) {
+  await api.post('/config/delete', {
+    name,
+  })
+}
+
+export async function getFileList(options: OperationOptions): Promise<File[]> {
   const response = await api.post<{
     list: File[]
-  }>('/operations/list', {
-    fs: options.fs,
-    remote: options.remote,
-  })
+  }>('/operations/list', options)
 
   return response.data.list
+}
+
+export async function mkdir(options: OperationOptions) {
+  await api.post('/operations/mkdir', options)
+}
+
+export async function purge(options: OperationOptions) {
+  await api.post('/operations/purge', options)
+}
+
+export async function deleteFile(options: OperationOptions) {
+  await api.post('/operations/deletefile', options)
 }
 
 export async function stats(): Promise<Stats> {

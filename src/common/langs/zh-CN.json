@@ -38,5 +38,12 @@
   "openInCurWin": "在当前窗口打开",
   "openInNewWin": "在新窗口打开",
   "reqErr": "请求出错",
-  "open": "打开"
+  "open": "打开",
+  "rcloneCli": "Rclone 命令行界面",
+  "duplicate": "拷贝",
+  "deleteConfigConfirm": "确定要删除 {{name}} 吗？",
+  "filter": "过滤",
+  "newFolder": "新建文件夹",
+  "newFolderName": "新文件夹名称",
+  "deleteFileConfirm": "确定要删除文件 {{name}} 吗？"
 }

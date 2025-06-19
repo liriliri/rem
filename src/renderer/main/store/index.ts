@@ -7,11 +7,15 @@ import { IConfig } from './types'
 import { Remote } from './remote'
 import { setMainStore } from '../../lib/util'
 import isUndef from 'licia/isUndef'
+import some from 'licia/some'
+import getUrlParam from 'licia/getUrlParam'
+import find from 'licia/find'
 
 class Store extends BaseStore {
   listView = false
   showConfig = true
   configs: IConfig[] = []
+  selectedConfig = ''
   remote = new Remote(LOCAL_CONFIG)
   constructor() {
     super()
@@ -21,6 +25,8 @@ class Store extends BaseStore {
       showConfig: observable,
       remote: observable,
       configs: observable,
+      selectedConfig: observable,
+      selectConfig: action,
       toggleConfig: action,
       setViewMode: action,
       openRemote: action,
@@ -40,8 +46,21 @@ class Store extends BaseStore {
 
     if (await rclone.wait()) {
       await this.fetchConfigs()
-      await this.remote.go('')
+      const name = getUrlParam('name')
+      if (name) {
+        const config = find(this.configs, (config) => config.name === name)
+        if (config) {
+          this.openRemote(config)
+        } else {
+          this.remote.go('')
+        }
+      } else {
+        await this.remote.go('')
+      }
     }
+  }
+  selectConfig(name: string) {
+    this.selectedConfig = name
   }
   setViewMode(mode: 'list' | 'icon') {
     if (mode === 'list') {
@@ -59,6 +78,10 @@ class Store extends BaseStore {
     this.remote = new Remote(config)
     this.remote.go('')
   }
+  async deleteConfig(name: string) {
+    await rclone.deleteConfig(name)
+    this.fetchConfigs()
+  }
   async fetchConfigs() {
     const configDump = await rclone.getConfigDump()
     runInAction(() => {
@@ -70,7 +93,21 @@ class Store extends BaseStore {
           fs: `${name}:`,
         }
       })
+
+      if (this.selectedConfig) {
+        if (
+          !some(this.configs, (config) => config.name === this.selectedConfig)
+        ) {
+          this.selectConfig('')
+        }
+      }
+
       this.configs.unshift(LOCAL_CONFIG)
+
+      if (!some(this.configs, (config) => config.name === this.remote.name)) {
+        this.remote = new Remote(LOCAL_CONFIG)
+        this.remote.go('')
+      }
     })
   }
 }

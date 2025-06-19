@@ -7,9 +7,12 @@ import map from 'licia/map'
 import { LoadingBar } from 'share/renderer/components/loading'
 import { t } from '../../../../common/util'
 import contextMenu from 'share/renderer/lib/contextMenu'
+import LunaModal from 'luna-modal'
 
 export default observer(function File() {
-  const files = map(store.remote.files, (file) => {
+  const { remote } = store
+
+  const files = map(remote.files, (file) => {
     return {
       name: file.Name,
       directory: file.IsDir,
@@ -20,9 +23,12 @@ export default observer(function File() {
 
   function open(file: IFile) {
     if (file.directory) {
-      const { remote } = store
-      remote.go(remote.remote + (remote.remote ? '/' : '') + file.name)
+      remote.go(resolvePath(file.name))
     }
+  }
+
+  function resolvePath(name: string) {
+    return remote.remote + (remote.remote ? '/' : '') + name
   }
 
   function onContextMenu(e: MouseEvent, file?: IFile) {
@@ -31,6 +37,40 @@ export default observer(function File() {
         {
           label: t('open'),
           click: () => open(file),
+        },
+      ]
+      template.push(
+        {
+          type: 'separator',
+        },
+        {
+          label: t('delete'),
+          click: async () => {
+            const result = await LunaModal.confirm(
+              t('deleteFileConfirm', { name: file.name })
+            )
+            if (result) {
+              const filePath = resolvePath(file.name)
+              if (file.directory) {
+                remote.deleteFolder(filePath)
+              } else {
+                remote.deleteFile(filePath)
+              }
+            }
+          },
+        }
+      )
+      contextMenu(e, template)
+    } else {
+      const template: any[] = [
+        {
+          label: t('newFolder'),
+          click: async () => {
+            const name = await LunaModal.prompt(t('newFolderName'))
+            if (name) {
+              remote.newFolder(resolvePath(name))
+            }
+          },
         },
       ]
       contextMenu(e, template)
@@ -42,11 +82,12 @@ export default observer(function File() {
       <LunaFileList
         className={Style.fileList}
         files={files}
+        filter={remote.filter}
         listView={store.listView}
         onDoubleClick={(e: MouseEvent, file: IFile) => open(file)}
         onContextMenu={onContextMenu}
       />
-      {store.remote.isLoading && (
+      {remote.isLoading && (
         <div className={Style.loading}>
           <LoadingBar />
         </div>

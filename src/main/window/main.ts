@@ -4,18 +4,20 @@ import log from 'share/common/log'
 import { IpcGetStore, IpcSetStore } from 'share/common/types'
 import { handleEvent } from 'share/main/lib/util'
 import once from 'licia/once'
+import uuid from 'licia/uuid'
+import { IpcNewWindow } from 'common/types'
 
 const logger = log('mainWin')
 
 const store = getMainStore()
 
-export function showWin() {
+export function showWin(name?: string) {
   logger.info('show')
 
   initIpc()
 
   const win = window.create({
-    name: 'main',
+    name: `main-${uuid()}`,
     minWidth: 960,
     minHeight: 640,
     ...store.get('bounds'),
@@ -28,7 +30,13 @@ export function showWin() {
     win?.destroy()
   })
 
-  window.loadPage(win)
+  if (name) {
+    window.loadPage(win, {
+      name,
+    })
+  } else {
+    window.loadPage(win)
+  }
 }
 
 const initIpc = once(() => {
@@ -39,4 +47,14 @@ const initIpc = once(() => {
   store.on('change', (name, val) => {
     window.sendAll('changeMainStore', name, val)
   })
+  handleEvent('newWindow', <IpcNewWindow>((name) => {
+    const bounds = store.get('bounds')
+    if (bounds.x) {
+      bounds.x += 50
+    }
+    if (bounds.y) {
+      bounds.y += 50
+    }
+    showWin(name)
+  }))
 })

@@ -5,6 +5,8 @@ import { handleEvent, resolveUnpack } from 'share/main/lib/util'
 import getPort from 'licia/getPort'
 import log from 'share/common/log'
 import { app } from 'electron'
+import isMac from 'licia/isMac'
+import isWindows from 'licia/isWindows'
 
 const logger = log('rclone')
 
@@ -41,7 +43,29 @@ export async function start() {
   app.on('will-quit', () => subprocess.kill())
 }
 
+async function openRcloneCli() {
+  const cwd = resolveUnpack('rclone')
+
+  if (isMac) {
+    const child = childProcess.spawn('open', ['-a', 'Terminal', cwd], {
+      stdio: 'ignore',
+    })
+    child.unref()
+  } else if (isWindows) {
+    const child = childProcess.exec('start cmd', {
+      cwd,
+    })
+    child.unref()
+  } else {
+    const child = childProcess.spawn('x-terminal-emulator', ['-w', cwd], {
+      stdio: 'ignore',
+    })
+    child.unref()
+  }
+}
+
 const initRpc = once(() => {
   handleEvent('getRclonePort', () => port)
   handleEvent('isRcloneRunning', () => !isDead)
+  handleEvent('openRcloneCli', openRcloneCli)
 })

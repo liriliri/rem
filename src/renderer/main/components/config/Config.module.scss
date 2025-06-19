@@ -25,6 +25,13 @@
       display: flex;
     }
   }
+  &.connected {
+    color: var(--color-primary);
+  }
+  &.selected {
+    background-color: var(--color-primary);
+    color: #fff;
+  }
 }
 
 .config-icon {

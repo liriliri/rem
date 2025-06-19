@@ -3,24 +3,27 @@ import * as rclone from '../lib/rclone'
 import { File } from '../lib/rclone'
 import { action, makeObservable, observable, runInAction } from 'mobx'
 import { t } from '../../../common/util'
+import splitPath from 'licia/splitPath'
+import normalizePath from 'licia/normalizePath'
+import trim from 'licia/trim'
 
 export class Remote {
   remote = ''
+  name = ''
   customRemote = ''
   files: File[] = []
   history: string[] = []
   historyIdx = -1
   isLoading = false
+  filter = ''
   private fs: string
   constructor(config: IConfig) {
     const { name, fs } = config
-    if (fs === '/') {
-      preload.setTitle(t('localDisk'))
-    } else {
-      preload.setTitle(name)
-    }
 
+    this.name = name
     this.fs = fs
+
+    this.updateTitle()
 
     makeObservable(this, {
       remote: observable,
@@ -29,8 +32,13 @@ export class Remote {
       historyIdx: observable,
       files: observable,
       isLoading: observable,
+      filter: observable,
       setCustomRemote: action,
+      setFilter: action,
     })
+  }
+  setFilter(filter: string) {
+    this.filter = filter
   }
   setCustomRemote(customRemote: string) {
     this.customRemote = customRemote
@@ -72,8 +80,46 @@ export class Remote {
       this.historyIdx += 1
     })
   }
+  async goCustomRemote() {
+    const p = normalizePath(this.customRemote)
+
+    this.go(trim(p, '/'))
+  }
   async refresh() {
     await this.fetchFileList(this.remote)
+  }
+  async newFolder(remote: string) {
+    await rclone.mkdir({
+      fs: this.fs,
+      remote,
+    })
+    await this.refresh()
+  }
+  async deleteFile(remote: string) {
+    await rclone.deleteFile({
+      fs: this.fs,
+      remote,
+    })
+    await this.refresh()
+  }
+  async deleteFolder(remote: string) {
+    await rclone.purge({
+      fs: this.fs,
+      remote,
+    })
+    await this.refresh()
+  }
+  private updateTitle() {
+    let title = this.name
+    if (this.fs === '/') {
+      title = t('localDisk')
+    }
+
+    if (this.remote) {
+      title += ` - ${splitPath(this.remote).name}`
+    }
+
+    preload.setTitle(title)
   }
   private async fetchFileList(remote: string) {
     runInAction(() => {
@@ -89,13 +135,14 @@ export class Remote {
         this.files = fileList
         this.remote = remote
         this.customRemote = this.remote
+        this.setFilter('')
       })
-    } catch {
-      // ignore
-    }
 
-    runInAction(() => {
-      this.isLoading = false
-    })
+      this.updateTitle()
+    } finally {
+      runInAction(() => {
+        this.isLoading = false
+      })
+    }
   }
 }

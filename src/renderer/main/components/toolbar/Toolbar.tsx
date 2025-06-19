@@ -1,6 +1,7 @@
 import { observer } from 'mobx-react-lite'
 import LunaToolbar, {
   LunaToolbarHtml,
+  LunaToolbarInput,
   LunaToolbarSeparator,
 } from 'luna-toolbar/react'
 import ToolbarIcon from 'share/renderer/components/ToolbarIcon'
@@ -22,6 +23,11 @@ export default observer(function Toolbar() {
           onClick={() => {
             store.toggleConfig()
           }}
+        />
+        <ToolbarIcon
+          icon="terminal"
+          title={t('rcloneCli')}
+          onClick={() => main.openRcloneCli()}
         />
         <LunaToolbarSeparator />
         <ToolbarIcon
@@ -52,7 +58,11 @@ export default observer(function Toolbar() {
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
               remote.setCustomRemote(e.target.value)
             }}
-            onKeyDown={async () => {}}
+            onKeyDown={async (e) => {
+              if (e.key === 'Enter') {
+                store.remote.goCustomRemote()
+              }
+            }}
           />
         </LunaToolbarHtml>
         <ToolbarIcon
@@ -60,6 +70,12 @@ export default observer(function Toolbar() {
           title={t('refresh')}
           onClick={() => remote.refresh()}
           disabled={remote.isLoading}
+        />
+        <LunaToolbarInput
+          keyName="filter"
+          value={store.remote.filter}
+          placeholder={t('filter')}
+          onChange={(val) => store.remote.setFilter(val)}
         />
         <LunaToolbarSeparator />
         <ToolbarIcon
