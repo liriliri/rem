@@ -23,7 +23,7 @@ export type Stats = {
   bytes: number
 }
 
-export type OperationOptions = {
+export type Target = {
   fs: string
   remote: string
 }
@@ -59,7 +59,7 @@ export async function deleteConfig(name: string) {
   })
 }
 
-export async function getFileList(options: OperationOptions): Promise<File[]> {
+export async function getFileList(options: Target): Promise<File[]> {
   const response = await api.post<{
     list: File[]
   }>('/operations/list', options)
@@ -67,15 +67,15 @@ export async function getFileList(options: OperationOptions): Promise<File[]> {
   return response.data.list
 }
 
-export async function mkdir(options: OperationOptions) {
+export async function mkdir(options: Target) {
   await api.post('/operations/mkdir', options)
 }
 
-export async function purge(options: OperationOptions) {
+export async function purge(options: Target) {
   await api.post('/operations/purge', options)
 }
 
-export async function deleteFile(options: OperationOptions) {
+export async function deleteFile(options: Target) {
   await api.post('/operations/deletefile', options)
 }
 

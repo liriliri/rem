@@ -45,5 +45,9 @@
   "filter": "过滤",
   "newFolder": "新建文件夹",
   "newFolderName": "新文件夹名称",
-  "deleteFileConfirm": "确定要删除文件 {{name}} 吗？"
+  "deleteFileConfirm": "确定要删除文件 {{name}} 吗？",
+  "job": "任务",
+  "source": "源",
+  "destination": "目标",
+  "jobId": "任务 ID"
 }

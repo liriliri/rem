@@ -4,8 +4,8 @@
   position: relative;
   background: var(--color-bg-container);
   border-right: 1px solid var(--color-border);
-  width: 200px;
   padding-top: 31px;
+  height: 100%;
 }
 
 .config-list {
@@ -19,6 +19,7 @@
   line-height: 28px;
   padding: 0 #{$padding-x-s}px;
   display: flex;
+  cursor: pointer;
   &:hover {
     background-color: var(--color-fill);
     .config-button {

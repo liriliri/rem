@@ -56,12 +56,7 @@ export default observer(function Config() {
   })
 
   return (
-    <div
-      className={Style.container}
-      style={{
-        display: store.showConfig ? 'block' : 'none',
-      }}
-    >
+    <div className={Style.container}>
       <Toolbar />
       <div className={Style.configList}>{configs}</div>
     </div>

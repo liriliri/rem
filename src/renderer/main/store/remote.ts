@@ -2,7 +2,6 @@ import { IConfig } from './types'
 import * as rclone from '../lib/rclone'
 import { File } from '../lib/rclone'
 import { action, makeObservable, observable, runInAction } from 'mobx'
-import { t } from '../../../common/util'
 import splitPath from 'licia/splitPath'
 import normalizePath from 'licia/normalizePath'
 import trim from 'licia/trim'
@@ -111,14 +110,12 @@ export class Remote {
   }
   private updateTitle() {
     let title = this.name
-    if (this.fs === '/') {
-      title = t('localDisk')
-    }
 
     if (this.remote) {
       title += ` - ${splitPath(this.remote).name}`
     }
 
+    console.log('update title', title)
     preload.setTitle(title)
   }
   private async fetchFileList(remote: string) {

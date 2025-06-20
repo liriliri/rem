@@ -14,35 +14,62 @@ import find from 'licia/find'
 class Store extends BaseStore {
   listView = false
   showConfig = true
+  configWeight = 25
+  showJob = true
+  jobWeight = 30
   configs: IConfig[] = []
   selectedConfig = ''
-  remote = new Remote(LOCAL_CONFIG)
+  remote = new Remote({
+    name: 'REM',
+    type: 'local',
+    fs: '/',
+  })
   constructor() {
     super()
 
     makeObservable(this, {
       listView: observable,
       showConfig: observable,
+      configWeight: observable,
+      showJob: observable,
+      jobWeight: observable,
       remote: observable,
       configs: observable,
       selectedConfig: observable,
       selectConfig: action,
       toggleConfig: action,
+      setConfigWeight: action,
       setViewMode: action,
       openRemote: action,
+      toggleJob: action,
+      setJobWeight: action,
     })
 
     this.init()
   }
   async init() {
     const listView = await main.getMainStore('listView')
-    if (listView) {
-      runInAction(() => (this.listView = true))
-    }
+    const configWeight: number = await main.getMainStore('configWeight')
     const showConfig = await main.getMainStore('showConfig')
-    if (!isUndef(showConfig)) {
-      runInAction(() => (this.showConfig = showConfig))
-    }
+    const showJob = await main.getMainStore('showJob')
+    const jobWeight = await main.getMainStore('jobWeight')
+    runInAction(() => {
+      if (listView) {
+        this.listView = true
+      }
+      if (configWeight) {
+        this.configWeight = configWeight
+      }
+      if (!isUndef(showConfig)) {
+        this.showConfig = showConfig
+      }
+      if (jobWeight) {
+        this.jobWeight = jobWeight
+      }
+      if (!isUndef(showJob)) {
+        this.showJob = showJob
+      }
+    })
 
     if (await rclone.wait()) {
       await this.fetchConfigs()
@@ -51,12 +78,11 @@ class Store extends BaseStore {
         const config = find(this.configs, (config) => config.name === name)
         if (config) {
           this.openRemote(config)
-        } else {
-          this.remote.go('')
+          return
         }
-      } else {
-        await this.remote.go('')
       }
+
+      this.openRemote(this.configs[0])
     }
   }
   selectConfig(name: string) {
@@ -70,9 +96,21 @@ class Store extends BaseStore {
     }
     setMainStore('listView', this.listView)
   }
+  setConfigWeight(weight: number) {
+    this.configWeight = weight
+    setMainStore('configWeight', this.configWeight)
+  }
   toggleConfig() {
     this.showConfig = !this.showConfig
     setMainStore('showConfig', this.showConfig)
+  }
+  toggleJob() {
+    this.showJob = !this.showJob
+    setMainStore('showJob', this.showJob)
+  }
+  setJobWeight(weight: number) {
+    this.jobWeight = weight
+    setMainStore('jobWeight', this.jobWeight)
   }
   openRemote(config: IConfig) {
     this.remote = new Remote(config)
@@ -102,20 +140,27 @@ class Store extends BaseStore {
         }
       }
 
-      this.configs.unshift(LOCAL_CONFIG)
+      const localConfigs = getLocalConfigs()
+      this.configs.unshift(...localConfigs)
 
-      if (!some(this.configs, (config) => config.name === this.remote.name)) {
-        this.remote = new Remote(LOCAL_CONFIG)
-        this.remote.go('')
+      if (
+        !some(this.configs, (config) => config.name === this.remote.name) &&
+        this.remote.name !== 'REM'
+      ) {
+        this.openRemote(localConfigs[0])
       }
     })
   }
 }
 
-const LOCAL_CONFIG = {
-  name: t('localDisk'),
-  type: 'local',
-  fs: '/',
+function getLocalConfigs(): IConfig[] {
+  return [
+    {
+      name: t('localDisk'),
+      type: 'local',
+      fs: '/',
+    },
+  ]
 }
 
 export default new Store()

@@ -25,6 +25,14 @@ export default observer(function Toolbar() {
           }}
         />
         <ToolbarIcon
+          icon="bidirection"
+          title={t('job')}
+          state={store.showJob ? 'hover' : ''}
+          onClick={() => {
+            store.toggleJob()
+          }}
+        />
+        <ToolbarIcon
           icon="terminal"
           title={t('rcloneCli')}
           onClick={() => main.openRcloneCli()}
