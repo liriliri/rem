@@ -2,27 +2,17 @@ import { observer } from 'mobx-react-lite'
 import Style from './Job.module.scss'
 import LunaDataGrid from 'luna-data-grid/react'
 import { t } from '../../../../common/util'
-import { useEffect, useRef } from 'react'
+import { useRef } from 'react'
 import DataGrid from 'luna-data-grid'
-import ResizeSensor from 'licia/ResizeSensor'
+import { useResizeSensor } from 'share/renderer/lib/hooks'
 
 export default observer(function Job() {
   const containerRef = useRef<HTMLDivElement>(null)
   const dataGridRef = useRef<DataGrid>(null)
-  const resizeSensorRef = useRef<ResizeSensor>(null)
 
-  useEffect(() => {
-    const resizeSensor = new ResizeSensor(containerRef.current!)
-    resizeSensor.addListener(() => {
-      dataGridRef.current?.fit()
-    })
-    resizeSensorRef.current = resizeSensor
-
-    return () => {
-      resizeSensor.destroy()
-      resizeSensorRef.current = null
-    }
-  }, [])
+  useResizeSensor(containerRef, () => {
+    dataGridRef.current?.fit()
+  })
 
   return (
     <div className={Style.container} ref={containerRef}>
