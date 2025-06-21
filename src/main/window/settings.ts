@@ -21,6 +21,8 @@ export function showWin() {
     name: 'settings',
     resizable: false,
     ...store.get('bounds'),
+    minWidth: 480,
+    minHeight: 360,
     width: 480,
     height: 360,
     onSavePos: () => window.savePos(win, store),

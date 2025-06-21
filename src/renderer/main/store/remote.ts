@@ -115,7 +115,6 @@ export class Remote {
       title += ` - ${splitPath(this.remote).name}`
     }
 
-    console.log('update title', title)
     preload.setTitle(title)
   }
   private async fetchFileList(remote: string) {
