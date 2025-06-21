@@ -49,5 +49,6 @@
   "job": "Job",
   "source": "Source",
   "destination": "Destination",
-  "jobId": "Job ID"
+  "jobId": "Job ID",
+  "upload": "Upload"
 }

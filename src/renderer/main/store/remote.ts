@@ -1,10 +1,12 @@
 import { IConfig } from './types'
 import * as rclone from '../lib/rclone'
-import { File } from '../lib/rclone'
+import { File, Target } from '../lib/rclone'
 import { action, makeObservable, observable, runInAction } from 'mobx'
 import splitPath from 'licia/splitPath'
 import normalizePath from 'licia/normalizePath'
 import trim from 'licia/trim'
+import isEmpty from 'licia/isEmpty'
+import { genTargetPair, parseLocalPath } from '../lib/util'
 
 export class Remote {
   remote = ''
@@ -107,6 +109,29 @@ export class Remote {
       remote,
     })
     await this.refresh()
+  }
+  async uploadFiles(files?: string[]) {
+    if (!files) {
+      const { filePaths } = await main.showOpenDialog({
+        properties: ['openFile', 'multiSelections'],
+      })
+      if (isEmpty(filePaths)) {
+        return
+      }
+      files = filePaths
+    }
+
+    for (let i = 0, len = files!.length; i < len; i++) {
+      this.copyFrom(parseLocalPath(files![i]))
+    }
+  }
+  private async copyFrom(target: Target) {
+    await rclone.copyFile(
+      genTargetPair(target, {
+        fs: this.fs,
+        remote: this.remote,
+      })
+    )
   }
   private updateTitle() {
     let title = this.name

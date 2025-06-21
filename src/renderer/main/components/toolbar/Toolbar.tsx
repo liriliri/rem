@@ -87,6 +87,13 @@ export default observer(function Toolbar() {
         />
         <LunaToolbarSeparator />
         <ToolbarIcon
+          icon="upload"
+          title={t('upload')}
+          onClick={() => remote.uploadFiles()}
+          disabled={remote.isLoading}
+        />
+        <LunaToolbarSeparator />
+        <ToolbarIcon
           icon="grid"
           title={t('iconView')}
           state={store.listView ? '' : 'hover'}

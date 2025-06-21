@@ -49,5 +49,6 @@
   "job": "任务",
   "source": "源",
   "destination": "目标",
-  "jobId": "任务 ID"
+  "jobId": "任务 ID",
+  "upload": "上传"
 }

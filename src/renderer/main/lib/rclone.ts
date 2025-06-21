@@ -28,6 +28,17 @@ export type Target = {
   remote: string
 }
 
+export type TargetPair = {
+  srcFs: string
+  srcRemote: string
+  dstFs: string
+  dstRemote: string
+}
+
+type OperationAsyncResult = {
+  jobid: number
+}
+
 const api = axios.create({
   baseURL: 'http://127.0.1:5572',
   headers: {
@@ -59,24 +70,36 @@ export async function deleteConfig(name: string) {
   })
 }
 
-export async function getFileList(options: Target): Promise<File[]> {
+export async function getFileList(target: Target): Promise<File[]> {
   const response = await api.post<{
     list: File[]
-  }>('/operations/list', options)
+  }>('/operations/list', target)
 
   return response.data.list
 }
 
-export async function mkdir(options: Target) {
-  await api.post('/operations/mkdir', options)
+export async function mkdir(target: Target) {
+  await api.post('/operations/mkdir', target)
 }
 
-export async function purge(options: Target) {
-  await api.post('/operations/purge', options)
+export async function purge(target: Target) {
+  await api.post('/operations/purge', target)
 }
 
-export async function deleteFile(options: Target) {
-  await api.post('/operations/deletefile', options)
+export async function deleteFile(target: Target) {
+  await api.post('/operations/deletefile', target)
+}
+
+export async function copyFile(targetPair: TargetPair): Promise<number> {
+  const response = await api.post<OperationAsyncResult>(
+    '/operations/copyfile',
+    {
+      ...targetPair,
+      _async: true,
+    }
+  )
+
+  return response.data.jobid
 }
 
 export async function stats(): Promise<Stats> {
