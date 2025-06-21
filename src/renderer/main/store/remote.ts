@@ -7,6 +7,7 @@ import normalizePath from 'licia/normalizePath'
 import trim from 'licia/trim'
 import isEmpty from 'licia/isEmpty'
 import { genTargetPair, parseLocalPath } from '../lib/util'
+import { Job, JobType } from './job'
 
 export class Remote {
   remote = ''
@@ -116,22 +117,28 @@ export class Remote {
         properties: ['openFile', 'multiSelections'],
       })
       if (isEmpty(filePaths)) {
-        return
+        return []
       }
       files = filePaths
     }
 
+    const jobs: Job[] = []
+
     for (let i = 0, len = files!.length; i < len; i++) {
-      this.copyFrom(parseLocalPath(files![i]))
+      jobs.push(await this.copyFrom(parseLocalPath(files![i])))
     }
+
+    return jobs
   }
   private async copyFrom(target: Target) {
-    await rclone.copyFile(
-      genTargetPair(target, {
-        fs: this.fs,
-        remote: this.remote,
-      })
-    )
+    const targetPair = genTargetPair(target, {
+      fs: this.fs,
+      remote: this.remote,
+    })
+
+    const jobId = await rclone.copyFile(targetPair)
+
+    return new Job(jobId, JobType.Copy, targetPair)
   }
   private updateTitle() {
     let title = this.name

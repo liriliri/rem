@@ -9,6 +9,7 @@ import { t } from '../../../../common/util'
 import Style from './Toolbar.module.scss'
 import className from 'licia/className'
 import store from '../../store'
+import each from 'licia/each'
 
 export default observer(function Toolbar() {
   const { remote } = store
@@ -89,7 +90,10 @@ export default observer(function Toolbar() {
         <ToolbarIcon
           icon="upload"
           title={t('upload')}
-          onClick={() => remote.uploadFiles()}
+          onClick={async () => {
+            const jobs = await remote.uploadFiles()
+            each(jobs, (job) => store.addJob(job))
+          }}
           disabled={remote.isLoading}
         />
         <LunaToolbarSeparator />

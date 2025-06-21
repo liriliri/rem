@@ -39,6 +39,13 @@ type OperationAsyncResult = {
   jobid: number
 }
 
+type JobStatus = {
+  finished: boolean
+  success: boolean
+  startTime: string
+  duration: number
+}
+
 const api = axios.create({
   baseURL: 'http://127.0.1:5572',
   headers: {
@@ -100,6 +107,14 @@ export async function copyFile(targetPair: TargetPair): Promise<number> {
   )
 
   return response.data.jobid
+}
+
+export async function getStatusForJob(jobId: number): Promise<JobStatus> {
+  const response = await api.post<JobStatus>('/job/status', {
+    jobid: jobId,
+  })
+
+  return response.data
 }
 
 export async function stats(): Promise<Stats> {

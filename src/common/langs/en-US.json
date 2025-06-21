@@ -50,5 +50,7 @@
   "source": "Source",
   "destination": "Destination",
   "jobId": "Job ID",
-  "upload": "Upload"
+  "upload": "Upload",
+  "type": "Type",
+  "status": "Status"
 }

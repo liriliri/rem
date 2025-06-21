@@ -12,6 +12,7 @@ import getUrlParam from 'licia/getUrlParam'
 import find from 'licia/find'
 import isWindows from 'licia/isWindows'
 import isEmpty from 'licia/isEmpty'
+import { Job } from './job'
 
 class Store extends BaseStore {
   listView = false
@@ -26,6 +27,7 @@ class Store extends BaseStore {
     type: 'local',
     fs: '/',
   })
+  jobs: Job[] = []
   constructor() {
     super()
 
@@ -38,6 +40,7 @@ class Store extends BaseStore {
       remote: observable,
       configs: observable,
       selectedConfig: observable,
+      jobs: observable,
       selectConfig: action,
       toggleConfig: action,
       setConfigWeight: action,
@@ -45,6 +48,7 @@ class Store extends BaseStore {
       openRemote: action,
       toggleJob: action,
       setJobWeight: action,
+      addJob: action,
     })
 
     this.init()
@@ -86,6 +90,9 @@ class Store extends BaseStore {
 
       this.openRemote(this.configs[0])
     }
+  }
+  addJob(job: Job) {
+    this.jobs.push(job)
   }
   selectConfig(name: string) {
     this.selectedConfig = name
