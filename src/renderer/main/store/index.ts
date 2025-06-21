@@ -10,6 +10,8 @@ import isUndef from 'licia/isUndef'
 import some from 'licia/some'
 import getUrlParam from 'licia/getUrlParam'
 import find from 'licia/find'
+import isWindows from 'licia/isWindows'
+import isEmpty from 'licia/isEmpty'
 
 class Store extends BaseStore {
   listView = false
@@ -139,28 +141,46 @@ class Store extends BaseStore {
           this.selectConfig('')
         }
       }
-
-      const localConfigs = getLocalConfigs()
-      this.configs.unshift(...localConfigs)
-
-      if (
-        !some(this.configs, (config) => config.name === this.remote.name) &&
-        this.remote.name !== 'REM'
-      ) {
-        this.openRemote(localConfigs[0])
-      }
     })
+
+    const localConfigs = await getLocalConfigs()
+    runInAction(() => {
+      this.configs.unshift(...localConfigs)
+    })
+
+    if (
+      !some(this.configs, (config) => config.name === this.remote.name) &&
+      this.remote.name !== 'REM'
+    ) {
+      this.openRemote(localConfigs[0])
+    }
   }
 }
 
-function getLocalConfigs(): IConfig[] {
-  return [
-    {
-      name: t('localDisk'),
-      type: 'local',
-      fs: '/',
-    },
-  ]
+let localConfigs: IConfig[] = []
+async function getLocalConfigs(): Promise<IConfig[]> {
+  if (isEmpty(localConfigs)) {
+    if (isWindows) {
+      const drives = await main.getWindowsDrives()
+      return map(drives, drive => {
+        return {
+          name: `${t('localDisk')} (${drive})`,
+          type: 'remdisk',
+          fs: drive,
+        }
+      })
+    } else {
+      localConfigs = [
+        {
+          name: t('localDisk'),
+          type: 'remdisk',
+          fs: '/',
+        },
+      ]
+    }
+  }
+
+  return localConfigs
 }
 
 export default new Store()

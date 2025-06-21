@@ -5,7 +5,12 @@ import { IpcGetStore, IpcSetStore } from 'share/common/types'
 import { handleEvent } from 'share/main/lib/util'
 import once from 'licia/once'
 import uuid from 'licia/uuid'
-import { IpcNewWindow } from 'common/types'
+import { IpcGetWindowsDrives, IpcNewWindow } from 'common/types'
+import childProcess from 'node:child_process'
+import map from 'licia/map'
+import trim from 'licia/trim'
+import filter from 'licia/filter'
+import endWith from 'licia/endWith'
 
 const logger = log('mainWin')
 
@@ -40,6 +45,21 @@ export function showWin(name?: string) {
 }
 
 const initIpc = once(() => {
+  const getWindowsDrives: IpcGetWindowsDrives = function () {
+    return new Promise((resolve, reject) => {
+      childProcess.exec('wmic logicaldisk get caption', (err, stdout) => {
+        if (err) {
+          reject(err)
+          return
+        }
+
+        const lines = map(stdout.split('\n'), (line) => trim(line))
+
+        resolve(filter(lines, (line) => endWith(line, ':')))
+      })
+    })
+  }
+
   handleEvent('setMainStore', <IpcSetStore>(
     ((name, val) => store.set(name, val))
   ))
@@ -57,4 +77,5 @@ const initIpc = once(() => {
     }
     showWin(name)
   }))
+  handleEvent('getWindowsDrives', getWindowsDrives)
 })

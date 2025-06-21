@@ -21,7 +21,7 @@ export default observer(function Config() {
           [Style.connected]: store.remote.name === config.name,
         })}
         onClick={() => {
-          if (config.name === t('localDisk')) {
+          if (config.type === 'remdisk') {
             return
           }
           store.selectConfig(config.name)

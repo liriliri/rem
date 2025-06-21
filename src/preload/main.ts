@@ -1,5 +1,6 @@
 import {
   IpcGetRclonePort,
+  IpcGetWindowsDrives,
   IpcIsRcloneRunning,
   IpcNewWindow,
 } from 'common/types'
@@ -16,4 +17,5 @@ export default Object.assign(mainObj, {
   isRcloneRunning: invoke<IpcIsRcloneRunning>('isRcloneRunning'),
   openRcloneCli: invoke('openRcloneCli'),
   newWindow: invoke<IpcNewWindow>('newWindow'),
+  getWindowsDrives: invoke<IpcGetWindowsDrives>('getWindowsDrives'),
 })
