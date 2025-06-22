@@ -7,6 +7,8 @@ import DataGrid from 'luna-data-grid'
 import { useResizeSensor } from 'share/renderer/lib/hooks'
 import map from 'licia/map'
 import store from '../../store'
+import durationFormat from 'licia/durationFormat'
+import { JobStatus } from '../../store/job'
 
 export default observer(function Job() {
   const containerRef = useRef<HTMLDivElement>(null)
@@ -20,6 +22,9 @@ export default observer(function Job() {
     return {
       id: job.id,
       source: job.source,
+      status: getStatusText(job.status),
+      type: getTypeText(job.type),
+      duration: durationFormat(Math.round(job.duration * 1000), 'h:m:s:l'),
       destination: job.destination,
     }
   })
@@ -30,6 +35,7 @@ export default observer(function Job() {
         data={data}
         uniqueId="id"
         columns={columns}
+        selectable={true}
         onCreate={(dataGrid) => {
           dataGridRef.current = dataGrid
           dataGrid.fit()
@@ -38,6 +44,21 @@ export default observer(function Job() {
     </div>
   )
 })
+
+function getTypeText() {
+  return t('copy')
+}
+
+function getStatusText(status: JobStatus) {
+  switch (status) {
+    case JobStatus.Fail:
+      return t('fail')
+    case JobStatus.Success:
+      return t('success')
+  }
+
+  return t('running')
+}
 
 const columns = [
   {
@@ -55,14 +76,19 @@ const columns = [
   {
     id: 'source',
     title: t('source'),
-    weight: 35,
+    weight: 30,
     sortable: true,
   },
   {
     id: 'destination',
     title: t('destination'),
-    weight: 35,
+    weight: 30,
     sortable: true,
+  },
+  {
+    id: 'duration',
+    title: t('duration'),
+    weight: 10,
   },
   {
     id: 'status',

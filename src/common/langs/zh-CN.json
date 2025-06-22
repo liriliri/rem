@@ -52,5 +52,9 @@
   "jobId": "任务 ID",
   "upload": "上传",
   "type": "类型",
-  "status": "状态"
+  "status": "状态",
+  "running": "运行中",
+  "success": "成功",
+  "fail": "失败",
+  "duration": "时长"
 }

@@ -52,5 +52,9 @@
   "jobId": "Job ID",
   "upload": "Upload",
   "type": "Type",
-  "status": "Status"
+  "status": "Status",
+  "running": "Running",
+  "success": "Success",
+  "fail": "Fail",
+  "duration": "Duration"
 }
