@@ -109,6 +109,16 @@ export async function copyFile(targetPair: TargetPair): Promise<number> {
   return response.data.jobid
 }
 
+export async function copyDir(targetPair: TargetPair): Promise<number> {
+  const response = await api.post<OperationAsyncResult>('/sync/copy', {
+    ...targetPair,
+    _async: true,
+    createEmptySrcDirs: true,
+  })
+
+  return response.data.jobid
+}
+
 export async function getStatusForJob(jobId: number): Promise<JobStatus> {
   const response = await api.post<JobStatus>('/job/status', {
     jobid: jobId,

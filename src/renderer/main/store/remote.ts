@@ -125,7 +125,9 @@ export class Remote {
     const jobs: Job[] = []
 
     for (let i = 0, len = files!.length; i < len; i++) {
-      jobs.push(await this.copyFrom(parseLocalPath(files![i])))
+      const file = files![i]
+      const isDir = await node.isDirectory(file)
+      jobs.push(await this.copyFrom(parseLocalPath(file), isDir))
     }
 
     return jobs
@@ -133,13 +135,15 @@ export class Remote {
   async downloadFile(remote: string, file: string) {
     return this.copyTo(remote, parseLocalPath(file))
   }
-  private async copyFrom(target: Target) {
+  private async copyFrom(target: Target, isDir = false) {
     const targetPair = genTargetPair(target, {
       fs: this.fs,
       remote: this.remote,
     })
 
-    const jobId = await rclone.copyFile(targetPair)
+    const jobId = isDir
+      ? await rclone.copyDir(targetPair)
+      : await rclone.copyFile(targetPair)
 
     return new Job(jobId, JobType.Copy, targetPair)
   }
