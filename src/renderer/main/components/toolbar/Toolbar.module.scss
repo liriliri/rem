@@ -4,3 +4,19 @@
     width: 100%;
   }
 }
+
+.blink {
+  span {
+    animation: blinkColor 1s infinite;
+  }
+}
+
+@keyframes blinkColor {
+  0%,
+  100% {
+    color: var(--color-text);
+  }
+  50% {
+    color: var(--color-primary);
+  }
+}

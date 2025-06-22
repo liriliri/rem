@@ -10,6 +10,8 @@ import Style from './Toolbar.module.scss'
 import className from 'licia/className'
 import store from '../../store'
 import each from 'licia/each'
+import some from 'licia/some'
+import { JobStatus } from '../../store/job'
 
 export default observer(function Toolbar() {
   const { remote } = store
@@ -27,6 +29,11 @@ export default observer(function Toolbar() {
         />
         <ToolbarIcon
           icon="bidirection"
+          className={className({
+            [Style.blink]: some(store.jobs, (job) => {
+              return job.status === JobStatus.Running
+            }),
+          })}
           title={t('job')}
           state={store.showJob ? 'hover' : ''}
           onClick={() => {
