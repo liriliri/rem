@@ -56,5 +56,6 @@
   "running": "Running",
   "success": "Success",
   "fail": "Fail",
-  "duration": "Duration"
+  "duration": "Duration",
+  "startTime": "Start Time"
 }

@@ -9,6 +9,7 @@ import map from 'licia/map'
 import store from '../../store'
 import durationFormat from 'licia/durationFormat'
 import { JobStatus } from '../../store/job'
+import dateFormat from 'licia/dateFormat'
 
 export default observer(function Job() {
   const containerRef = useRef<HTMLDivElement>(null)
@@ -19,13 +20,16 @@ export default observer(function Job() {
   })
 
   const data = map(store.jobs, (job) => {
+    const { pair } = job
+
     return {
       id: job.id,
-      source: job.source,
+      source: `${pair.srcFs}${pair.srcRemote}`,
+      destination: `${pair.dstFs}${pair.dstRemote}`,
       status: getStatusText(job.status),
       type: getTypeText(),
       duration: durationFormat(Math.round(job.duration * 1000), 'h:m:s:l'),
-      destination: job.destination,
+      startTime: dateFormat(job.startTime, 'yyyy-MM-dd hh:mm:ss'),
     }
   })
 
@@ -64,26 +68,31 @@ const columns = [
   {
     id: 'id',
     title: t('jobId'),
-    weight: 10,
+    weight: 5,
     sortable: true,
   },
   {
     id: 'type',
     title: t('type'),
-    weight: 10,
+    weight: 5,
     sortable: true,
   },
   {
     id: 'source',
     title: t('source'),
-    weight: 30,
+    weight: 25,
     sortable: true,
   },
   {
     id: 'destination',
     title: t('destination'),
-    weight: 30,
+    weight: 25,
     sortable: true,
+  },
+  {
+    id: 'startTime',
+    title: t('startTime'),
+    weight: 20,
   },
   {
     id: 'duration',

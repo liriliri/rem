@@ -56,5 +56,6 @@
   "running": "运行中",
   "success": "成功",
   "fail": "失败",
-  "duration": "时长"
+  "duration": "时长",
+  "startTime": "开始时间"
 }

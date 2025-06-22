@@ -1,6 +1,8 @@
 import { makeObservable, observable, runInAction } from 'mobx'
 import * as rclone from '../lib/rclone'
 import { TargetPair } from '../lib/rclone'
+import now from 'licia/now'
+import Emitter from 'licia/Emitter'
 
 export enum JobType {
   Copy,
@@ -13,18 +15,19 @@ export enum JobStatus {
   Fail,
 }
 
-export class Job {
+export class Job extends Emitter {
   id: number
   type: JobType
-  source: string
-  destination: string
   duration = 0
+  startTime = new Date()
   status = JobStatus.Running
+  pair: TargetPair
   constructor(id: number, type: JobType, pair: TargetPair) {
+    super()
+
     this.id = id
     this.type = type
-    this.source = `${pair.srcFs}${pair.srcRemote}`
-    this.destination = `${pair.dstFs}${pair.dstRemote}`
+    this.pair = pair
 
     makeObservable(this, {
       duration: observable,
@@ -37,9 +40,21 @@ export class Job {
     const status = await rclone.getStatusForJob(this.id)
     runInAction(() => {
       if (status.finished) {
-        this.status = status.success ? JobStatus.Success : JobStatus.Fail
+        if (status.success) {
+          this.status = JobStatus.Success
+          this.emit('success', this)
+        } else {
+          this.status = JobStatus.Fail
+          this.emit('fail', this)
+        }
+        this.emit('finish', this)
       }
-      this.duration = status.duration
+      this.startTime = new Date(status.startTime)
+      if (!status.duration) {
+        this.duration = (now() - this.startTime.getTime()) / 1000
+      } else {
+        this.duration = status.duration
+      }
     })
     if (!status.finished) {
       setTimeout(() => {

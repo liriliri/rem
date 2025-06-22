@@ -18,7 +18,7 @@ export class Remote {
   historyIdx = -1
   isLoading = false
   filter = ''
-  private fs: string
+  fs: string
   constructor(config: IConfig) {
     const { name, fs } = config
 

@@ -12,7 +12,8 @@ import getUrlParam from 'licia/getUrlParam'
 import find from 'licia/find'
 import isWindows from 'licia/isWindows'
 import isEmpty from 'licia/isEmpty'
-import { Job } from './job'
+import { Job, JobType } from './job'
+import splitPath from 'licia/splitPath'
 
 class Store extends BaseStore {
   listView = false
@@ -92,6 +93,16 @@ class Store extends BaseStore {
     }
   }
   addJob(job: Job) {
+    job.on('success', () => {
+      const { fs, remote } = this.remote
+      const { dstFs, dstRemote } = job.pair
+
+      if (job.type === JobType.Copy) {
+        if (dstFs === fs || splitPath(dstRemote).dir === remote) {
+          this.remote.refresh()
+        }
+      }
+    })
     this.jobs.push(job)
   }
   selectConfig(name: string) {
