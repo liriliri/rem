@@ -57,5 +57,6 @@
   "success": "成功",
   "fail": "失败",
   "duration": "时长",
-  "startTime": "开始时间"
+  "startTime": "开始时间",
+  "download": "下载"
 }

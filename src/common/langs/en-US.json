@@ -57,5 +57,6 @@
   "success": "Success",
   "fail": "Fail",
   "duration": "Duration",
-  "startTime": "Start Time"
+  "startTime": "Start Time",
+  "download": "Download"
 }

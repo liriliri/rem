@@ -38,8 +38,23 @@ export default observer(function File() {
           label: t('open'),
           click: () => open(file),
         },
-      ]
-      template.push(
+        {
+          label: t('download'),
+          click: async () => {
+            const { canceled, filePath } = await main.showSaveDialog({
+              defaultPath: file.name,
+            })
+            if (canceled) {
+              return
+            }
+
+            const job = await remote.downloadFile(
+              resolvePath(file.name),
+              filePath
+            )
+            store.addJob(job)
+          },
+        },
         {
           type: 'separator',
         },
@@ -58,8 +73,8 @@ export default observer(function File() {
               }
             }
           },
-        }
-      )
+        },
+      ]
       contextMenu(e, template)
     } else {
       const template: any[] = [

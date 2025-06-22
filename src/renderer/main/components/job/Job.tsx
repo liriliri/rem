@@ -68,25 +68,25 @@ const columns = [
   {
     id: 'id',
     title: t('jobId'),
-    weight: 5,
+    weight: 10,
     sortable: true,
   },
   {
     id: 'type',
     title: t('type'),
-    weight: 5,
+    weight: 10,
     sortable: true,
   },
   {
     id: 'source',
     title: t('source'),
-    weight: 25,
+    weight: 20,
     sortable: true,
   },
   {
     id: 'destination',
     title: t('destination'),
-    weight: 25,
+    weight: 20,
     sortable: true,
   },
   {

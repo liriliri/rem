@@ -130,11 +130,28 @@ export class Remote {
 
     return jobs
   }
+  async downloadFile(remote: string, file: string) {
+    return this.copyTo(remote, parseLocalPath(file))
+  }
   private async copyFrom(target: Target) {
     const targetPair = genTargetPair(target, {
       fs: this.fs,
       remote: this.remote,
     })
+
+    const jobId = await rclone.copyFile(targetPair)
+
+    return new Job(jobId, JobType.Copy, targetPair)
+  }
+  private async copyTo(remote: string, target: Target) {
+    const targetPair = genTargetPair(
+      {
+        fs: this.fs,
+        remote,
+      },
+      target,
+      false
+    )
 
     const jobId = await rclone.copyFile(targetPair)
 
