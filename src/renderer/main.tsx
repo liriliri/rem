@@ -15,7 +15,6 @@ import 'luna-split-pane/css'
 import 'share/renderer/luna.scss'
 import './luna.scss'
 import 'share/renderer/main.scss'
-import './main.scss'
 import './icon.css'
 
 const logger = log('renderer')

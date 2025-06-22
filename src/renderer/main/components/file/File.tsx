@@ -8,8 +8,15 @@ import { LoadingBar } from 'share/renderer/components/loading'
 import { t } from '../../../../common/util'
 import contextMenu from 'share/renderer/lib/contextMenu'
 import LunaModal from 'luna-modal'
+import { useRef, useState } from 'react'
+import className from 'licia/className'
+import { isFileDrop } from 'share/renderer/lib/util'
+import each from 'licia/each'
 
 export default observer(function File() {
+  const [dropHighlight, setDropHighlight] = useState(false)
+  const draggingRef = useRef(0)
+
   const { remote } = store
 
   const files = map(remote.files, (file) => {
@@ -25,6 +32,18 @@ export default observer(function File() {
     if (file.directory) {
       remote.go(resolvePath(file.name))
     }
+  }
+
+  async function onDrop(e: React.DragEvent) {
+    e.preventDefault()
+    setDropHighlight(false)
+    const files = e.dataTransfer.files
+    const filePaths: string[] = []
+    for (let i = 0, len = files.length; i < len; i++) {
+      filePaths.push(preload.getPathForFile(files[i]))
+    }
+    const jobs = await remote.uploadFiles(filePaths)
+    each(jobs, (job) => store.addJob(job))
   }
 
   function resolvePath(name: string) {
@@ -93,7 +112,30 @@ export default observer(function File() {
   }
 
   return (
-    <div className={Style.container}>
+    <div
+      onDrop={onDrop}
+      onDragEnter={() => {
+        draggingRef.current++
+      }}
+      onDragLeave={() => {
+        draggingRef.current--
+        if (draggingRef.current === 0) {
+          setDropHighlight(false)
+        }
+      }}
+      onDragOver={(e) => {
+        if (!isFileDrop(e)) {
+          return
+        }
+        e.preventDefault()
+        if (!remote.isLoading) {
+          setDropHighlight(true)
+        }
+      }}
+      className={className(Style.container, {
+        [Style.highlight]: dropHighlight,
+      })}
+    >
       <LunaFileList
         className={Style.fileList}
         files={files}
