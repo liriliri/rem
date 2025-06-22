@@ -23,7 +23,7 @@ export default observer(function Job() {
       id: job.id,
       source: job.source,
       status: getStatusText(job.status),
-      type: getTypeText(job.type),
+      type: getTypeText(),
       duration: durationFormat(Math.round(job.duration * 1000), 'h:m:s:l'),
       destination: job.destination,
     }
