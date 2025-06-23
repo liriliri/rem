@@ -50,7 +50,7 @@ export default observer(function File() {
     return remote.remote + (remote.remote ? '/' : '') + name
   }
 
-  function onContextMenu(e: MouseEvent, file?: IFile) {
+  async function onContextMenu(e: MouseEvent, file?: IFile) {
     if (file) {
       const template: any[] = [
         {
@@ -68,22 +68,37 @@ export default observer(function File() {
           type: 'separator',
         },
         {
-          label: t('delete'),
-          click: async () => {
-            const result = await LunaModal.confirm(
-              t('deleteFileConfirm', { name: file.name })
-            )
-            if (result) {
-              const filePath = resolvePath(file.name)
-              if (file.directory) {
-                remote.deleteFolder(filePath)
-              } else {
-                remote.deleteFile(filePath)
-              }
-            }
+          label: t('copy'),
+          click() {
+            remote.copyFiles([resolvePath(file.name)])
           },
         },
       ]
+      if (file.directory && (await remote.canPaste())) {
+        template.push({
+          label: t('paste'),
+          click: async () => {
+            const jobs = await remote.pasteFiles(resolvePath(file.name))
+            each(jobs, (job) => store.addJob(job))
+          },
+        })
+      }
+      template.push({
+        label: t('delete'),
+        click: async () => {
+          const result = await LunaModal.confirm(
+            t('deleteFileConfirm', { name: file.name })
+          )
+          if (result) {
+            const filePath = resolvePath(file.name)
+            if (file.directory) {
+              remote.deleteFolder(filePath)
+            } else {
+              remote.deleteFile(filePath)
+            }
+          }
+        },
+      })
       contextMenu(e, template)
     } else {
       const template: any[] = [
@@ -97,6 +112,15 @@ export default observer(function File() {
           },
         },
       ]
+      if (await remote.canPaste()) {
+        template.push({
+          label: t('paste'),
+          click: async () => {
+            const jobs = await remote.pasteFiles()
+            each(jobs, (job) => store.addJob(job))
+          },
+        })
+      }
       contextMenu(e, template)
     }
   }
