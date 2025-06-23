@@ -1,6 +1,6 @@
 import { IConfig } from './types'
 import * as rclone from '../lib/rclone'
-import { File, Target } from '../lib/rclone'
+import { File, Target, TargetPair } from '../lib/rclone'
 import { action, makeObservable, observable, runInAction } from 'mobx'
 import splitPath from 'licia/splitPath'
 import normalizePath from 'licia/normalizePath'
@@ -155,8 +155,7 @@ export class Remote {
     return jobs
   }
   async uploadFile(file: string) {
-    const isDir = await node.isDirectory(file)
-    return this.copyFrom(parseLocalPath(file), this.remote, isDir)
+    return this.copyFrom(parseLocalPath(file), this.remote)
   }
   async downloadFiles(remotes: string[]) {
     const result = await main.showOpenDialog({
@@ -176,15 +175,17 @@ export class Remote {
     return jobs
   }
   async downloadFile(remote: string, dir: string) {
-    const stat = await rclone.getFileStat({
-      fs: this.fs,
-      remote,
-    })
     return this.copyTo(
       remote,
-      parseLocalPath(dir + '/' + stat.Name),
-      stat.IsDir
+      parseLocalPath(dir + '/' + splitPath(remote).name)
     )
+  }
+  async renameFile(remote: string, newName: string) {
+    const target = {
+      fs: this.fs,
+      remote: splitPath(remote).dir + newName,
+    }
+    return await this.moveTo(remote, target)
   }
   async canPaste() {
     const clipboardData = await main.getMemStore('clipboard')
@@ -209,15 +210,10 @@ export class Remote {
     const targets = clipboardData.targets
     for (let i = 0, len = targets.length; i < len; i++) {
       const target = targets[i]
-      const stat = await rclone.getFileStat(target)
       if (clipboardData.type === 'copy') {
-        jobs.push(
-          await this.copyFrom(target, remote || this.remote, stat.IsDir)
-        )
+        jobs.push(await this.copyFrom(target, remote || this.remote))
       } else {
-        jobs.push(
-          await this.moveFrom(target, remote || this.remote, stat.IsDir)
-        )
+        jobs.push(await this.moveFrom(target, remote || this.remote))
       }
     }
 
@@ -225,51 +221,82 @@ export class Remote {
 
     return jobs
   }
-  private async copyFrom(target: Target, remote: string, isDir: boolean) {
-    const targetPair = genTargetPair(target, {
-      fs: this.fs,
-      remote,
-    })
-
-    const jobId = isDir
-      ? await rclone.copyDir(targetPair)
-      : await rclone.copyFile(targetPair)
-
-    return new Job(jobId, JobType.Copy, targetPair)
+  private async copyFrom(target: Target, remote: string) {
+    return this.copy(
+      genTargetPair(target, {
+        fs: this.fs,
+        remote,
+      })
+    )
   }
-  private async moveFrom(target: Target, remote: string, isDir: boolean) {
-    const targetPair = genTargetPair(target, {
-      fs: this.fs,
-      remote,
+  private async copyTo(remote: string, target: Target) {
+    return this.copy(
+      genTargetPair(
+        {
+          fs: this.fs,
+          remote,
+        },
+        target,
+        false
+      )
+    )
+  }
+  private async copy(pair: TargetPair) {
+    const stat = await rclone.getFileStat({
+      fs: pair.srcFs,
+      remote: pair.srcRemote,
     })
+    const isDir = stat.IsDir
 
     const jobId = isDir
-      ? await rclone.moveDir(targetPair)
-      : await rclone.moveFile(targetPair)
+      ? await rclone.copyDir(pair)
+      : await rclone.copyFile(pair)
 
-    const job = new Job(jobId, JobType.Move, targetPair)
+    return new Job(jobId, JobType.Copy, pair)
+  }
+  private async moveFrom(target: Target, remote: string) {
+    return this.move(
+      genTargetPair(target, {
+        fs: this.fs,
+        remote,
+      })
+    )
+  }
+  private async moveTo(remote: string, target: Target) {
+    return this.move(
+      genTargetPair(
+        {
+          fs: this.fs,
+          remote,
+        },
+        target,
+        false
+      )
+    )
+  }
+  private async move(pair: TargetPair) {
+    const stat = await rclone.getFileStat({
+      fs: pair.srcFs,
+      remote: pair.srcRemote,
+    })
+    const isDir = stat.IsDir
+
+    const jobId = isDir
+      ? await rclone.moveDir(pair)
+      : await rclone.moveFile(pair)
+
+    const job = new Job(jobId, JobType.Move, pair)
 
     if (isDir) {
-      job.on('success', () => rclone.purge(target))
+      job.on('success', () =>
+        rclone.purge({
+          fs: pair.srcFs,
+          remote: pair.srcRemote,
+        })
+      )
     }
 
     return job
-  }
-  private async copyTo(remote: string, target: Target, isDir: boolean) {
-    const targetPair = genTargetPair(
-      {
-        fs: this.fs,
-        remote,
-      },
-      target,
-      false
-    )
-
-    const jobId = isDir
-      ? await rclone.copyDir(targetPair)
-      : await rclone.copyFile(targetPair)
-
-    return new Job(jobId, JobType.Copy, targetPair)
   }
   private async setClipboardData(type: string, remotes: string[]) {
     const clipboardData = {

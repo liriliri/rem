@@ -58,5 +58,7 @@
   "fail": "失败",
   "duration": "时长",
   "startTime": "开始时间",
-  "download": "下载"
+  "download": "下载",
+  "rename": "重命名",
+  "newFileName": "新文件名称"
 }

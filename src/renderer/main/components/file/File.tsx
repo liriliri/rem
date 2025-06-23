@@ -89,22 +89,37 @@ export default observer(function File() {
           },
         })
       }
-      template.push({
-        label: t('delete'),
-        click: async () => {
-          const result = await LunaModal.confirm(
-            t('deleteFileConfirm', { name: file.name })
-          )
-          if (result) {
-            const filePath = resolvePath(file.name)
-            if (file.directory) {
-              remote.deleteFolder(filePath)
-            } else {
-              remote.deleteFile(filePath)
+      template.push(
+        {
+          label: t('delete'),
+          click: async () => {
+            const result = await LunaModal.confirm(
+              t('deleteFileConfirm', { name: file.name })
+            )
+            if (result) {
+              const filePath = resolvePath(file.name)
+              if (file.directory) {
+                remote.deleteFolder(filePath)
+              } else {
+                remote.deleteFile(filePath)
+              }
             }
-          }
+          },
         },
-      })
+        {
+          label: t('rename'),
+          click: async () => {
+            const name = await LunaModal.prompt(
+              t(file.directory ? 'newFolderName' : 'newFileName'),
+              file.name
+            )
+            if (name && name !== file.name) {
+              const job = await remote.renameFile(resolvePath(file.name), name)
+              store.addJob(job)
+            }
+          },
+        }
+      )
       contextMenu(e, template)
     } else {
       const template: any[] = [

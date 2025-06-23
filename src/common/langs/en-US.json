@@ -58,5 +58,7 @@
   "fail": "Fail",
   "duration": "Duration",
   "startTime": "Start Time",
-  "download": "Download"
+  "download": "Download",
+  "rename": "Rename",
+  "newFileName": "New File Name"
 }
