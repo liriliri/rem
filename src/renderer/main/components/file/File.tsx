@@ -73,6 +73,12 @@ export default observer(function File() {
             remote.copyFiles([resolvePath(file.name)])
           },
         },
+        {
+          label: t('cut'),
+          click() {
+            remote.cutFiles([resolvePath(file.name)])
+          },
+        },
       ]
       if (file.directory && (await remote.canPaste())) {
         template.push({

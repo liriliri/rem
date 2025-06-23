@@ -189,19 +189,13 @@ export class Remote {
   async canPaste() {
     const clipboardData = await main.getMemStore('clipboard')
 
-    return clipboardData && contain(['copy'], clipboardData.type)
+    return clipboardData && contain(['copy', 'cut'], clipboardData.type)
   }
   copyFiles(remotes: string[]) {
-    const clipboardData = {
-      type: 'copy',
-      targets: map(remotes, (remote) => {
-        return {
-          fs: this.fs,
-          remote,
-        }
-      }),
-    }
-    main.setMemStore('clipboard', clipboardData)
+    this.setClipboardData('copy', remotes)
+  }
+  cutFiles(remotes: string[]) {
+    this.setClipboardData('cut', remotes)
   }
   async pasteFiles(remote?: string) {
     const clipboardData = await main.getMemStore('clipboard')
@@ -212,13 +206,17 @@ export class Remote {
 
     const jobs: Job[] = []
 
-    if (clipboardData.type === 'copy') {
-      const targets = clipboardData.targets
-      for (let i = 0, len = targets.length; i < len; i++) {
-        const target = targets[i]
-        const stat = await rclone.getFileStat(target)
+    const targets = clipboardData.targets
+    for (let i = 0, len = targets.length; i < len; i++) {
+      const target = targets[i]
+      const stat = await rclone.getFileStat(target)
+      if (clipboardData.type === 'copy') {
         jobs.push(
           await this.copyFrom(target, remote || this.remote, stat.IsDir)
+        )
+      } else {
+        jobs.push(
+          await this.moveFrom(target, remote || this.remote, stat.IsDir)
         )
       }
     }
@@ -239,6 +237,24 @@ export class Remote {
 
     return new Job(jobId, JobType.Copy, targetPair)
   }
+  private async moveFrom(target: Target, remote: string, isDir: boolean) {
+    const targetPair = genTargetPair(target, {
+      fs: this.fs,
+      remote,
+    })
+
+    const jobId = isDir
+      ? await rclone.moveDir(targetPair)
+      : await rclone.moveFile(targetPair)
+
+    const job = new Job(jobId, JobType.Move, targetPair)
+
+    if (isDir) {
+      job.on('success', () => rclone.purge(target))
+    }
+
+    return job
+  }
   private async copyTo(remote: string, target: Target, isDir: boolean) {
     const targetPair = genTargetPair(
       {
@@ -254,6 +270,18 @@ export class Remote {
       : await rclone.copyFile(targetPair)
 
     return new Job(jobId, JobType.Copy, targetPair)
+  }
+  private async setClipboardData(type: string, remotes: string[]) {
+    const clipboardData = {
+      type,
+      targets: map(remotes, (remote) => {
+        return {
+          fs: this.fs,
+          remote: remote,
+        }
+      }),
+    }
+    await main.setMemStore('clipboard', clipboardData)
   }
   private updateTitle() {
     let title = this.name

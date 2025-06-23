@@ -6,6 +6,7 @@ import Emitter from 'licia/Emitter'
 
 export enum JobType {
   Copy,
+  Move,
 }
 
 export enum JobStatus {

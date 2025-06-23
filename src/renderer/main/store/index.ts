@@ -93,13 +93,24 @@ class Store extends BaseStore {
   }
   addJob(job: Job) {
     job.on('success', () => {
-      const { dstFs, dstRemote } = job.pair
+      const { dstFs, dstRemote, srcFs, srcRemote } = job.pair
 
       if (job.type === JobType.Copy) {
         this.remote.refresh({
           fs: dstFs,
           remote: dstRemote,
         })
+      } else if (job.type === JobType.Move) {
+        this.remote.refresh([
+          {
+            fs: srcFs,
+            remote: srcRemote,
+          },
+          {
+            fs: dstFs,
+            remote: dstRemote,
+          },
+        ])
       }
     })
     this.jobs.push(job)
