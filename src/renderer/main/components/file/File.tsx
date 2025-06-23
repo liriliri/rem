@@ -12,6 +12,7 @@ import { useRef, useState } from 'react'
 import className from 'licia/className'
 import { isFileDrop } from 'share/renderer/lib/util'
 import each from 'licia/each'
+import normalizePath from 'licia/normalizePath'
 
 export default observer(function File() {
   const [dropHighlight, setDropHighlight] = useState(false)
@@ -60,16 +61,31 @@ export default observer(function File() {
         {
           label: t('download'),
           click: async () => {
-            const { canceled, filePath } = await main.showSaveDialog({
-              defaultPath: file.name,
-            })
-            if (canceled) {
-              return
+            let filePath = ''
+
+            if (file.directory) {
+              const result = await main.showOpenDialog({
+                properties: ['openDirectory'],
+                defaultPath: file.name,
+              })
+              if (result.canceled) {
+                return
+              }
+              filePath = normalizePath(result.filePaths[0] + '/' + file.name)
+            } else {
+              const result = await main.showSaveDialog({
+                defaultPath: file.name,
+              })
+              if (result.canceled) {
+                return
+              }
+              filePath = normalizePath(result.filePath)
             }
 
             const job = await remote.downloadFile(
               resolvePath(file.name),
-              filePath
+              filePath,
+              file.directory
             )
             store.addJob(job)
           },
