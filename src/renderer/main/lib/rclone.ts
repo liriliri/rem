@@ -85,6 +85,14 @@ export async function getFileList(target: Target): Promise<File[]> {
   return response.data.list
 }
 
+export async function getFileStat(target: Target): Promise<File> {
+  const response = await api.post<{
+    item: File
+  }>('/operations/stat', target)
+
+  return response.data.item
+}
+
 export async function mkdir(target: Target) {
   await api.post('/operations/mkdir', target)
 }
