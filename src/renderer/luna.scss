@@ -1,3 +1,9 @@
+.luna-data-grid {
+  td {
+    user-select: none;
+  }
+}
+
 @each $class in (':root', '.-theme-with-dark-background') {
   #{$class} {
     .luna-data-grid-data-container {

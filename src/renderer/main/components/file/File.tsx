@@ -28,9 +28,12 @@ export default observer(function File() {
     }
   })
 
-  function open(file: IFile) {
+  async function open(file: IFile) {
     if (file.directory) {
       remote.go(resolvePath(file.name))
+    } else {
+      const job = await remote.openFile(resolvePath(file.name))
+      store.addJob(job)
     }
   }
 

@@ -187,6 +187,14 @@ export class Remote {
     }
     return await this.moveTo(remote, target)
   }
+  async openFile(remote: string) {
+    const tmpdir = node.tmpdir()
+    const job = await this.downloadFile(remote, tmpdir)
+    job.on('success', () => {
+      main.openPath(tmpdir + '/' + splitPath(remote).name)
+    })
+    return job
+  }
   async canPaste() {
     const clipboardData = await main.getMemStore('clipboard')
 
