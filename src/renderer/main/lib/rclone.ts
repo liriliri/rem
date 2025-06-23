@@ -111,7 +111,8 @@ export async function copyFile(targetPair: TargetPair): Promise<number> {
 
 export async function copyDir(targetPair: TargetPair): Promise<number> {
   const response = await api.post<OperationAsyncResult>('/sync/copy', {
-    ...targetPair,
+    srcFs: targetPair.srcFs + targetPair.srcRemote,
+    dstFs: targetPair.dstFs + targetPair.dstRemote,
     _async: true,
     createEmptySrcDirs: true,
   })
