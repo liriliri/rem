@@ -60,5 +60,13 @@
   "startTime": "开始时间",
   "download": "下载",
   "rename": "重命名",
-  "newFileName": "新文件名称"
+  "newFileName": "新文件名称",
+  "move": "移动",
+  "file": "文件",
+  "size": "大小",
+  "speed": "速度",
+  "clearFinished": "清除已完成",
+  "stop": "停止",
+  "stopAll": "全部停止",
+  "cancel": "取消"
 }

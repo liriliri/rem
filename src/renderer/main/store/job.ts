@@ -11,7 +11,7 @@ export enum JobType {
 
 export enum JobStatus {
   Running,
-  Stop,
+  Cancel,
   Success,
   Fail,
 }
@@ -23,6 +23,11 @@ export class Job extends Emitter {
   startTime = new Date()
   status = JobStatus.Running
   pair: TargetPair
+  totalBytes = 0
+  transferredBytes = 0
+  totalFiles = 0
+  transferredFiles = 0
+  speed = 0
   constructor(id: number, type: JobType, pair: TargetPair) {
     super()
 
@@ -33,20 +38,34 @@ export class Job extends Emitter {
     makeObservable(this, {
       duration: observable,
       status: observable,
+      totalBytes: observable,
+      transferredBytes: observable,
+      totalFiles: observable,
+      transferredFiles: observable,
     })
 
     this.getStatus()
   }
+  async stop() {
+    if (this.status !== JobStatus.Running) {
+      return
+    }
+    await rclone.stopJob(this.id)
+    this.status = JobStatus.Cancel
+  }
   private async getStatus() {
     const status = await rclone.getStatusForJob(this.id)
+    const stats = await rclone.stats(this.id)
     runInAction(() => {
       if (status.finished) {
-        if (status.success) {
-          this.status = JobStatus.Success
-          this.emit('success', this)
-        } else {
-          this.status = JobStatus.Fail
-          this.emit('fail', this)
+        if (this.status !== JobStatus.Cancel) {
+          if (status.success) {
+            this.status = JobStatus.Success
+            this.emit('success', this)
+          } else {
+            this.status = JobStatus.Fail
+            this.emit('fail', this)
+          }
         }
         this.emit('finish', this)
       }
@@ -56,6 +75,12 @@ export class Job extends Emitter {
       } else {
         this.duration = status.duration
       }
+
+      this.totalBytes = stats.totalBytes
+      this.transferredBytes = stats.bytes
+      this.totalFiles = stats.totalTransfers
+      this.transferredFiles = stats.transfers
+      this.speed = Math.round(stats.bytes / this.duration)
     })
     if (!status.finished) {
       setTimeout(() => {

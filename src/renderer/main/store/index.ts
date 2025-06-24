@@ -12,7 +12,9 @@ import getUrlParam from 'licia/getUrlParam'
 import find from 'licia/find'
 import isWindows from 'licia/isWindows'
 import isEmpty from 'licia/isEmpty'
-import { Job, JobType } from './job'
+import { Job, JobStatus, JobType } from './job'
+import filter from 'licia/filter'
+import each from 'licia/each'
 
 class Store extends BaseStore {
   listView = false
@@ -49,6 +51,8 @@ class Store extends BaseStore {
       toggleJob: action,
       setJobWeight: action,
       addJob: action,
+      deleteJob: action,
+      clearFinishedJobs: action,
     })
 
     this.init()
@@ -114,6 +118,24 @@ class Store extends BaseStore {
       }
     })
     this.jobs.push(job)
+  }
+  deleteJob(id: number) {
+    const job = this.getJob(id)
+    if (job) {
+      job.stop()
+      this.jobs = filter(this.jobs, (job) => job.id !== id)
+    }
+  }
+  getJob(id: number): Job | void {
+    return find(this.jobs, (job) => job.id === id)
+  }
+  stopAllJobs() {
+    each(this.jobs, (job) => job.stop())
+  }
+  clearFinishedJobs() {
+    this.jobs = filter(this.jobs, (job) => {
+      return job.status === JobStatus.Running
+    })
   }
   selectConfig(name: string) {
     this.selectedConfig = name

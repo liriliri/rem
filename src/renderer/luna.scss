@@ -17,6 +17,7 @@
     }
     .luna-data-grid:focus {
       .luna-data-grid-node.luna-data-grid-selectable.luna-data-grid-selected {
+        color: #fff;
         background-color: var(--color-primary);
       }
     }

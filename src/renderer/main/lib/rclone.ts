@@ -21,6 +21,15 @@ export type File = {
 
 export type Stats = {
   bytes: number
+  totalBytes: number
+  transfers: number
+  totalTransfers: number
+}
+
+export type Transfer = {
+  name: string
+  size: number
+  bytes: number
 }
 
 export type Target = {
@@ -160,10 +169,31 @@ export async function getStatusForJob(jobId: number): Promise<JobStatus> {
   return response.data
 }
 
-export async function stats(): Promise<Stats> {
-  const response = await api.post<Stats>('/core/stats')
+export async function stats(jobId?: number): Promise<Stats> {
+  const data: any = {}
+  if (jobId) {
+    data.group = `job/${jobId}`
+  }
+
+  const response = await api.post<Stats>('/core/stats', data)
 
   return response.data
+}
+
+export async function transferred(jobId: number): Promise<Transfer[]> {
+  const response = await api.post<{
+    transferred: Transfer[]
+  }>('/core/transferred', {
+    group: `job/${jobId}`,
+  })
+
+  return response.data.transferred
+}
+
+export async function stopJob(jobId: number) {
+  await api.post('/job/stop', {
+    jobid: jobId,
+  })
 }
 
 export const wait = singleton(async function (checkInterval = 5) {

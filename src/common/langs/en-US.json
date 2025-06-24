@@ -60,5 +60,13 @@
   "startTime": "Start Time",
   "download": "Download",
   "rename": "Rename",
-  "newFileName": "New File Name"
+  "newFileName": "New File Name",
+  "move": "Move",
+  "file": "File",
+  "size": "Size",
+  "speed": "Speed",
+  "clearFinished": "Clear Finished",
+  "stop": "Stop",
+  "stopAll": "Stop All",
+  "cancel": "Cancel"
 }
