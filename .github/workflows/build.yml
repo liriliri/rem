@@ -1,0 +1,34 @@
+name: Build
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [windows-latest, macos-latest]
+
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        submodules: true
+    - uses: actions/setup-node@v4
+      with:
+        node-version: '18.x'
+    - run: |
+        npm i
+        npm run rclone
+        npm run build
+        npm run pack
+    - uses: actions/upload-artifact@v4
+      with:
+        name: ${{ matrix.os }}
+        path: |
+          release/**/*.dmg
+          release/**/*.exe
+          release/**/*-lates*.yml
+          !release/**/win-unpacked/
