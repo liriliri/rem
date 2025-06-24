@@ -72,6 +72,8 @@ api.interceptors.response.use(
 ;(async () => {
   const port = await main.getRclonePort()
   api.defaults.baseURL = `http://127.0.0.1:${port}`
+  const auth = await main.getRcloneAuth()
+  api.defaults.headers.common['Authorization'] = `Basic ${auth}`
 })()
 
 export async function getConfigDump(): Promise<ConfigDump> {

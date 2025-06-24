@@ -1,4 +1,5 @@
 import {
+  IpcGetRcloneAuth,
   IpcGetRclonePort,
   IpcGetWindowsDrives,
   IpcIsRcloneRunning,
@@ -14,6 +15,7 @@ export default Object.assign(mainObj, {
   getMainStore: invoke<IpcGetStore>('getMainStore'),
   setMainStore: invoke<IpcSetStore>('setMainStore'),
   getRclonePort: invoke<IpcGetRclonePort>('getRclonePort'),
+  getRcloneAuth: invoke<IpcGetRcloneAuth>('getRcloneAuth'),
   isRcloneRunning: invoke<IpcIsRcloneRunning>('isRcloneRunning'),
   openRcloneCli: invoke('openRcloneCli'),
   newWindow: invoke<IpcNewWindow>('newWindow'),

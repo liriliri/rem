@@ -7,10 +7,14 @@ import log from 'share/common/log'
 import { app } from 'electron'
 import isMac from 'licia/isMac'
 import isWindows from 'licia/isWindows'
+import randomId from 'licia/randomId'
+import btoa from 'licia/btoa'
 
 const logger = log('rclone')
 
 let port = 5572
+const user = 'rem'
+const pass = randomId()
 let isDead = false
 let subprocess: ChildProcessByStdio<null, Readable, Readable>
 
@@ -23,7 +27,15 @@ export async function start() {
 
   port = await getPort(port, '127.0.0.1')
 
-  const args = ['rcd', '--rc-addr', `127.0.0.1:${port}`, '--rc-no-auth']
+  const args = [
+    'rcd',
+    '--rc-addr',
+    `127.0.0.1:${port}`,
+    '--rc-user',
+    user,
+    '--rc-pass',
+    pass,
+  ]
 
   subprocess = childProcess.spawn(rclonePath, args, {
     windowsHide: true,
@@ -68,6 +80,7 @@ async function openRcloneCli() {
 
 const initRpc = once(() => {
   handleEvent('getRclonePort', () => port)
+  handleEvent('getRcloneAuth', () => btoa(`${user}:${pass}`))
   handleEvent('isRcloneRunning', () => !isDead)
   handleEvent('openRcloneCli', openRcloneCli)
 })
