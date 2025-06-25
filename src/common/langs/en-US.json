@@ -68,5 +68,6 @@
   "clearFinished": "Clear Finished",
   "stop": "Stop",
   "stopAll": "Stop All",
-  "cancel": "Cancel"
+  "cancel": "Cancel",
+  "version": "Version"
 }

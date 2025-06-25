@@ -68,5 +68,6 @@
   "clearFinished": "清除已完成",
   "stop": "停止",
   "stopAll": "全部停止",
-  "cancel": "取消"
+  "cancel": "取消",
+  "version": "版本"
 }
