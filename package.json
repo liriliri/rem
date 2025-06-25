@@ -56,7 +56,7 @@
     "globals": "^16.2.0",
     "licia": "^1.48.0",
     "luna-data-grid": "^1.6.5",
-    "luna-file-list": "^0.5.1",
+    "luna-file-list": "^0.5.2",
     "luna-icon-list": "^0.2.5",
     "luna-menu": "^0.1.3",
     "luna-modal": "^1.3.1",
