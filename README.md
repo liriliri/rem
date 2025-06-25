@@ -31,17 +31,6 @@ Rclone desktop app.
 
 Click [here](https://github.com/liriliri/rem/releases/) to download and install REM. Windows x64 and Mac arm64 are supported.
 
-## Features
-
-* Screen mirror
-* File explorer
-* Application manager
-* Process monitor
-* Layout inspector
-* CPU, memory and FPS monitor
-* Logcat viewer
-* Interactive shell
-
 ## Related Projects
 
 * [licia](https://github.com/liriliri/licia): Utility library used by REM.
