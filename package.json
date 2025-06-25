@@ -3,7 +3,7 @@
   "productName": "REM",
   "version": "0.1.0",
   "description": "Rclone desktop app",
-  "main": "rces",
+  "main": "dist/main/index.js",
   "scripts": {
     "dev": "concurrently \"npm run dev:main\" \"npm run dev:preload\" \"npm run dev:renderer\"",
     "dev:main": "vite build --watch --config vite.main.ts --mode=development",
