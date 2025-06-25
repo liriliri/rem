@@ -69,12 +69,6 @@ api.interceptors.response.use(
     return Promise.reject(error)
   }
 )
-;(async () => {
-  const port = await main.getRclonePort()
-  api.defaults.baseURL = `http://127.0.0.1:${port}`
-  const auth = await main.getRcloneAuth()
-  api.defaults.headers.common['Authorization'] = `Basic ${auth}`
-})()
 
 export async function getConfigDump(): Promise<ConfigDump> {
   const response = await api.post<ConfigDump>('/config/dump')
@@ -198,7 +192,16 @@ export async function stopJob(jobId: number) {
   })
 }
 
+let isInit = false
 export const wait = singleton(async function (checkInterval = 5) {
+  if (!isInit) {
+    const port = await main.getRclonePort()
+    api.defaults.baseURL = `http://127.0.0.1:${port}`
+    const auth = await main.getRcloneAuth()
+    api.defaults.headers.common['Authorization'] = `Basic ${auth}`
+    isInit = true
+  }
+
   return new Promise((resolve) => {
     async function check() {
       if (!(await main.isRcloneRunning())) {
