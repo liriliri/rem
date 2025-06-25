@@ -11,47 +11,51 @@ export default observer(function App() {
   return (
     <>
       <Toolbar />
-      <LunaSplitPane
-        direction="vertical"
-        className={Style.workspace}
-        onResize={(weights) => {
-          const [explorerWeight, jobWeight] = weights
-          store.setJobWeight((jobWeight / (explorerWeight + jobWeight)) * 100)
-        }}
-      >
-        <LunaSplitPaneItem
-          minSize={200}
-          className={Style.explorer}
-          weight={100 - store.jobWeight}
+      <div className={Style.workspace}>
+        <LunaSplitPane
+          direction="vertical"
+          onResize={(weights) => {
+            const [explorerWeight, jobWeight] = weights
+            store.setJobWeight((jobWeight / (explorerWeight + jobWeight)) * 100)
+          }}
         >
-          <LunaSplitPane
-            onResize={(weights) => {
-              const [configWeight, fileWeight] = weights
-              store.setConfigWeight(
-                (configWeight / (configWeight + fileWeight)) * 100
-              )
-            }}
+          <LunaSplitPaneItem
+            minSize={200}
+            className={Style.explorer}
+            weight={100 - store.jobWeight}
           >
-            <LunaSplitPaneItem
-              minSize={200}
-              visible={store.showConfig}
-              weight={store.configWeight}
+            <LunaSplitPane
+              onResize={(weights) => {
+                const [configWeight, fileWeight] = weights
+                store.setConfigWeight(
+                  (configWeight / (configWeight + fileWeight)) * 100
+                )
+              }}
             >
-              <Config />
-            </LunaSplitPaneItem>
-            <LunaSplitPaneItem minSize={400} weight={100 - store.configWeight}>
-              <File />
-            </LunaSplitPaneItem>
-          </LunaSplitPane>
-        </LunaSplitPaneItem>
-        <LunaSplitPaneItem
-          minSize={150}
-          weight={store.jobWeight}
-          visible={store.showJob}
-        >
-          <Job />
-        </LunaSplitPaneItem>
-      </LunaSplitPane>
+              <LunaSplitPaneItem
+                minSize={200}
+                visible={store.showConfig}
+                weight={store.configWeight}
+              >
+                <Config />
+              </LunaSplitPaneItem>
+              <LunaSplitPaneItem
+                minSize={400}
+                weight={100 - store.configWeight}
+              >
+                <File />
+              </LunaSplitPaneItem>
+            </LunaSplitPane>
+          </LunaSplitPaneItem>
+          <LunaSplitPaneItem
+            minSize={150}
+            weight={store.jobWeight}
+            visible={store.showJob}
+          >
+            <Job />
+          </LunaSplitPaneItem>
+        </LunaSplitPane>
+      </div>
     </>
   )
 })
