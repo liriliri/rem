@@ -34,8 +34,12 @@ function renderApp() {
       title = t('terminal')
       break
     case 'settings':
-      App = lazy(() => import('./setting/App.js') as Promise<any>)
+      App = lazy(() => import('./settings/App.js') as Promise<any>)
       title = t('settings')
+      break
+    case 'about':
+      App = lazy(() => import('./about/App.js') as Promise<any>)
+      title = t('aboutRem')
       break
   }
 

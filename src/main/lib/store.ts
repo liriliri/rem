@@ -25,3 +25,9 @@ export const getSettingsStore = memoize(function () {
     bounds: {},
   })
 })
+
+export const getAboutStore = memoize(function () {
+  return new FileStore(getUserDataPath('data/about.json'), {
+    bounds: {},
+  })
+})
