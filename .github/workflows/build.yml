@@ -10,7 +10,7 @@ jobs:
 
     strategy:
       matrix:
-        os: [windows-latest, macos-latest]
+        os: [windows-latest, macos-latest, ubuntu-latest]
 
     steps:
     - uses: actions/checkout@v4
@@ -30,5 +30,6 @@ jobs:
         path: |
           release/**/*.dmg
           release/**/*.exe
+          release/**/*.AppImage
           release/**/*-lates*.yml
           !release/**/win-unpacked/
