@@ -69,5 +69,9 @@
   "stop": "停止",
   "stopAll": "全部停止",
   "cancel": "取消",
-  "version": "版本"
+  "version": "版本",
+  "updateNotAvailable": "当前没有可用的更新",
+  "updateAvailable": "有可用的更新，是否下载？",
+  "updateErr": "检查更新失败",
+  "ok": "确定"
 }

@@ -11,14 +11,20 @@ import map from 'licia/map'
 import trim from 'licia/trim'
 import filter from 'licia/filter'
 import endWith from 'licia/endWith'
+import { BrowserWindow, dialog, shell } from 'electron'
+import { autoUpdater } from 'electron-updater'
+import { t } from '../../common/util'
 
 const logger = log('mainWin')
 
 const store = getMainStore()
 
+let focusedWin: BrowserWindow | null = null
+
 export function showWin(name?: string) {
   logger.info('show')
 
+  init()
   initIpc()
 
   const win = window.create({
@@ -31,7 +37,11 @@ export function showWin(name?: string) {
     menu: true,
   })
 
+  win.on('focus', () => (focusedWin = win))
   win.on('close', () => {
+    if (focusedWin === win) {
+      focusedWin = null
+    }
     win?.destroy()
   })
 
@@ -43,6 +53,41 @@ export function showWin(name?: string) {
     window.loadPage(win)
   }
 }
+
+const init = once(() => {
+  autoUpdater.on('update-not-available', () => {
+    alert('info', t('updateNotAvailable'))
+  })
+  autoUpdater.on('update-available', async () => {
+    const result = await confirm(t('updateAvailable'))
+    if (result) {
+      shell.openExternal('https://rem.liriliri.io')
+    }
+  })
+  autoUpdater.on('error', () => {
+    alert('error', t('updateErr'))
+  })
+  function alert(type: 'info' | 'error', message: string) {
+    if (focusedWin) {
+      dialog.showMessageBox(focusedWin, {
+        type,
+        message,
+        buttons: [t('ok')],
+      })
+    }
+  }
+  async function confirm(message: string) {
+    if (focusedWin) {
+      const res = await dialog.showMessageBox(focusedWin, {
+        type: 'question',
+        message,
+        buttons: [t('ok'), t('cancel')],
+      })
+      return res.response === 0
+    }
+    return false
+  }
+})
 
 const initIpc = once(() => {
   const getWindowsDrives: IpcGetWindowsDrives = function () {

@@ -69,5 +69,9 @@
   "stop": "Stop",
   "stopAll": "Stop All",
   "cancel": "Cancel",
-  "version": "Version"
+  "version": "Version",
+  "updateNotAvailable": "There are currently no updates available",
+  "updateAvailable": "A new version is available, do you want to download it?",
+  "updateErr": "Failed to check for updates",
+  "ok": "OK"
 }
