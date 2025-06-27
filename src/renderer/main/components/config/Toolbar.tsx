@@ -1,6 +1,5 @@
 import { observer } from 'mobx-react-lite'
 import LunaToolbar, { LunaToolbarSpace } from 'luna-toolbar/react'
-import Style from './Toolbar.module.scss'
 import ToolbarIcon from 'share/renderer/components/ToolbarIcon'
 import { t } from '../../../../common/util'
 import store from '../../store'
@@ -10,7 +9,7 @@ export default observer(function Toolbar() {
   const { selectedConfig } = store
 
   return (
-    <LunaToolbar className={Style.container}>
+    <LunaToolbar>
       <ToolbarIcon
         icon="delete"
         title={t('delete')}

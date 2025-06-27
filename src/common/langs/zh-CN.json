@@ -73,5 +73,7 @@
   "updateNotAvailable": "当前没有可用的更新",
   "updateAvailable": "有可用的更新，是否下载？",
   "updateErr": "检查更新失败",
-  "ok": "确定"
+  "ok": "确定",
+  "usedStorage": "{{storage}} 已使用",
+  "totalStorage": "总计 {{storage}}"
 }

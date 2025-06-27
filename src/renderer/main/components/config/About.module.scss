@@ -1,0 +1,24 @@
+@use '../../../theme' as *;
+
+.container {
+  padding: #{$padding-x-s}px;
+}
+
+.storage {
+  font-size: #{$font-size-s-m}px;
+  margin-bottom: #{$margin-x-x-s}px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.bar {
+  height: 8px;
+  border-radius: 4px;
+  background: var(--color-bg-container-darker);
+  overflow: hidden;
+}
+
+.bar-used {
+  height: 100%;
+  background: var(--color-primary);
+}

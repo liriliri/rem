@@ -1,6 +1,6 @@
 import { IConfig } from './types'
 import * as rclone from '../lib/rclone'
-import { File, Target, TargetPair } from '../lib/rclone'
+import { File, Target, TargetPair, About, Features } from '../lib/rclone'
 import { action, makeObservable, observable, runInAction } from 'mobx'
 import splitPath from 'licia/splitPath'
 import normalizePath from 'licia/normalizePath'
@@ -22,6 +22,14 @@ export class Remote {
   historyIdx = -1
   isLoading = false
   filter = ''
+  features: Features = {
+    About: false,
+  }
+  about: About = {
+    total: 0,
+    used: 0,
+    free: 0,
+  }
   fs: string
   constructor(config: IConfig) {
     const { name, fs } = config
@@ -39,9 +47,13 @@ export class Remote {
       files: observable,
       isLoading: observable,
       filter: observable,
+      about: observable,
+      features: observable,
       setCustomRemote: action,
       setFilter: action,
     })
+
+    this.init()
   }
   setFilter(filter: string) {
     this.filter = filter
@@ -56,7 +68,7 @@ export class Remote {
       return
     }
 
-    await this.fetchFileList(this.history[historyIdx - 1])
+    await this.getFileList(this.history[historyIdx - 1])
 
     runInAction(() => {
       this.historyIdx -= 1
@@ -69,7 +81,7 @@ export class Remote {
       return
     }
 
-    await this.fetchFileList(history[historyIdx + 1])
+    await this.getFileList(history[historyIdx + 1])
 
     runInAction(() => {
       this.historyIdx += 1
@@ -79,7 +91,7 @@ export class Remote {
     await this.go(this.remote.split('/').slice(0, -1).join('/'))
   }
   async go(remote: string) {
-    await this.fetchFileList(remote)
+    await this.getFileList(remote)
 
     runInAction(() => {
       this.history = [...this.history.slice(0, this.historyIdx + 1), remote]
@@ -102,14 +114,14 @@ export class Remote {
           fs === this.fs &&
           rtrim(splitPath(remote).dir, '/') === this.remote
         ) {
-          await this.fetchFileList(this.remote)
+          await this.getFileList(this.remote)
           break
         }
       }
       return
     }
 
-    await this.fetchFileList(this.remote)
+    await this.getFileList(this.remote)
   }
   async newFolder(remote: string) {
     const target = {
@@ -229,6 +241,25 @@ export class Remote {
 
     return jobs
   }
+  private async getAbout() {
+    const about = await rclone.getAbout(this.fs)
+    runInAction(() => {
+      this.about = about
+    })
+  }
+  private async getFsInfo() {
+    const fsInfo = await rclone.getFsInfo(this.fs)
+    runInAction(() => {
+      this.features = fsInfo.Features
+    })
+  }
+  private async init() {
+    await rclone.wait()
+    await this.getFsInfo()
+    if (this.features.About) {
+      await this.getAbout()
+    }
+  }
   private async copyFrom(target: Target, remote: string) {
     return this.copy(
       genTargetPair(target, {
@@ -327,7 +358,7 @@ export class Remote {
 
     preload.setTitle(title)
   }
-  private async fetchFileList(remote: string) {
+  private async getFileList(remote: string) {
     runInAction(() => {
       this.isLoading = true
     })

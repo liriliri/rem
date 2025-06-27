@@ -9,6 +9,23 @@ type ConfigDump = types.PlainObj<{
   provider?: string
 }>
 
+export type About = {
+  total: number
+  used: number
+  free: number
+  trashed?: number
+  other?: number
+}
+
+export type Features = {
+  About: boolean
+}
+
+export type FsInfo = {
+  Name: string
+  Features: Features
+}
+
 export type File = {
   ID: string
   IsDir: boolean
@@ -61,14 +78,6 @@ const api = axios.create({
     'Content-Type': 'application/json',
   },
 })
-
-api.interceptors.response.use(
-  (response) => response,
-  (error) => {
-    notify(t('reqErr'), { icon: 'error' })
-    return Promise.reject(error)
-  }
-)
 
 export async function getConfigDump(): Promise<ConfigDump> {
   const response = await api.post<ConfigDump>('/config/dump')
@@ -192,15 +201,20 @@ export async function stopJob(jobId: number) {
   })
 }
 
-let isInit = false
+export async function getAbout(fs: string): Promise<About> {
+  const response = await api.post<About>('/operations/about', { fs })
+
+  return response.data
+}
+
+export async function getFsInfo(fs: string): Promise<FsInfo> {
+  const response = await api.post<FsInfo>('/operations/fsinfo', { fs })
+
+  return response.data
+}
+
 export const wait = singleton(async function (checkInterval = 5) {
-  if (!isInit) {
-    const port = await main.getRclonePort()
-    api.defaults.baseURL = `http://127.0.0.1:${port}`
-    const auth = await main.getRcloneAuth()
-    api.defaults.headers.common['Authorization'] = `Basic ${auth}`
-    isInit = true
-  }
+  await init()
 
   return new Promise((resolve) => {
     async function check() {
@@ -218,3 +232,21 @@ export const wait = singleton(async function (checkInterval = 5) {
     check()
   })
 })
+
+let isInit = false
+async function init() {
+  if (!isInit) {
+    const port = await main.getRclonePort()
+    api.defaults.baseURL = `http://127.0.0.1:${port}`
+    const auth = await main.getRcloneAuth()
+    api.defaults.headers.common['Authorization'] = `Basic ${auth}`
+    api.interceptors.response.use(
+      (response) => response,
+      (error) => {
+        notify(t('reqErr'), { icon: 'error' })
+        return Promise.reject(error)
+      }
+    )
+    isInit = true
+  }
+}

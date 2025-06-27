@@ -9,6 +9,7 @@ import DropboxIcon from '../../../assets/config-icon/dropbox.svg'
 import CloudflareIcon from '../../../assets/config-icon/cloudflare.svg'
 import OneDriveIcon from '../../../assets/config-icon/onedrive.svg'
 import className from 'licia/className'
+import About from './About'
 import { t } from '../../../../common/util'
 
 export default observer(function Config() {
@@ -59,6 +60,7 @@ export default observer(function Config() {
     <div className={Style.container}>
       <Toolbar />
       <div className={Style.configList}>{configs}</div>
+      {store.remote.features.About && <About />}
     </div>
   )
 })
