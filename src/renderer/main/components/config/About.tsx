@@ -6,8 +6,10 @@ import fileSize from 'licia/fileSize'
 
 export default observer(function About() {
   const { about } = store.remote
+  const total = about.total || 0
+  const free = about.free || 0
 
-  const used = about.total - about.free
+  const used = total - free
 
   return (
     <div className={Style.container}>
@@ -17,7 +19,7 @@ export default observer(function About() {
             storage: fileSize(used) + 'B',
           })}
         </div>
-        <div>{t('totalStorage', { storage: fileSize(about.total) + 'B' })}</div>
+        <div>{t('totalStorage', { storage: fileSize(total) + 'B' })}</div>
       </div>
       <div className={Style.bar}>
         <div

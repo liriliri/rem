@@ -23,13 +23,9 @@ export class Remote {
   isLoading = false
   filter = ''
   features: Features = {
-    About: false,
+    About: true,
   }
-  about: About = {
-    total: 0,
-    used: 0,
-    free: 0,
-  }
+  about: About = {}
   fs: string
   constructor(config: IConfig) {
     const { name, fs } = config

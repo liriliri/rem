@@ -10,9 +10,9 @@ type ConfigDump = types.PlainObj<{
 }>
 
 export type About = {
-  total: number
-  used: number
-  free: number
+  total?: number
+  used?: number
+  free?: number
   trashed?: number
   other?: number
 }
