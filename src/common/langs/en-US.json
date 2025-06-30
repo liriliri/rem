@@ -75,5 +75,8 @@
   "updateErr": "Failed to check for updates",
   "ok": "OK",
   "usedStorage": "{{storage}} used",
-  "totalStorage": "{{storage}} total"
+  "totalStorage": "{{storage}} total",
+  "selectForSync": "Select for Synchronize",
+  "sync": "Synchronize",
+  "bisync": "Bi-directional Synchronize"
 }

@@ -67,6 +67,21 @@ export default observer(function File() {
             each(jobs, (job) => store.addJob(job))
           },
         },
+      ]
+      if (file.directory) {
+        template.push(
+          {
+            type: 'separator',
+          },
+          {
+            label: t('selectForSync'),
+            click: () => {
+              remote.syncFiles(resolvePath(file.name))
+            },
+          }
+        )
+      }
+      template.push(
         {
           type: 'separator',
         },
@@ -81,8 +96,8 @@ export default observer(function File() {
           click() {
             remote.cutFiles([resolvePath(file.name)])
           },
-        },
-      ]
+        }
+      )
       if (file.directory && (await remote.canPaste())) {
         template.push({
           label: t('paste'),
@@ -136,14 +151,34 @@ export default observer(function File() {
           },
         },
       ]
-      if (await remote.canPaste()) {
-        template.push({
-          label: t('paste'),
-          click: async () => {
-            const jobs = await remote.pasteFiles()
-            each(jobs, (job) => store.addJob(job))
+      if (await remote.canSync()) {
+        template.push(
+          {
+            type: 'separator',
           },
-        })
+          {
+            label: t('sync'),
+            click: () => {},
+          },
+          {
+            label: t('bisync'),
+            click: () => {},
+          }
+        )
+      }
+      if (await remote.canPaste()) {
+        template.push(
+          {
+            type: 'separator',
+          },
+          {
+            label: t('paste'),
+            click: async () => {
+              const jobs = await remote.pasteFiles()
+              each(jobs, (job) => store.addJob(job))
+            },
+          }
+        )
       }
       contextMenu(e, template)
     }

@@ -208,11 +208,19 @@ export class Remote {
 
     return clipboardData && contain(['copy', 'cut'], clipboardData.type)
   }
+  async canSync() {
+    const clipboardData = await main.getMemStore('clipboard')
+
+    return clipboardData && clipboardData.type === 'sync'
+  }
   copyFiles(remotes: string[]) {
     this.setClipboardData('copy', remotes)
   }
   cutFiles(remotes: string[]) {
     this.setClipboardData('cut', remotes)
+  }
+  syncFiles(remote: string) {
+    this.setClipboardData('sync', remote)
   }
   async pasteFiles(remote?: string) {
     const clipboardData = await main.getMemStore('clipboard')
@@ -333,7 +341,7 @@ export class Remote {
 
     return job
   }
-  private async setClipboardData(type: string, remotes: string[]) {
+  private async setClipboardData(type: string, remotes: string | string[]) {
     const clipboardData = {
       type,
       targets: map(remotes, (remote) => {
