@@ -166,6 +166,17 @@ export async function moveDir(targetPair: TargetPair): Promise<number> {
   return response.data.jobid
 }
 
+export async function syncDir(targetPair: TargetPair): Promise<number> {
+  const response = await api.post<OperationAsyncResult>('/sync/sync', {
+    srcFs: targetPair.srcFs + targetPair.srcRemote,
+    dstFs: targetPair.dstFs + targetPair.dstRemote,
+    _async: true,
+    createEmptySrcDirs: true,
+  })
+
+  return response.data.jobid
+}
+
 export async function getStatusForJob(jobId: number): Promise<JobStatus> {
   const response = await api.post<JobStatus>('/job/status', {
     jobid: jobId,

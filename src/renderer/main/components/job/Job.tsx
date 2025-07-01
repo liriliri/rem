@@ -8,7 +8,7 @@ import { useResizeSensor } from 'share/renderer/lib/hooks'
 import map from 'licia/map'
 import store from '../../store'
 import durationFormat from 'licia/durationFormat'
-import { JobStatus, JobType } from '../../store/job'
+import { Job, JobStatus, JobType } from '../../store/job'
 import dateFormat from 'licia/dateFormat'
 import fileSize from 'licia/fileSize'
 import contextMenu from 'share/renderer/lib/contextMenu'
@@ -111,6 +111,8 @@ function getTypeText(type: JobType) {
   switch (type) {
     case JobType.Move:
       return t('move')
+    case JobType.Sync:
+      return t('sync')
   }
 
   return t('copy')

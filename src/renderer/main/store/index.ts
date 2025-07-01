@@ -99,7 +99,7 @@ class Store extends BaseStore {
     job.on('success', () => {
       const { dstFs, dstRemote, srcFs, srcRemote } = job.pair
 
-      if (job.type === JobType.Copy) {
+      if (job.type === JobType.Copy || job.type === JobType.Sync) {
         this.remote.refresh({
           fs: dstFs,
           remote: dstRemote,

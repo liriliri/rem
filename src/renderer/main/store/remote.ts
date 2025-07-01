@@ -12,6 +12,7 @@ import isArr from 'licia/isArr'
 import map from 'licia/map'
 import contain from 'licia/contain'
 import rtrim from 'licia/rtrim'
+import toBool from 'licia/toBool'
 
 export class Remote {
   remote = ''
@@ -106,9 +107,10 @@ export class Remote {
       }
       for (let i = 0, len = targets.length; i < len; i++) {
         const { fs, remote } = targets[i]
+        const parentDir = rtrim(splitPath(remote).dir, '/')
         if (
           fs === this.fs &&
-          rtrim(splitPath(remote).dir, '/') === this.remote
+          (parentDir === this.remote || remote === this.remote)
         ) {
           await this.getFileList(this.remote)
           break
@@ -209,9 +211,7 @@ export class Remote {
     return clipboardData && contain(['copy', 'cut'], clipboardData.type)
   }
   async canSync() {
-    const clipboardData = await main.getMemStore('clipboard')
-
-    return clipboardData && clipboardData.type === 'sync'
+    return toBool(await main.getMemStore('sync'))
   }
   copyFiles(remotes: string[]) {
     this.setClipboardData('copy', remotes)
@@ -219,8 +219,21 @@ export class Remote {
   cutFiles(remotes: string[]) {
     this.setClipboardData('cut', remotes)
   }
-  syncFiles(remote: string) {
-    this.setClipboardData('sync', remote)
+  async selectSyncFolder(remote: string) {
+    const syncData = {
+      target: {
+        fs: this.fs,
+        remote: remote,
+      },
+    }
+    await main.setMemStore('sync', syncData)
+  }
+  async syncFolder(remote?: string) {
+    const syncData = await main.getMemStore('sync')
+
+    await main.setMemStore('sync', null)
+
+    return this.syncFrom(syncData.target, remote || this.remote)
   }
   async pasteFiles(remote?: string) {
     const clipboardData = await main.getMemStore('clipboard')
@@ -340,6 +353,23 @@ export class Remote {
     }
 
     return job
+  }
+  private async syncFrom(target: Target, remote: string) {
+    return this.sync(
+      genTargetPair(
+        target,
+        {
+          fs: this.fs,
+          remote,
+        },
+        false
+      )
+    )
+  }
+  private async sync(pair: TargetPair) {
+    const jobId = await rclone.syncDir(pair)
+
+    return new Job(jobId, JobType.Sync, pair)
   }
   private async setClipboardData(type: string, remotes: string | string[]) {
     const clipboardData = {

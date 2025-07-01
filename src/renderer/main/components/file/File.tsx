@@ -76,7 +76,7 @@ export default observer(function File() {
           {
             label: t('selectForSync'),
             click: () => {
-              remote.syncFiles(resolvePath(file.name))
+              remote.selectSyncFolder(resolvePath(file.name))
             },
           }
         )
@@ -150,15 +150,24 @@ export default observer(function File() {
             }
           },
         },
+        {
+          type: 'separator',
+        },
+        {
+          label: t('selectForSync'),
+          click: () => {
+            remote.selectSyncFolder(remote.remote)
+          },
+        },
       ]
       if (await remote.canSync()) {
         template.push(
           {
-            type: 'separator',
-          },
-          {
             label: t('sync'),
-            click: () => {},
+            click: async () => {
+              const job = await remote.syncFolder()
+              store.addJob(job)
+            },
           },
           {
             label: t('bisync'),
