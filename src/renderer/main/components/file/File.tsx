@@ -80,6 +80,15 @@ export default observer(function File() {
             },
           }
         )
+        if (await remote.canSync()) {
+          template.push({
+            label: t('sync'),
+            click: async () => {
+              const job = await remote.syncFolder(resolvePath(file.name))
+              store.addJob(job)
+            },
+          })
+        }
       }
       template.push(
         {
@@ -161,19 +170,13 @@ export default observer(function File() {
         },
       ]
       if (await remote.canSync()) {
-        template.push(
-          {
-            label: t('sync'),
-            click: async () => {
-              const job = await remote.syncFolder()
-              store.addJob(job)
-            },
+        template.push({
+          label: t('sync'),
+          click: async () => {
+            const job = await remote.syncFolder()
+            store.addJob(job)
           },
-          {
-            label: t('bisync'),
-            click: () => {},
-          }
-        )
+        })
       }
       if (await remote.canPaste()) {
         template.push(

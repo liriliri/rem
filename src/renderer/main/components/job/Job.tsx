@@ -8,7 +8,7 @@ import { useResizeSensor } from 'share/renderer/lib/hooks'
 import map from 'licia/map'
 import store from '../../store'
 import durationFormat from 'licia/durationFormat'
-import { Job, JobStatus, JobType } from '../../store/job'
+import { JobStatus, JobType } from '../../store/job'
 import dateFormat from 'licia/dateFormat'
 import fileSize from 'licia/fileSize'
 import contextMenu from 'share/renderer/lib/contextMenu'
@@ -34,7 +34,7 @@ export default observer(function Job() {
       file: `${job.transferredFiles}/${job.totalFiles}`,
       size: `${fileSize(job.transferredBytes)}B/${fileSize(job.totalBytes)}B`,
       speed: fileSize(job.speed) + 'B/s',
-      startTime: dateFormat(job.startTime, 'MM-dd hh:mm:ss'),
+      startTime: dateFormat(job.startTime, 'mm-dd HH:MM:ss'),
     }
   })
 

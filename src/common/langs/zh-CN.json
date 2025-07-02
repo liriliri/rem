@@ -77,6 +77,5 @@
   "usedStorage": "{{storage}} 已使用",
   "totalStorage": "总计 {{storage}}",
   "selectForSync": "选择以进行同步",
-  "sync": "同步",
-  "bisync": "双向同步"
+  "sync": "同步"
 }

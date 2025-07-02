@@ -8,7 +8,23 @@
   font-size: #{$font-size-s-m}px;
   margin-bottom: #{$margin-x-x-s}px;
   display: flex;
-  justify-content: space-between;
+}
+
+.used,
+.total {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex: 1;
+  min-width: 0;
+}
+
+.used {
+  text-align: left;
+}
+
+.total {
+  text-align: right;
 }
 
 .bar {

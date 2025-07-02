@@ -14,12 +14,14 @@ export default observer(function About() {
   return (
     <div className={Style.container}>
       <div className={Style.storage}>
-        <div>
+        <div className={Style.used}>
           {t('usedStorage', {
             storage: fileSize(used) + 'B',
           })}
         </div>
-        <div>{t('totalStorage', { storage: fileSize(total) + 'B' })}</div>
+        <div className={Style.total}>
+          {t('totalStorage', { storage: fileSize(total) + 'B' })}
+        </div>
       </div>
       <div className={Style.bar}>
         <div

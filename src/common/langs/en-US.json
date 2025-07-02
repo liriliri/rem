@@ -77,6 +77,5 @@
   "usedStorage": "{{storage}} used",
   "totalStorage": "{{storage}} total",
   "selectForSync": "Select for Synchronize",
-  "sync": "Synchronize",
-  "bisync": "Bi-directional Synchronize"
+  "sync": "Synchronize"
 }
