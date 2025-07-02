@@ -19,6 +19,7 @@ export type About = {
 
 export type Features = {
   About: boolean
+  PublicLink: boolean
 }
 
 export type FsInfo = {
@@ -175,6 +176,15 @@ export async function syncDir(targetPair: TargetPair): Promise<number> {
   })
 
   return response.data.jobid
+}
+
+export async function createPublicLink(target: Target): Promise<string> {
+  const response = await api.post<{ url: string }>(
+    '/operations/publiclink',
+    target
+  )
+
+  return response.data.url
 }
 
 export async function getStatusForJob(jobId: number): Promise<JobStatus> {

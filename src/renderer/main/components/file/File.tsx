@@ -12,8 +12,11 @@ import { useRef, useState } from 'react'
 import className from 'licia/className'
 import { isFileDrop } from 'share/renderer/lib/util'
 import each from 'licia/each'
+import PublicLinkModal from './PublicLinkModal'
 
 export default observer(function File() {
+  const [publicLinkModalVisible, setPublicLinkModalVisible] = useState(false)
+  const [publicLink, setPublicLink] = useState('')
   const [dropHighlight, setDropHighlight] = useState(false)
   const draggingRef = useRef(0)
 
@@ -147,6 +150,21 @@ export default observer(function File() {
           },
         }
       )
+      if (remote.features.PublicLink) {
+        template.push(
+          {
+            type: 'separator',
+          },
+          {
+            label: t('getPublicLink'),
+            click: async () => {
+              const url = await remote.getPublicLink(resolvePath(file.name))
+              setPublicLinkModalVisible(true)
+              setPublicLink(url)
+            },
+          }
+        )
+      }
       contextMenu(e, template)
     } else {
       const template: any[] = [
@@ -197,43 +215,50 @@ export default observer(function File() {
   }
 
   return (
-    <div
-      onDrop={onDrop}
-      onDragEnter={() => {
-        draggingRef.current++
-      }}
-      onDragLeave={() => {
-        draggingRef.current--
-        if (draggingRef.current === 0) {
-          setDropHighlight(false)
-        }
-      }}
-      onDragOver={(e) => {
-        if (!isFileDrop(e)) {
-          return
-        }
-        e.preventDefault()
-        if (!remote.isLoading) {
-          setDropHighlight(true)
-        }
-      }}
-      className={className(Style.container, {
-        [Style.highlight]: dropHighlight,
-      })}
-    >
-      <LunaFileList
-        className={Style.fileList}
-        files={files}
-        filter={remote.filter}
-        listView={store.listView}
-        onDoubleClick={(e: MouseEvent, file: IFile) => open(file)}
-        onContextMenu={onContextMenu}
+    <>
+      <div
+        onDrop={onDrop}
+        onDragEnter={() => {
+          draggingRef.current++
+        }}
+        onDragLeave={() => {
+          draggingRef.current--
+          if (draggingRef.current === 0) {
+            setDropHighlight(false)
+          }
+        }}
+        onDragOver={(e) => {
+          if (!isFileDrop(e)) {
+            return
+          }
+          e.preventDefault()
+          if (!remote.isLoading) {
+            setDropHighlight(true)
+          }
+        }}
+        className={className(Style.container, {
+          [Style.highlight]: dropHighlight,
+        })}
+      >
+        <LunaFileList
+          className={Style.fileList}
+          files={files}
+          filter={remote.filter}
+          listView={store.listView}
+          onDoubleClick={(e: MouseEvent, file: IFile) => open(file)}
+          onContextMenu={onContextMenu}
+        />
+        {remote.isLoading && (
+          <div className={Style.loading}>
+            <LoadingBar />
+          </div>
+        )}
+      </div>
+      <PublicLinkModal
+        visible={publicLinkModalVisible}
+        onClose={() => setPublicLinkModalVisible(false)}
+        url={publicLink}
       />
-      {remote.isLoading && (
-        <div className={Style.loading}>
-          <LoadingBar />
-        </div>
-      )}
-    </div>
+    </>
   )
 })

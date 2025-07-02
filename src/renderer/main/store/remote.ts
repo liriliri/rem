@@ -25,6 +25,7 @@ export class Remote {
   filter = ''
   features: Features = {
     About: true,
+    PublicLink: false,
   }
   about: About = {}
   fs: string
@@ -93,6 +94,12 @@ export class Remote {
     runInAction(() => {
       this.history = [...this.history.slice(0, this.historyIdx + 1), remote]
       this.historyIdx += 1
+    })
+  }
+  async getPublicLink(remote: string) {
+    return await rclone.createPublicLink({
+      fs: this.fs,
+      remote,
     })
   }
   async goCustomRemote() {

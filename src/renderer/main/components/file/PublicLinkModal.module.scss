@@ -1,0 +1,8 @@
+@use '../../../theme' as *;
+
+.public-link {
+  border: 1px solid var(--color-border);
+  border-radius: #{$border-radius-s-m}px;
+  user-select: text;
+  padding: #{$padding-s-m}px;
+}

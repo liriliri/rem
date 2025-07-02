@@ -77,5 +77,8 @@
   "usedStorage": "{{storage}} 已使用",
   "totalStorage": "总计 {{storage}}",
   "selectForSync": "选择以进行同步",
-  "sync": "同步"
+  "sync": "同步",
+  "getPublicLink": "获取公开链接",
+  "publicLink": "公开链接",
+  "copied": "已复制"
 }

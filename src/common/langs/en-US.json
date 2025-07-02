@@ -77,5 +77,8 @@
   "usedStorage": "{{storage}} used",
   "totalStorage": "{{storage}} total",
   "selectForSync": "Select for Synchronize",
-  "sync": "Synchronize"
+  "sync": "Synchronize",
+  "getPublicLink": "Get Public Link",
+  "publicLink": "Public Link",
+  "copied": "Copied"
 }
