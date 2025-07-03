@@ -22,4 +22,5 @@ export default Object.assign(mainObj, {
   newWindow: invoke<IpcNewWindow>('newWindow'),
   getWindowsDrives: invoke<IpcGetWindowsDrives>('getWindowsDrives'),
   getFileIcon: invoke<IpcGetFileIcon>('getFileIcon'),
+  showMount: invoke('showMount'),
 })

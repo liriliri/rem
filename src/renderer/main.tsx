@@ -3,6 +3,7 @@ import getUrlParam from 'licia/getUrlParam'
 import { lazy } from 'react'
 import { createRoot } from 'react-dom/client'
 import log from 'share/common/log'
+import LunaModal from 'luna-modal'
 import 'share/renderer/main'
 import 'luna-toolbar/css'
 import 'luna-setting/css'
@@ -41,6 +42,10 @@ function renderApp() {
       App = lazy(() => import('./about/App.js') as Promise<any>)
       title = t('aboutRem')
       break
+    case 'mount':
+      App = lazy(() => import('./mount/App.js') as Promise<any>)
+      title = t('mountManager')
+      break
   }
 
   preload.setTitle(title)
@@ -51,6 +56,12 @@ function renderApp() {
 ;(async function () {
   const language = await main.getLanguage()
   i18n.locale(language)
+
+  LunaModal.i18n.locale('en-US')
+  LunaModal.i18n.set('en-US', {
+    ok: t('ok'),
+    cancel: t('cancel'),
+  })
 
   renderApp()
 })()

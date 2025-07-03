@@ -31,3 +31,12 @@ export const getAboutStore = memoize(function () {
     bounds: {},
   })
 })
+
+export const getMountStore = memoize(function () {
+  return new FileStore(getUserDataPath('data/mount.json'), {
+    bounds: {
+      width: 640,
+      height: 480,
+    },
+  })
+})

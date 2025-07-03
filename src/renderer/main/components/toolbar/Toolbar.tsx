@@ -42,7 +42,7 @@ export default observer(function Toolbar() {
         <ToolbarIcon
           icon="mount"
           title={t('mountManager')}
-          onClick={async () => {}}
+          onClick={() => main.showMount()}
         />
         <ToolbarIcon
           icon="terminal"

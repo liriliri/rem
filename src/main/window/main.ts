@@ -19,6 +19,7 @@ import fs from 'fs-extra'
 import path from 'path'
 import os from 'os'
 import isMac from 'licia/isMac'
+import * as mount from './mount'
 
 const logger = log('mainWin')
 
@@ -156,4 +157,5 @@ const initIpc = once(() => {
   }))
   handleEvent('getWindowsDrives', getWindowsDrives)
   handleEvent('getFileIcon', getFileIcon)
+  handleEvent('showMount', () => mount.showWin())
 })
