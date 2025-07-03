@@ -240,6 +240,13 @@ export async function getFsInfo(fs: string): Promise<FsInfo> {
   return response.data
 }
 
+export async function createMount(fs: string, mountPoint: string) {
+  await api.post('/mount/mount', {
+    fs,
+    mountPoint,
+  })
+}
+
 export const wait = singleton(async function (checkInterval = 5) {
   await init()
 

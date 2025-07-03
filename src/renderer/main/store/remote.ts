@@ -17,6 +17,7 @@ import toBool from 'licia/toBool'
 export class Remote {
   remote = ''
   name = ''
+  type = ''
   customRemote = ''
   files: File[] = []
   history: string[] = []
@@ -34,6 +35,7 @@ export class Remote {
 
     this.name = name
     this.fs = fs
+    this.type = config.type
 
     this.updateTitle()
 
@@ -264,6 +266,9 @@ export class Remote {
     await main.setMemStore('clipboard', null)
 
     return jobs
+  }
+  async mount(mountPoint: string) {
+    await rclone.createMount(this.fs + this.remote, mountPoint)
   }
   private async getAbout() {
     const about = await rclone.getAbout(this.fs)

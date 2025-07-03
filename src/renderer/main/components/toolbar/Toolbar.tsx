@@ -9,7 +9,6 @@ import { t } from '../../../../common/util'
 import Style from './Toolbar.module.scss'
 import className from 'licia/className'
 import store from '../../store'
-import each from 'licia/each'
 import some from 'licia/some'
 import { JobStatus } from '../../store/job'
 
@@ -39,6 +38,11 @@ export default observer(function Toolbar() {
           onClick={() => {
             store.toggleJob()
           }}
+        />
+        <ToolbarIcon
+          icon="mount"
+          title={t('mountManager')}
+          onClick={async () => {}}
         />
         <ToolbarIcon
           icon="terminal"
@@ -92,16 +96,6 @@ export default observer(function Toolbar() {
           value={store.remote.filter}
           placeholder={t('filter')}
           onChange={(val) => store.remote.setFilter(val)}
-        />
-        <LunaToolbarSeparator />
-        <ToolbarIcon
-          icon="upload"
-          title={t('upload')}
-          onClick={async () => {
-            const jobs = await remote.uploadFiles()
-            each(jobs, (job) => store.addJob(job))
-          }}
-          disabled={remote.isLoading}
         />
         <LunaToolbarSeparator />
         <ToolbarIcon

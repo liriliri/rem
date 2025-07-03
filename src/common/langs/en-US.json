@@ -80,5 +80,8 @@
   "sync": "Synchronize",
   "getPublicLink": "Get Public Link",
   "publicLink": "Public Link",
-  "copied": "Copied"
+  "copied": "Copied",
+  "mount": "Mount",
+  "mountManager": "Mount Manager",
+  "browse": "Browse"
 }

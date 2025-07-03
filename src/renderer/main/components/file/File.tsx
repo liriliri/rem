@@ -13,10 +13,12 @@ import className from 'licia/className'
 import { isFileDrop } from 'share/renderer/lib/util'
 import each from 'licia/each'
 import PublicLinkModal from './PublicLinkModal'
+import MountModal from './MountModal'
 
 export default observer(function File() {
   const [publicLinkModalVisible, setPublicLinkModalVisible] = useState(false)
   const [publicLink, setPublicLink] = useState('')
+  const [mountModalVisible, setMountModalVisible] = useState(false)
   const [dropHighlight, setDropHighlight] = useState(false)
   const draggingRef = useRef(0)
 
@@ -175,6 +177,26 @@ export default observer(function File() {
     } else {
       const template: any[] = [
         {
+          label: t('upload'),
+          click: async () => {
+            const jobs = await remote.uploadFiles()
+            each(jobs, (job) => store.addJob(job))
+          },
+        },
+      ]
+      if (remote.type !== 'remdisk') {
+        template.push({
+          label: t('mount'),
+          click: async () => {
+            setMountModalVisible(true)
+          },
+        })
+      }
+      template.push(
+        {
+          type: 'separator',
+        },
+        {
           label: t('newFolder'),
           click: async () => {
             const name = await LunaModal.prompt(t('newFolderName'))
@@ -191,8 +213,8 @@ export default observer(function File() {
           click: () => {
             remote.selectSyncFolder(remote.remote)
           },
-        },
-      ]
+        }
+      )
       if (await remote.canSync()) {
         template.push({
           label: t('sync'),
@@ -264,6 +286,10 @@ export default observer(function File() {
         visible={publicLinkModalVisible}
         onClose={() => setPublicLinkModalVisible(false)}
         url={publicLink}
+      />
+      <MountModal
+        visible={mountModalVisible}
+        onClose={() => setMountModalVisible(false)}
       />
     </>
   )
