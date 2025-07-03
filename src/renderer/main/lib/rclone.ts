@@ -35,6 +35,7 @@ export type File = {
   Size: number
   ModTime: string
   Path: string
+  Metadata?: any
 }
 
 export type Stats = {
@@ -95,7 +96,12 @@ export async function deleteConfig(name: string) {
 export async function getFileList(target: Target): Promise<File[]> {
   const response = await api.post<{
     list: File[]
-  }>('/operations/list', target)
+  }>('/operations/list', {
+    ...target,
+    opt: {
+      metadata: true,
+    },
+  })
 
   return response.data.list
 }

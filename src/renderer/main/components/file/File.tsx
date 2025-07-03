@@ -23,12 +23,18 @@ export default observer(function File() {
   const { remote } = store
 
   const files = map(remote.files, (file) => {
-    return {
+    const ret: IFile = {
       name: file.Name,
       directory: file.IsDir,
       mtime: new Date(file.ModTime),
       size: file.Size,
     }
+
+    if (file.Metadata && file.Metadata.thumbnail) {
+      ret.thumbnail = file.Metadata.thumbnail
+    }
+
+    return ret
   })
 
   async function open(file: IFile) {

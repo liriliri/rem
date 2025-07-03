@@ -409,6 +409,15 @@ export class Remote {
         fs: this.fs,
         remote,
       })
+      for (let i = 0, len = fileList.length; i < len; i++) {
+        const file = fileList[i]
+        if (!file.IsDir) {
+          file.Metadata = file.Metadata || {}
+          file.Metadata.thumbnail = await main.getFileIcon(
+            splitPath(file.Name).ext
+          )
+        }
+      }
       runInAction(() => {
         this.files = fileList
         this.remote = remote

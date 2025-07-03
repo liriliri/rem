@@ -1,4 +1,5 @@
 import {
+  IpcGetFileIcon,
   IpcGetRcloneAuth,
   IpcGetRclonePort,
   IpcGetWindowsDrives,
@@ -20,4 +21,5 @@ export default Object.assign(mainObj, {
   openRcloneCli: invoke('openRcloneCli'),
   newWindow: invoke<IpcNewWindow>('newWindow'),
   getWindowsDrives: invoke<IpcGetWindowsDrives>('getWindowsDrives'),
+  getFileIcon: invoke<IpcGetFileIcon>('getFileIcon'),
 })
