@@ -26,12 +26,6 @@ export const getSettingsStore = memoize(function () {
   })
 })
 
-export const getAboutStore = memoize(function () {
-  return new FileStore(getUserDataPath('data/about.json'), {
-    bounds: {},
-  })
-})
-
 export const getMountStore = memoize(function () {
   return new FileStore(getUserDataPath('data/mount.json'), {
     bounds: {

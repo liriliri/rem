@@ -33,7 +33,8 @@ export default defineConfig(async (): Promise<UserConfig> => {
       port: 8080,
     },
     define: {
-      REM_VERSION: JSON.stringify(pkg.version),
+      PRODUCT_NAME: JSON.stringify(pkg.productName),
+      VERSION: JSON.stringify(pkg.version),
     },
     resolve: {
       alias: {
