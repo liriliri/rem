@@ -194,9 +194,6 @@ export default observer(function File() {
       }
       template.push(
         {
-          type: 'separator',
-        },
-        {
           label: t('newFolder'),
           click: async () => {
             const name = await LunaModal.prompt(t('newFolderName'))
