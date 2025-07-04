@@ -83,5 +83,13 @@
   "copied": "已复制",
   "mount": "挂载",
   "mountManager": "挂载管理器",
-  "browse": "浏览"
+  "browse": "浏览",
+  "mountPoint": "挂载点",
+  "mounted": "已挂载",
+  "unmounted": "未挂载",
+  "openDir": "打开目录",
+  "deleteAllMounts": "删除所有挂载",
+  "deleteAllMountsConfirm": "确定要删除所有挂载吗？",
+  "mountErr": "挂载 {{mountPoint}} 失败",
+  "unmount": "卸载"
 }

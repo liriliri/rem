@@ -2,12 +2,18 @@ import axios from 'axios'
 import types from 'licia/types'
 import singleton from 'licia/singleton'
 import { notify } from 'share/renderer/lib/util'
-import { t } from '../../../common/util'
+import { t } from '../../common/util'
 
 type ConfigDump = types.PlainObj<{
   type: string
   provider?: string
 }>
+
+export type Mount = {
+  Fs: string
+  MountPoint: string
+  MountedOn: string
+}
 
 export type About = {
   total?: number
@@ -247,6 +253,24 @@ export async function createMount(fs: string, mountPoint: string) {
   })
 }
 
+export async function removeMount(mountPoint: string) {
+  await api.post('/mount/unmount', {
+    mountPoint,
+  })
+}
+
+export async function unmountAll() {
+  await api.post('/mount/unmountall')
+}
+
+export async function listMounts(): Promise<Mount[]> {
+  const response = await api.post<{
+    mountPoints: Mount[]
+  }>('/mount/listmounts')
+
+  return response.data.mountPoints
+}
+
 export const wait = singleton(async function (checkInterval = 5) {
   await init()
 
@@ -277,7 +301,16 @@ async function init() {
     api.interceptors.response.use(
       (response) => response,
       (error) => {
-        notify(t('reqErr'), { icon: 'error' })
+        const url = error.config?.url || ''
+        if (url === '/mount/mount') {
+          const data = JSON.parse(error.config?.data || '{}')
+          notify(t('mountErr', { mountPoint: data.mountPoint || '' }), {
+            icon: 'error',
+          })
+        } else {
+          notify(t('reqErr'), { icon: 'error' })
+        }
+
         return Promise.reject(error)
       }
     )

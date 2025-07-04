@@ -1,6 +1,6 @@
 import { makeObservable, observable, runInAction } from 'mobx'
-import * as rclone from '../lib/rclone'
-import { TargetPair } from '../lib/rclone'
+import * as rclone from '../../lib/rclone'
+import { TargetPair } from '../../lib/rclone'
 import now from 'licia/now'
 import Emitter from 'licia/Emitter'
 

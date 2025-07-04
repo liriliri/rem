@@ -27,7 +27,7 @@ export default observer(function Toolbar() {
       <ToolbarIcon
         icon="refresh"
         title={t('refresh')}
-        onClick={() => store.fetchConfigs()}
+        onClick={() => store.getConfigs()}
       />
     </LunaToolbar>
   )

@@ -83,5 +83,13 @@
   "copied": "Copied",
   "mount": "Mount",
   "mountManager": "Mount Manager",
-  "browse": "Browse"
+  "browse": "Browse",
+  "mountPoint": "Mount Point",
+  "mounted": "Mounted",
+  "unmounted": "Unmounted",
+  "openDir": "Open Directory",
+  "deleteAllMounts": "Delete All Mounts",
+  "deleteAllMountsConfirm": "Are you sure you want to delete all mounts?",
+  "mountErr": "Failed to mount {{mountPoint}}",
+  "unmount": "Unmount"
 }

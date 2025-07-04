@@ -12,5 +12,8 @@
   "copy.svg",
   "delete.svg",
   "bidirection.svg",
-  "mount.svg"
+  "mount.svg",
+  "open-file.svg",
+  "disconnect.svg",
+  "delete-all.svg"
 ]
