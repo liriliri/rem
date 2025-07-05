@@ -12,7 +12,7 @@
         background-color: if($class == ':root', #ddd, #393939);
       }
       tr:nth-child(even) {
-        background-color: if($class == ':root', #fafafa, #1f262c);
+        background-color: if($class == ':root', #e6e6e6, #1f262c);
       }
     }
     .luna-data-grid:focus {
