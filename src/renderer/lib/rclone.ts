@@ -6,6 +6,7 @@ import { t } from '../../common/util'
 import contain from 'licia/contain'
 import LunaModal from 'luna-modal'
 import isWindows from 'licia/isWindows'
+import isMac from 'licia/isMac'
 
 type ConfigDump = types.PlainObj<{
   type: string
@@ -250,8 +251,8 @@ export async function getFsInfo(fs: string): Promise<FsInfo> {
 }
 
 export async function createMount(fs: string, mountPoint: string) {
-  if (isWindows) {
-    if (node.existsSync(mountPoint)) {
+  if (node.existsSync(mountPoint)) {
+    if (isWindows) {
       if (
         (await node.isDir(mountPoint)) &&
         (await node.isEmptyDir(mountPoint))
@@ -259,6 +260,8 @@ export async function createMount(fs: string, mountPoint: string) {
         await node.rmdir(mountPoint)
       }
     }
+  } else {
+    await node.mkdir(mountPoint, { recursive: true })
   }
 
   await api.post('/mount/mount', {
@@ -322,6 +325,11 @@ async function init() {
             const result = await LunaModal.confirm(t('winfspNotFound'))
             if (result) {
               main.openExternal('https://winfsp.dev/')
+            }
+          } else if (isMac && contain(err, 'cannot find FUSE')) {
+            const result = await LunaModal.confirm(t('macfuseNotFound'))
+            if (result) {
+              main.openExternal('https://macfuse.github.io/')
             }
           } else {
             const data = JSON.parse(error.config?.data || '{}')

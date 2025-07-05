@@ -92,5 +92,6 @@
   "deleteAllMountsConfirm": "确定要删除所有挂载吗？",
   "mountErr": "挂载 {{mountPoint}} 失败",
   "unmount": "卸载",
-  "winfspNotFound": "未找到 WinFsp，是否要安装？"
+  "winfspNotFound": "未找到 WinFsp，是否要安装？",
+  "macfuseNotFound": "未找到 macFUSE，是否要安装？"
 }

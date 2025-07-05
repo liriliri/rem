@@ -92,5 +92,6 @@
   "deleteAllMountsConfirm": "Are you sure you want to delete all mounts?",
   "mountErr": "Failed to mount {{mountPoint}}",
   "unmount": "Unmount",
-  "winfspNotFound": "WinFsp not found, do you want to install it?"
+  "winfspNotFound": "WinFsp not found, do you want to install it?",
+  "macfuseNotFound": "macFUSE not found, do you want to install it?"
 }
