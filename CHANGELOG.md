@@ -1,3 +1,8 @@
+## v0.4.0 (6 Jul 2025)
+
+* feat: mount
+* feat: use system file icon
+
 ## v0.3.0 (2 Jul 2025)
 
 * feat: synchronize folder

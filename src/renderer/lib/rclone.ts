@@ -261,7 +261,9 @@ export async function createMount(fs: string, mountPoint: string) {
       }
     }
   } else {
-    await node.mkdir(mountPoint, { recursive: true })
+    if (!isWindows) {
+      await node.mkdir(mountPoint, { recursive: true })
+    }
   }
 
   await api.post('/mount/mount', {
