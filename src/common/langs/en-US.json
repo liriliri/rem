@@ -91,5 +91,6 @@
   "deleteAllMounts": "Delete All Mounts",
   "deleteAllMountsConfirm": "Are you sure you want to delete all mounts?",
   "mountErr": "Failed to mount {{mountPoint}}",
-  "unmount": "Unmount"
+  "unmount": "Unmount",
+  "winfspNotFound": "WinFsp not found, do you want to install it?"
 }

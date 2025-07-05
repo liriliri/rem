@@ -91,5 +91,6 @@
   "deleteAllMounts": "删除所有挂载",
   "deleteAllMountsConfirm": "确定要删除所有挂载吗？",
   "mountErr": "挂载 {{mountPoint}} 失败",
-  "unmount": "卸载"
+  "unmount": "卸载",
+  "winfspNotFound": "未找到 WinFsp，是否要安装？"
 }

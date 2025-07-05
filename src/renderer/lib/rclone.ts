@@ -3,6 +3,9 @@ import types from 'licia/types'
 import singleton from 'licia/singleton'
 import { notify } from 'share/renderer/lib/util'
 import { t } from '../../common/util'
+import contain from 'licia/contain'
+import LunaModal from 'luna-modal'
+import isWindows from 'licia/isWindows'
 
 type ConfigDump = types.PlainObj<{
   type: string
@@ -300,13 +303,21 @@ async function init() {
     api.defaults.headers.common['Authorization'] = `Basic ${auth}`
     api.interceptors.response.use(
       (response) => response,
-      (error) => {
+      async (error) => {
         const url = error.config?.url || ''
         if (url === '/mount/mount') {
-          const data = JSON.parse(error.config?.data || '{}')
-          notify(t('mountErr', { mountPoint: data.mountPoint || '' }), {
-            icon: 'error',
-          })
+          const err = error.response.data.error
+          if (isWindows && contain(err, 'cannot find winfsp')) {
+            const result = await LunaModal.confirm(t('winfspNotFound'))
+            if (result) {
+              main.openExternal('https://winfsp.dev/')
+            }
+          } else {
+            const data = JSON.parse(error.config?.data || '{}')
+            notify(t('mountErr', { mountPoint: data.mountPoint || '' }), {
+              icon: 'error',
+            })
+          }
         } else {
           notify(t('reqErr'), { icon: 'error' })
         }

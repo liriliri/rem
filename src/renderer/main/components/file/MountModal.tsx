@@ -17,7 +17,7 @@ export default function MountModal(props: IProps) {
   const [filePath, setFilePath] = useState('')
 
   useEffect(() => {
-    if (props.visible) {
+    if (!props.visible) {
       setFilePath('')
     }
   }, [props.visible])
