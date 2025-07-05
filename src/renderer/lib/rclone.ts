@@ -250,6 +250,17 @@ export async function getFsInfo(fs: string): Promise<FsInfo> {
 }
 
 export async function createMount(fs: string, mountPoint: string) {
+  if (isWindows) {
+    if (node.existsSync(mountPoint)) {
+      if (
+        (await node.isDir(mountPoint)) &&
+        (await node.isEmptyDir(mountPoint))
+      ) {
+        await node.rmdir(mountPoint)
+      }
+    }
+  }
+
   await api.post('/mount/mount', {
     fs,
     mountPoint,
