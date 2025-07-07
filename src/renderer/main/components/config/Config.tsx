@@ -9,6 +9,7 @@ import DropboxIcon from '../../../assets/config-icon/dropbox.svg'
 import CloudflareIcon from '../../../assets/config-icon/cloudflare.svg'
 import OneDriveIcon from '../../../assets/config-icon/onedrive.svg'
 import TencentIcon from '../../../assets/config-icon/tencent.svg'
+import AlibabaIcon from '../../../assets/config-icon/aliyun.svg'
 import className from 'licia/className'
 import About from './About'
 import { t } from '../../../../common/util'
@@ -73,6 +74,8 @@ function getConfigIcon(type: string, provider?: string) {
         return CloudflareIcon
       case 'TencentCOS':
         return TencentIcon
+      case 'Alibaba':
+        return AlibabaIcon
     }
   }
 
