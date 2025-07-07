@@ -7,18 +7,19 @@
 @each $class in (':root', '.-theme-with-dark-background') {
   #{$class} {
     .luna-data-grid-data-container {
-      .luna-data-grid-node.luna-data-grid-selected,
-      .luna-data-grid-node.luna-data-grid-selectable:hover {
-        background-color: if($class == ':root', #ddd, #393939);
+      .luna-data-grid-node.luna-data-grid-selectable {
+        &:hover {
+          background: transparent;
+        }
       }
       tr:nth-child(even) {
-        background-color: if($class == ':root', #e6e6e6, #1f262c);
+        background-color: if($class == ':root', #f1f1f1, #2c363e) !important;
       }
     }
-    .luna-data-grid:focus {
+    .luna-data-grid {
       .luna-data-grid-node.luna-data-grid-selectable.luna-data-grid-selected {
         color: #fff;
-        background-color: var(--color-primary);
+        background-color: var(--color-primary) !important;
       }
     }
   }

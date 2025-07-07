@@ -33,6 +33,11 @@
   &.selected {
     background-color: var(--color-primary);
     color: #fff;
+    .config-icon {
+      img {
+        filter: brightness(0) saturate(100%) invert(1);
+      }
+    }
   }
 }
 

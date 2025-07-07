@@ -10,6 +10,7 @@ import CloudflareIcon from '../../../assets/config-icon/cloudflare.svg'
 import OneDriveIcon from '../../../assets/config-icon/onedrive.svg'
 import TencentIcon from '../../../assets/config-icon/tencent.svg'
 import AlibabaIcon from '../../../assets/config-icon/aliyun.svg'
+import SftpIcon from '../../../assets/config-icon/sftp.svg'
 import className from 'licia/className'
 import About from './About'
 import { t } from '../../../../common/util'
@@ -86,6 +87,8 @@ function getConfigIcon(type: string, provider?: string) {
       return DropboxIcon
     case 'onedrive':
       return OneDriveIcon
+    case 'sftp':
+      return SftpIcon
     default:
       return DefaultIcon
   }
