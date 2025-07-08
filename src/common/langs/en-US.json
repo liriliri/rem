@@ -93,5 +93,7 @@
   "mountErr": "Failed to mount {{mountPoint}}",
   "unmount": "Unmount",
   "winfspNotFound": "WinFsp not found, do you want to install it?",
-  "macfuseNotFound": "macFUSE not found, do you want to install it?"
+  "macfuseNotFound": "macFUSE not found, do you want to install it?",
+  "rclonePath": "Rclone Path",
+  "autoMountWhenLaunch": "Auto mount when launch"
 }

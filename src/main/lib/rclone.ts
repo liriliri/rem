@@ -9,8 +9,14 @@ import isMac from 'licia/isMac'
 import isWindows from 'licia/isWindows'
 import randomId from 'licia/randomId'
 import btoa from 'licia/btoa'
+import { getSettingsStore } from './store'
+import fs from 'fs-extra'
+import isStrBlank from 'licia/isStrBlank'
+import path from 'path'
 
 const logger = log('rclone')
+
+const settingsStore = getSettingsStore()
 
 let port = 5572
 const user = 'rem'
@@ -21,9 +27,7 @@ let subprocess: ChildProcessByStdio<null, Readable, Readable>
 export async function start() {
   initRpc()
 
-  const rclonePath = isWindows
-    ? resolveUnpack('rclone/rclone.exe')
-    : resolveUnpack('rclone/rclone')
+  const rclonePath = getRclonePath()
 
   port = await getPort(port, '127.0.0.1')
 
@@ -57,8 +61,26 @@ export async function start() {
   app.on('will-quit', () => subprocess.kill())
 }
 
+function getRclonePath() {
+  let bin = isWindows
+    ? resolveUnpack('rclone/rclone.exe')
+    : resolveUnpack('rclone/rclone')
+  const rclonePath = settingsStore.get('rclonePath')
+  if (
+    rclonePath === 'rclone' ||
+    (!isStrBlank(rclonePath) && fs.existsSync(rclonePath))
+  ) {
+    bin = rclonePath
+  }
+  return bin
+}
+
 async function openRcloneCli() {
-  const cwd = resolveUnpack('rclone')
+  let cwd = resolveUnpack('rclone')
+  const rclonePath = settingsStore.get('rclonePath')
+  if (!isStrBlank(rclonePath) && fs.existsSync(rclonePath)) {
+    cwd = path.dirname(rclonePath)
+  }
 
   if (isMac) {
     const child = childProcess.spawn('open', ['-a', 'Terminal', cwd], {

@@ -67,7 +67,7 @@ class Store extends BaseStore {
   async unmountSelected() {
     const { mount } = this
 
-    if (!mount) {
+    if (!mount || !mount.mounted) {
       return
     }
 

@@ -16,6 +16,7 @@ import { Job, JobStatus, JobType } from './job'
 import filter from 'licia/filter'
 import each from 'licia/each'
 import { setMemStore } from 'share/renderer/lib/util'
+import { Settings } from '../../store/settings'
 
 class Store extends BaseStore {
   listView = false
@@ -31,6 +32,7 @@ class Store extends BaseStore {
     fs: '/',
   })
   jobs: Job[] = []
+  settings = new Settings()
   constructor() {
     super()
 
@@ -94,7 +96,10 @@ class Store extends BaseStore {
       }
 
       this.openRemote(this.configs[0])
-      this.autoMount()
+
+      if (this.settings.autoMountWhenLaunch) {
+        this.autoMount()
+      }
     }
   }
   addJob(job: Job) {
