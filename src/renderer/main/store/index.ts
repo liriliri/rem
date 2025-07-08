@@ -182,6 +182,7 @@ class Store extends BaseStore {
           name,
           type: item.type,
           provider: item.provider,
+          url: item.url,
           fs: `${name}:`,
         }
       })

@@ -11,9 +11,11 @@ import OneDriveIcon from '../../../assets/config-icon/onedrive.svg'
 import TencentIcon from '../../../assets/config-icon/tencent.svg'
 import AlibabaIcon from '../../../assets/config-icon/aliyun.svg'
 import SftpIcon from '../../../assets/config-icon/sftp.svg'
+import JianGuoYunIcon from '../../../assets/config-icon/jianguoyun.svg'
 import className from 'licia/className'
 import About from './About'
 import { t } from '../../../../common/util'
+import { IConfig } from '../../store/types'
 
 export default observer(function Config() {
   const configs = map(store.configs, (config) => {
@@ -32,7 +34,7 @@ export default observer(function Config() {
         }}
       >
         <div className={Style.configIcon}>
-          <img src={getConfigIcon(config.type, config.provider)} />
+          <img src={getConfigIcon(config)} />
         </div>
         <div className={Style.configName}>{config.name}</div>
         <div
@@ -68,7 +70,9 @@ export default observer(function Config() {
   )
 })
 
-function getConfigIcon(type: string, provider?: string) {
+function getConfigIcon(config: IConfig) {
+  const { type, provider, url } = config
+
   if (type === 's3') {
     switch (provider) {
       case 'Cloudflare':
@@ -77,6 +81,12 @@ function getConfigIcon(type: string, provider?: string) {
         return TencentIcon
       case 'Alibaba':
         return AlibabaIcon
+    }
+  }
+
+  if (type === 'webdav') {
+    if (url === 'https://dav.jianguoyun.com/dav/') {
+      return JianGuoYunIcon
     }
   }
 

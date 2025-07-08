@@ -11,6 +11,7 @@ import isMac from 'licia/isMac'
 type ConfigDump = types.PlainObj<{
   type: string
   provider?: string
+  url?: string
 }>
 
 export type Mount = {
