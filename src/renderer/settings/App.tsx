@@ -50,6 +50,13 @@ export default observer(function App() {
         }}
       />
       <LunaSettingSeparator />
+      <LunaSettingTitle title={t('startup')} />
+      <LunaSettingCheckbox
+        keyName="autoMount"
+        value={store.settings.autoMount}
+        description={t('autoMount')}
+      />
+      <LunaSettingSeparator />
       <LunaSettingTitle title="Rclone" />
       <SettingPath
         title={t('rclonePath')}
@@ -61,11 +68,6 @@ export default observer(function App() {
         options={{
           properties: ['openFile'],
         }}
-      />
-      <LunaSettingCheckbox
-        keyName="autoMountWhenLaunch"
-        value={store.settings.autoMountWhenLaunch}
-        description={t('autoMountWhenLaunch')}
       />
       <LunaSettingButton
         description={t('restartRem')}

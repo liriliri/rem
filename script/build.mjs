@@ -15,7 +15,7 @@ await $`npm run build:preload`
 await $`npm run build:renderer`
 
 await fs.copy('build', 'dist/build')
-await fs.copy('rclone', 'dist/rclone')
+await fs.copy('resources', 'dist/resources')
 cd('dist')
 
 await fs.writeJson('package.json', pkg, {

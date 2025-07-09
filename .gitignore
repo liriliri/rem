@@ -1,5 +1,5 @@
 node_modules/
 dist/
 release/
-rclone/
+resources/rclone/
 package-lock.json

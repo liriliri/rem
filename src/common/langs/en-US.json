@@ -95,5 +95,6 @@
   "winfspNotFound": "WinFsp not found, do you want to install it?",
   "macfuseNotFound": "macFUSE not found, do you want to install it?",
   "rclonePath": "Rclone Path",
-  "autoMountWhenLaunch": "Auto mount when launch"
+  "autoMount": "Auto mount",
+  "startup": "Startup"
 }

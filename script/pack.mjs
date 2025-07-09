@@ -14,9 +14,13 @@ const config = {
   directories: {
     output: `../release/${pkg.version}`,
   },
-  files: ['main', 'preload', 'renderer', 'rclone'],
-  asarUnpack: ['rclone/**/*'],
+  files: ['main', 'preload', 'renderer'],
   artifactName: '${productName}-${version}-${os}-${arch}.${ext}',
+  extraResources: {
+    from: 'resources',
+    to: './',
+    filter: ['**/*'],
+  },
   nsis: {
     allowToChangeInstallationDirectory: true,
     oneClick: false,

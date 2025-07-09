@@ -4,7 +4,7 @@ import last from 'licia/last.js'
 import fs from 'fs-extra'
 import os from 'node:os'
 
-const rcloneDir = resolve(__dirname, '../rclone')
+const rcloneDir = resolve(__dirname, '../resources/rclone')
 
 await fs.ensureDir(rcloneDir)
 

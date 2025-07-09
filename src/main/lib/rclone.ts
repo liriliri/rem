@@ -1,7 +1,7 @@
 import once from 'licia/once'
 import childProcess, { ChildProcessByStdio } from 'node:child_process'
 import { Readable } from 'node:stream'
-import { handleEvent, resolveUnpack } from 'share/main/lib/util'
+import { handleEvent, resolveResources } from 'share/main/lib/util'
 import getPort from 'licia/getPort'
 import log from 'share/common/log'
 import { app } from 'electron'
@@ -63,8 +63,8 @@ export async function start() {
 
 function getRclonePath() {
   let bin = isWindows
-    ? resolveUnpack('rclone/rclone.exe')
-    : resolveUnpack('rclone/rclone')
+    ? resolveResources('rclone/rclone.exe')
+    : resolveResources('rclone/rclone')
   const rclonePath = settingsStore.get('rclonePath')
   if (
     rclonePath === 'rclone' ||
@@ -76,7 +76,7 @@ function getRclonePath() {
 }
 
 async function openRcloneCli() {
-  let cwd = resolveUnpack('rclone')
+  let cwd = resolveResources('rclone')
   const rclonePath = settingsStore.get('rclonePath')
   if (!isStrBlank(rclonePath) && fs.existsSync(rclonePath)) {
     cwd = path.dirname(rclonePath)

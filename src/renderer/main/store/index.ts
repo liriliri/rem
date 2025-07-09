@@ -97,7 +97,7 @@ class Store extends BaseStore {
 
       this.openRemote(this.configs[0])
 
-      if (this.settings.autoMountWhenLaunch) {
+      if (this.settings.autoMount) {
         this.autoMount()
       }
     }
