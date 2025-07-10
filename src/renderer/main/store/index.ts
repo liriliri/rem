@@ -16,9 +16,10 @@ import isEmpty from 'licia/isEmpty'
 import { Job, JobStatus, JobType } from './job'
 import filter from 'licia/filter'
 import each from 'licia/each'
-import { setMemStore } from 'share/renderer/lib/util'
+import { notify, setMemStore } from 'share/renderer/lib/util'
 import { Settings } from '../../store/settings'
 import types from 'licia/types'
+import isStr from 'licia/isStr'
 
 class Store extends BaseStore {
   listView = false
@@ -176,9 +177,32 @@ class Store extends BaseStore {
     this.jobWeight = weight
     setMainStore('jobWeight', this.jobWeight)
   }
-  openRemote(config: IConfig) {
-    this.remote = new Remote(config)
-    this.remote.go('')
+  openRemote(config: IConfig | string) {
+    if (isStr(config)) {
+      const c = find(this.configs, (c) => c.name === config)
+      if (c) {
+        config = c
+      }
+    }
+
+    if (!isStr(config)) {
+      this.remote = new Remote(config)
+      this.remote.go('')
+    }
+  }
+  async duplicateConfig(name: string, newName: string) {
+    await this._duplicateConfig(name, newName)
+    await this.getConfigs()
+    this.selectConfig(newName)
+  }
+  async renameConfig(name: string, newName: string) {
+    await this._duplicateConfig(name, newName)
+    await rclone.deleteConfig(name)
+    if (this.remote.name === name) {
+      this.remote.name = newName
+    }
+    await this.getConfigs()
+    this.selectConfig(newName)
   }
   async deleteConfig(name: string) {
     await rclone.deleteConfig(name)
@@ -221,15 +245,33 @@ class Store extends BaseStore {
   async createConfig(
     name: string,
     type: string,
-    parameters: types.PlainObj<any>
+    parameters: types.PlainObj<any>,
+    opt: rclone.ICreateConfigOptions = {}
   ) {
-    await rclone.createConfig(name, type, parameters)
+    await this._createConfig(name, type, parameters, opt)
     await this.getConfigs()
     this.selectConfig(name)
-    const config = find(this.configs, (config) => config.name === name)
-    if (config) {
-      this.openRemote(config)
+    await this.openRemote(name)
+  }
+  private async _duplicateConfig(name: string, newName: string) {
+    const config = await rclone.getConfig(name)
+
+    await this._createConfig(newName, config.type, config, {
+      NonInteractive: true,
+    })
+  }
+  private async _createConfig(
+    name: string,
+    type: string,
+    parameters: types.PlainObj<any>,
+    opt: rclone.ICreateConfigOptions = {}
+  ) {
+    if (find(this.configs, (config) => config.name === name)) {
+      const msg = t('configExist', { name })
+      notify(msg, { icon: 'error' })
+      throw new Error(msg)
     }
+    await rclone.createConfig(name, type, parameters, opt)
   }
   private async getProviders() {
     const providers = await rclone.getProviders()

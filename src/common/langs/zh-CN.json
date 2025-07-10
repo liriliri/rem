@@ -102,5 +102,6 @@
   "name": "名称",
   "provider": "存储类型",
   "nameRequired": "名称不能为空",
-  "configExist": "配置 {{name}} 已存在"
+  "configExist": "配置 {{name}} 已存在",
+  "newConfigName": "新配置名称"
 }

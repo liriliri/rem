@@ -8,11 +8,13 @@ import LunaModal from 'luna-modal'
 import isWindows from 'licia/isWindows'
 import isMac from 'licia/isMac'
 
-type ConfigDump = types.PlainObj<{
+type Config = {
   type: string
   provider?: string
   url?: string
-}>
+}
+
+type ConfigDump = types.PlainObj<Config>
 
 export type Mount = {
   Fs: string
@@ -115,6 +117,14 @@ const api = axios.create({
 
 export async function getConfigDump(): Promise<ConfigDump> {
   const response = await api.post<ConfigDump>('/config/dump')
+
+  return response.data
+}
+
+export async function getConfig(name: string): Promise<Config> {
+  const response = await api.post<Config>('/config/get', {
+    name,
+  })
 
   return response.data
 }
@@ -320,15 +330,21 @@ export async function getProviders(): Promise<Provider[]> {
   return response.data.providers
 }
 
+export interface ICreateConfigOptions {
+  NonInteractive?: boolean
+}
+
 export async function createConfig(
   name: string,
   type: string,
-  parameters: types.PlainObj<any>
+  parameters: types.PlainObj<any>,
+  opt: ICreateConfigOptions = {}
 ) {
   await api.post('/config/create', {
     name,
     type,
     parameters,
+    opt,
   })
 }
 

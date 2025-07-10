@@ -102,5 +102,6 @@
   "name": "Name",
   "provider": "Provider",
   "nameRequired": "Name is required",
-  "configExist": "Config {{name}} already exists"
+  "configExist": "Config {{name}} already exists",
+  "newConfigName": "New Config Name"
 }

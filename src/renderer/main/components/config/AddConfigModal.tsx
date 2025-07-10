@@ -132,11 +132,6 @@ export default function AddConfigModal(props: IProps) {
             return
           }
 
-          if (find(store.configs, (config) => config.name === name)) {
-            notify(t('configExist', { name }), { icon: 'error' })
-            return
-          }
-
           await store.createConfig(name, providerName, parameters)
           props.onClose()
         }}

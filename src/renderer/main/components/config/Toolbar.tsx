@@ -25,6 +25,28 @@ export default observer(function Toolbar() {
         />
         <LunaToolbarSeparator />
         <ToolbarIcon
+          icon="copy"
+          title={t('duplicate')}
+          onClick={async () => {
+            store.duplicateConfig(selectedConfig!, `${selectedConfig!}_copy`)
+          }}
+          disabled={!selectedConfig}
+        />
+        <ToolbarIcon
+          icon="rename"
+          title={t('rename')}
+          onClick={async () => {
+            const name = await LunaModal.prompt(
+              t('newConfigName'),
+              selectedConfig!
+            )
+            if (name) {
+              store.renameConfig(selectedConfig!, name)
+            }
+          }}
+          disabled={!selectedConfig}
+        />
+        <ToolbarIcon
           icon="delete"
           title={t('delete')}
           onClick={async () => {
