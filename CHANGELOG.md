@@ -1,3 +1,10 @@
+## v0.5.0 (10 Jul 2025)
+
+* feat: rclone path settings
+* feat: add config
+* feat: duplicate config
+* feat: rename config
+
 ## v0.4.0 (6 Jul 2025)
 
 * feat: mount
