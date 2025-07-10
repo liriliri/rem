@@ -314,7 +314,7 @@ async function getLocalConfigs(): Promise<IConfig[]> {
   if (isEmpty(localConfigs)) {
     if (isWindows) {
       const drives = await main.getWindowsDrives()
-      return map(drives, (drive) => {
+      localConfigs = map(drives, (drive) => {
         return {
           name: `${t('localDisk')} (${drive})`,
           type: 'remdisk',
