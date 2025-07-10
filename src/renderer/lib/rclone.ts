@@ -85,6 +85,27 @@ type JobStatus = {
   duration: number
 }
 
+type ProviderOption = {
+  Name: string
+  Help: string
+  Advanced: boolean
+  Required: boolean
+  Default: string | boolean | number
+  DefaultStr: string
+  Type: 'string'
+  Provider?: string
+  Examples?: Array<{
+    Value: string
+    Help: string
+  }>
+}
+
+export type Provider = {
+  Name: string
+  Description: string
+  Options: ProviderOption[]
+}
+
 const api = axios.create({
   baseURL: 'http://127.0.1:5572',
   headers: {
@@ -289,6 +310,26 @@ export async function listMounts(): Promise<Mount[]> {
   }>('/mount/listmounts')
 
   return response.data.mountPoints
+}
+
+export async function getProviders(): Promise<Provider[]> {
+  const response = await api.post<{
+    providers: Provider[]
+  }>('/config/providers')
+
+  return response.data.providers
+}
+
+export async function createConfig(
+  name: string,
+  type: string,
+  parameters: types.PlainObj<any>
+) {
+  await api.post('/config/create', {
+    name,
+    type,
+    parameters,
+  })
 }
 
 export const wait = singleton(async function (checkInterval = 5) {

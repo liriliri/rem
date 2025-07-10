@@ -96,5 +96,11 @@
   "macfuseNotFound": "macFUSE not found, do you want to install it?",
   "rclonePath": "Rclone Path",
   "autoMount": "Auto mount",
-  "startup": "Startup"
+  "startup": "Startup",
+  "add": "Add",
+  "addConfig": "Add Config",
+  "name": "Name",
+  "provider": "Provider",
+  "nameRequired": "Name is required",
+  "configExist": "Config {{name}} already exists"
 }

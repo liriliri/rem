@@ -53,14 +53,13 @@ export default function MountModal(props: IProps) {
       <div
         className={className('modal-button', 'button', 'primary')}
         onMouseDown={(e) => e.preventDefault()}
-        onClick={() => {
+        onClick={async () => {
           if (isStrBlank(filePath)) {
             return
           }
-          store.remote.mount(filePath).then(() => {
-            main.openPath(filePath)
-          })
+          await store.remote.mount(filePath)
           props.onClose()
+          main.openPath(filePath)
         }}
       >
         {t('ok')}

@@ -1,6 +1,7 @@
 import { action, makeObservable, observable, runInAction } from 'mobx'
 import BaseStore from 'share/renderer/store/BaseStore'
 import * as rclone from '../../lib/rclone'
+import { Provider } from '../../lib/rclone'
 import map from 'licia/map'
 import { t } from '../../../common/util'
 import { IConfig } from './types'
@@ -17,6 +18,7 @@ import filter from 'licia/filter'
 import each from 'licia/each'
 import { setMemStore } from 'share/renderer/lib/util'
 import { Settings } from '../../store/settings'
+import types from 'licia/types'
 
 class Store extends BaseStore {
   listView = false
@@ -33,6 +35,7 @@ class Store extends BaseStore {
   })
   jobs: Job[] = []
   settings = new Settings()
+  providers: Provider[] = []
   constructor() {
     super()
 
@@ -46,6 +49,7 @@ class Store extends BaseStore {
       configs: observable,
       selectedConfig: observable,
       jobs: observable,
+      providers: observable,
       selectConfig: action,
       toggleConfig: action,
       setConfigWeight: action,
@@ -86,6 +90,7 @@ class Store extends BaseStore {
 
     if (await rclone.wait()) {
       await this.getConfigs()
+      await this.getProviders()
       const name = getUrlParam('name')
       if (name) {
         const config = find(this.configs, (config) => config.name === name)
@@ -212,6 +217,25 @@ class Store extends BaseStore {
     ) {
       this.openRemote(localConfigs[0])
     }
+  }
+  async createConfig(
+    name: string,
+    type: string,
+    parameters: types.PlainObj<any>
+  ) {
+    await rclone.createConfig(name, type, parameters)
+    await this.getConfigs()
+    this.selectConfig(name)
+    const config = find(this.configs, (config) => config.name === name)
+    if (config) {
+      this.openRemote(config)
+    }
+  }
+  private async getProviders() {
+    const providers = await rclone.getProviders()
+    runInAction(() => {
+      this.providers = providers
+    })
   }
   private async autoMount() {
     const autoMounted = await main.getMemStore('autoMounted')
