@@ -8,7 +8,7 @@ import LunaModal from 'luna-modal'
 import isWindows from 'licia/isWindows'
 import isMac from 'licia/isMac'
 
-type Config = {
+export type Config = {
   type: string
   provider?: string
   url?: string
@@ -33,6 +33,7 @@ export type About = {
 export type Features = {
   About: boolean
   PublicLink: boolean
+  CanHaveEmptyDirectories: boolean
 }
 
 export type FsInfo = {

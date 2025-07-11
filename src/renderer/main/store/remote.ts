@@ -1,4 +1,3 @@
-import { IConfig } from './types'
 import * as rclone from '../../lib/rclone'
 import { File, Target, TargetPair, About, Features } from '../../lib/rclone'
 import { action, makeObservable, observable, runInAction } from 'mobx'
@@ -13,8 +12,8 @@ import map from 'licia/map'
 import contain from 'licia/contain'
 import rtrim from 'licia/rtrim'
 import toBool from 'licia/toBool'
-import { setMainStore } from '../../lib/util'
-import unique from 'licia/unique'
+import { addMount } from '../../lib/mount'
+import { IConfig } from './'
 
 export class Remote {
   remote = ''
@@ -29,6 +28,7 @@ export class Remote {
   features: Features = {
     About: true,
     PublicLink: false,
+    CanHaveEmptyDirectories: true,
   }
   about: About = {}
   fs: string
@@ -272,16 +272,7 @@ export class Remote {
   async mount(mountPoint: string) {
     const fs = this.fs + this.remote
     mountPoint = normalizePath(mountPoint)
-    await rclone.createMount(fs, mountPoint)
-    let mounts = (await main.getMainStore('mounts')) || []
-    mounts.push({
-      fs,
-      mountPoint,
-    })
-    mounts = unique(mounts, (a, b) => {
-      return a.fs === b.fs && a.mountPoint === b.mountPoint
-    })
-    setMainStore('mounts', mounts)
+    await addMount(fs, mountPoint)
   }
   private async getAbout() {
     const about = await rclone.getAbout(this.fs)

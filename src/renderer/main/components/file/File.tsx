@@ -192,8 +192,8 @@ export default observer(function File() {
           },
         })
       }
-      template.push(
-        {
+      if (remote.features.CanHaveEmptyDirectories) {
+        template.push({
           label: t('newFolder'),
           click: async () => {
             const name = await LunaModal.prompt(t('newFolderName'))
@@ -201,7 +201,9 @@ export default observer(function File() {
               remote.newFolder(resolvePath(name))
             }
           },
-        },
+        })
+      }
+      template.push(
         {
           type: 'separator',
         },

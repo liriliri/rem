@@ -4,12 +4,7 @@ import * as rclone from '../lib/rclone'
 import map from 'licia/map'
 import some from 'licia/some'
 import { setMainStore } from '../lib/util'
-import remove from 'licia/remove'
-
-interface IMountRaw {
-  fs: string
-  mountPoint: string
-}
+import { deleteMount, IMountRaw } from '../lib/mount'
 
 interface IMount extends IMountRaw {
   mounted: boolean
@@ -39,13 +34,11 @@ class Store extends BaseStore {
       return
     }
 
-    const mounts: IMountRaw[] = (await main.getMainStore('mounts')) || []
-    remove(mounts, (m) => {
-      return m.fs === mount.fs && m.mountPoint === mount.mountPoint
+    await deleteMount((fs, mountPoint) => {
+      return mount.fs === fs && mount.mountPoint === mountPoint
     })
-    setMainStore('mounts', mounts)
 
-    this.unmountSelected()
+    this.getMounts()
   }
   async deleteAll() {
     setMainStore('mounts', [])

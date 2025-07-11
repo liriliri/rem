@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react-lite'
 import Style from './Config.module.scss'
 import Toolbar from './Toolbar'
-import store from '../../store'
+import store, { IConfig } from '../../store'
 import map from 'licia/map'
 import DefaultIcon from '../../../assets/config-icon/default.svg'
 import DriveIcon from '../../../assets/config-icon/drive.svg'
@@ -15,7 +15,6 @@ import JianGuoYunIcon from '../../../assets/config-icon/jianguoyun.svg'
 import className from 'licia/className'
 import About from './About'
 import { t } from '../../../../common/util'
-import { IConfig } from '../../store/types'
 
 export default observer(function Config() {
   const configs = map(store.configs, (config) => {

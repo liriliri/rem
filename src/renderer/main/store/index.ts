@@ -1,10 +1,9 @@
 import { action, makeObservable, observable, runInAction } from 'mobx'
 import BaseStore from 'share/renderer/store/BaseStore'
 import * as rclone from '../../lib/rclone'
-import { Provider } from '../../lib/rclone'
+import { Provider, Config } from '../../lib/rclone'
 import map from 'licia/map'
 import { t } from '../../../common/util'
-import { IConfig } from './types'
 import { Remote } from './remote'
 import { setMainStore } from '../../lib/util'
 import isUndef from 'licia/isUndef'
@@ -20,6 +19,13 @@ import { notify, setMemStore } from 'share/renderer/lib/util'
 import { Settings } from '../../store/settings'
 import types from 'licia/types'
 import isStr from 'licia/isStr'
+import { deleteMount } from '../../lib/mount'
+import startWith from 'licia/startWith'
+
+export interface IConfig extends Config {
+  name: string
+  fs: string
+}
 
 class Store extends BaseStore {
   listView = false
@@ -196,17 +202,27 @@ class Store extends BaseStore {
     this.selectConfig(newName)
   }
   async renameConfig(name: string, newName: string) {
-    await this._duplicateConfig(name, newName)
-    await rclone.deleteConfig(name)
-    if (this.remote.name === name) {
-      this.remote.name = newName
+    const config = find(this.configs, (c) => c.name === name)
+    if (config) {
+      await this._duplicateConfig(name, newName)
+      await rclone.deleteConfig(name)
+      deleteMount((fs) => startWith(fs, config.fs))
+
+      if (this.remote.name === name) {
+        this.remote.name = newName
+      }
+      await this.getConfigs()
+      this.selectConfig(newName)
     }
-    await this.getConfigs()
-    this.selectConfig(newName)
   }
   async deleteConfig(name: string) {
-    await rclone.deleteConfig(name)
-    this.getConfigs()
+    const config = find(this.configs, (c) => c.name === name)
+    if (config) {
+      await rclone.deleteConfig(name)
+      this.getConfigs()
+
+      deleteMount((fs) => startWith(fs, config.fs))
+    }
   }
   async getConfigs() {
     const configDump = await rclone.getConfigDump()
