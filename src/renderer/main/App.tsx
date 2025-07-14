@@ -40,7 +40,7 @@ export default observer(function App() {
                 <Config />
               </LunaSplitPaneItem>
               <LunaSplitPaneItem
-                minSize={400}
+                minSize={720}
                 weight={100 - store.configWeight}
               >
                 <File />

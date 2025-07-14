@@ -33,6 +33,8 @@ class Store extends BaseStore {
   configWeight = 25
   showJob = true
   jobWeight = 30
+  showPreview = false
+  previewWeight = 30
   configs: IConfig[] = []
   selectedConfig = ''
   remote = new Remote({
@@ -57,6 +59,8 @@ class Store extends BaseStore {
       selectedConfig: observable,
       jobs: observable,
       providers: observable,
+      showPreview: observable,
+      previewWeight: observable,
       selectConfig: action,
       toggleConfig: action,
       setConfigWeight: action,
@@ -77,6 +81,8 @@ class Store extends BaseStore {
     const showConfig = await main.getMainStore('showConfig')
     const showJob = await main.getMainStore('showJob')
     const jobWeight = await main.getMainStore('jobWeight')
+    const showPreview = await main.getMainStore('showPreview')
+    const previewWeight = await main.getMainStore('previewWeight')
     runInAction(() => {
       if (listView) {
         this.listView = true
@@ -92,6 +98,12 @@ class Store extends BaseStore {
       }
       if (!isUndef(showJob)) {
         this.showJob = showJob
+      }
+      if (!isUndef(showPreview)) {
+        this.showPreview = showPreview
+      }
+      if (previewWeight) {
+        this.previewWeight = previewWeight
       }
     })
 
@@ -182,6 +194,14 @@ class Store extends BaseStore {
   setJobWeight(weight: number) {
     this.jobWeight = weight
     setMainStore('jobWeight', this.jobWeight)
+  }
+  togglePreview() {
+    this.showPreview = !this.showPreview
+    setMainStore('showPreview', this.showPreview)
+  }
+  setPreviewWeight(weight: number) {
+    this.previewWeight = weight
+    setMainStore('previewWeight', this.previewWeight)
   }
   openRemote(config: IConfig | string) {
     if (isStr(config)) {
