@@ -244,15 +244,8 @@ export default observer(function File() {
   }
 
   return (
-    <LunaSplitPane
-      onResize={(weights) => {
-        const [fileListWeight, previewWeight] = weights
-        store.setPreviewWeight(
-          (previewWeight / (fileListWeight + previewWeight)) * 100
-        )
-      }}
-    >
-      <LunaSplitPaneItem minSize={400} weight={100 - store.previewWeight}>
+    <LunaSplitPane onResize={(weights) => store.setFileWeights(weights)}>
+      <LunaSplitPaneItem minSize={400} weight={store.fileWeights[0]}>
         <div
           onDrop={onDrop}
           onDragEnter={() => {
@@ -303,7 +296,7 @@ export default observer(function File() {
       </LunaSplitPaneItem>
       <LunaSplitPaneItem
         minSize={180}
-        weight={store.previewWeight}
+        weight={store.fileWeights[1]}
         visible={store.showPreview}
       >
         <Preview />
