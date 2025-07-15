@@ -7,6 +7,7 @@ import lowerCase from 'licia/lowerCase'
 import splitPath from 'licia/splitPath'
 import startWith from 'licia/startWith'
 import LunaImageViewer from 'luna-image-viewer/react'
+import LunaVideoPlayer from 'luna-video-player/react'
 import store from '../../store'
 
 interface IProps {
@@ -32,6 +33,8 @@ export default function Preview(props: IProps) {
       if (mimeType) {
         if (startWith(mimeType, 'image/')) {
           preview = <LunaImageViewer image={url} />
+        } else if (startWith(mimeType, 'video/')) {
+          preview = <LunaVideoPlayer className={Style.videoPlayer} url={url} />
         }
       }
     }
