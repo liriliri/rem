@@ -104,5 +104,7 @@
   "nameRequired": "Name is required",
   "configExist": "Config {{name}} already exists",
   "newConfigName": "New Config Name",
-  "preview": "Preview"
+  "preview": "Preview",
+  "fileNotSelected": "File not selected",
+  "noPreview": "No preview"
 }

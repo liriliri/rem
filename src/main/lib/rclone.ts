@@ -4,7 +4,7 @@ import { Readable } from 'node:stream'
 import { handleEvent, resolveResources } from 'share/main/lib/util'
 import getPort from 'licia/getPort'
 import log from 'share/common/log'
-import { app } from 'electron'
+import { app, session } from 'electron'
 import isMac from 'licia/isMac'
 import isWindows from 'licia/isWindows'
 import randomId from 'licia/randomId'
@@ -25,6 +25,7 @@ let isDead = false
 let subprocess: ChildProcessByStdio<null, Readable, Readable>
 
 export async function start() {
+  init()
   initRpc()
 
   const rclonePath = getRclonePath()
@@ -33,6 +34,7 @@ export async function start() {
 
   const args = [
     'rcd',
+    '--rc-serve',
     '--rc-addr',
     `127.0.0.1:${port}`,
     '--rc-user',
@@ -99,6 +101,20 @@ async function openRcloneCli() {
     child.unref()
   }
 }
+
+const init = once(() => {
+  session.defaultSession.webRequest.onBeforeSendHeaders(
+    {
+      urls: ['http://127.0.0.1:*/*'],
+    },
+    (details, callback) => {
+      details.requestHeaders['Authorization'] = `Basic ${btoa(
+        `${user}:${pass}`
+      )}`
+      callback({ requestHeaders: details.requestHeaders })
+    }
+  )
+})
 
 const initRpc = once(() => {
   handleEvent('getRclonePort', () => port)

@@ -22,6 +22,7 @@ export default observer(function File() {
   const [publicLink, setPublicLink] = useState('')
   const [mountModalVisible, setMountModalVisible] = useState(false)
   const [dropHighlight, setDropHighlight] = useState(false)
+  const [selected, setSelected] = useState<IFile | null>(null)
   const draggingRef = useRef(0)
 
   const { remote } = store
@@ -277,6 +278,8 @@ export default observer(function File() {
             listView={store.listView}
             onDoubleClick={(e: MouseEvent, file: IFile) => open(file)}
             onContextMenu={onContextMenu}
+            onSelect={(file: IFile) => setSelected(file)}
+            onDeselect={() => setSelected(null)}
           />
           {remote.isLoading && (
             <div className={Style.loading}>
@@ -299,7 +302,7 @@ export default observer(function File() {
         weight={store.fileWeights[1]}
         visible={store.showPreview}
       >
-        <Preview />
+        <Preview file={selected} />
       </LunaSplitPaneItem>
     </LunaSplitPane>
   )

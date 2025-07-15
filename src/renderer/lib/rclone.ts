@@ -109,8 +109,12 @@ export type Provider = {
   Options: ProviderOption[]
 }
 
+export function getBaseURL() {
+  return api.defaults.baseURL
+}
+
 const api = axios.create({
-  baseURL: 'http://127.0.1:5572',
+  baseURL: `http://127.0.1:5572`,
   headers: {
     'Content-Type': 'application/json',
   },

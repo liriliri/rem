@@ -104,5 +104,7 @@
   "nameRequired": "名称不能为空",
   "configExist": "配置 {{name}} 已存在",
   "newConfigName": "新配置名称",
-  "preview": "预览"
+  "preview": "预览",
+  "fileNotSelected": "未选择文件",
+  "noPreview": "没有预览"
 }

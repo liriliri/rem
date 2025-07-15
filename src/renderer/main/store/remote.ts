@@ -106,6 +106,9 @@ export class Remote {
       remote,
     })
   }
+  getUrl(remote: string) {
+    return `${rclone.getBaseURL()}/[${this.fs}]/${remote}`
+  }
   async goCustomRemote() {
     const p = normalizePath(this.customRemote)
 
