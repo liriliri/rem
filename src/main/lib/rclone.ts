@@ -43,6 +43,11 @@ export async function start() {
     pass,
   ]
 
+  const configPath = settingsStore.get('configPath')
+  if (!isStrBlank(configPath)) {
+    args.push('--config', configPath)
+  }
+
   subprocess = childProcess.spawn(rclonePath, args, {
     windowsHide: true,
     stdio: ['inherit', 'pipe', 'pipe'],

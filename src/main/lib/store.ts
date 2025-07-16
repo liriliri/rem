@@ -24,6 +24,7 @@ export const getSettingsStore = memoize(function () {
     theme: 'system',
     bounds: {},
     rclonePath: '',
+    configPath: '',
     autoMount: true,
   })
 })

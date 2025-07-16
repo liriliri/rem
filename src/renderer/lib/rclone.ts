@@ -16,6 +16,12 @@ export type Config = {
 
 type ConfigDump = types.PlainObj<Config>
 
+type ConfigPaths = {
+  config: string
+  cache: string
+  temp: string
+}
+
 export type Mount = {
   Fs: string
   MountPoint: string
@@ -351,6 +357,12 @@ export async function createConfig(
     parameters,
     opt,
   })
+}
+
+export async function getConfigPaths(): Promise<ConfigPaths> {
+  const response = await api.post<ConfigPaths>('/config/paths')
+
+  return response.data
 }
 
 export const wait = singleton(async function (checkInterval = 5) {

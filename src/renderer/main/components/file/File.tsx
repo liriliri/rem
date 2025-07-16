@@ -32,7 +32,9 @@ export default observer(function File() {
       name: file.Name,
       directory: file.IsDir,
       mtime: new Date(file.ModTime),
-      size: file.Size,
+    }
+    if (file.Size > 0 || !file.IsDir) {
+      ret.size = file.Size
     }
 
     if (file.Metadata && file.Metadata.thumbnail) {

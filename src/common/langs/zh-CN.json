@@ -106,5 +106,6 @@
   "newConfigName": "新配置名称",
   "preview": "预览",
   "fileNotSelected": "未选择文件",
-  "noPreview": "没有预览"
+  "noPreview": "没有预览",
+  "configPath": "配置路径"
 }

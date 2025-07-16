@@ -5,12 +5,14 @@ export class Settings {
   language = 'en-US'
   theme = 'light'
   rclonePath = ''
+  configPath = ''
   autoMount = false
   constructor() {
     makeObservable(this, {
       language: observable,
       theme: observable,
       rclonePath: observable,
+      configPath: observable,
       autoMount: observable,
       set: action,
     })
@@ -18,7 +20,7 @@ export class Settings {
     this.init()
   }
   async init() {
-    const names = ['language', 'theme', 'rclonePath', 'autoMount']
+    const names = ['language', 'theme', 'rclonePath', 'configPath', 'autoMount']
     for (let i = 0, len = names.length; i < len; i++) {
       const name = names[i]
       const val = await main.getSettingsStore(name)

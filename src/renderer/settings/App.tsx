@@ -69,6 +69,17 @@ export default observer(function App() {
           properties: ['openFile'],
         }}
       />
+      <SettingPath
+        title={t('configPath')}
+        value={store.settings.configPath}
+        onChange={(val) => {
+          notifyRequireReload()
+          store.settings.set('configPath', val)
+        }}
+        options={{
+          properties: ['openFile'],
+        }}
+      />
       <LunaSettingButton
         description={t('restartRem')}
         onClick={() => main.relaunch()}

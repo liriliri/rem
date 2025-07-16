@@ -106,5 +106,6 @@
   "newConfigName": "New Config Name",
   "preview": "Preview",
   "fileNotSelected": "File not selected",
-  "noPreview": "No preview"
+  "noPreview": "No preview",
+  "configPath": "Config Path"
 }

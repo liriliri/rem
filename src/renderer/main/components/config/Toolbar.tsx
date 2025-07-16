@@ -9,6 +9,7 @@ import store from '../../store'
 import LunaModal from 'luna-modal'
 import AddConfigModal from './AddConfigModal'
 import { useState } from 'react'
+import * as rclone from '../../../lib/rclone'
 
 export default observer(function Toolbar() {
   const [addConfigModalVisible, setAddConfigModalVisible] = useState(false)
@@ -22,6 +23,14 @@ export default observer(function Toolbar() {
           icon="add"
           title={t('delete')}
           onClick={async () => setAddConfigModalVisible(true)}
+        />
+        <ToolbarIcon
+          icon="open-file"
+          title={t('openDir')}
+          onClick={async () => {
+            const paths = await rclone.getConfigPaths()
+            main.showItemInFolder(paths.config)
+          }}
         />
         <LunaToolbarSeparator />
         <ToolbarIcon
