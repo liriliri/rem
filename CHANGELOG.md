@@ -1,3 +1,9 @@
+## v0.6.0 (16 Jul 2025)
+
+* feat: image preview
+* feat: video preview
+* feat: remove mount when config deleted
+
 ## v0.5.0 (10 Jul 2025)
 
 * feat: rclone path settings
