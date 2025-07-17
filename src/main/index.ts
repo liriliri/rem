@@ -1,5 +1,6 @@
 import { app } from 'electron'
 import * as menu from './lib/menu'
+import * as tray from './lib/tray'
 import * as ipc from 'share/main/lib/ipc'
 import * as main from './window/main'
 import * as language from 'share/main/lib/language'
@@ -31,5 +32,6 @@ app.on('ready', () => {
   rclone.start()
   main.showWin()
   menu.init()
+  tray.init()
   updater.init()
 })
