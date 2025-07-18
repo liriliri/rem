@@ -1,5 +1,11 @@
-import * as rclone from '../../lib/rclone'
-import { File, Target, TargetPair, About, Features } from '../../lib/rclone'
+import * as rclone from '../../../common/rclone'
+import {
+  File,
+  Target,
+  TargetPair,
+  About,
+  Features,
+} from '../../../common/rclone'
 import { action, makeObservable, observable, runInAction } from 'mobx'
 import splitPath from 'licia/splitPath'
 import normalizePath from 'licia/normalizePath'
@@ -290,10 +296,11 @@ export class Remote {
     })
   }
   private async init() {
-    await rclone.wait()
-    await this.getFsInfo()
-    if (this.features.About) {
-      await this.getAbout()
+    if (await rclone.wait()) {
+      await this.getFsInfo()
+      if (this.features.About) {
+        await this.getAbout()
+      }
     }
   }
   private async copyFrom(target: Target, remote: string) {

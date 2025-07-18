@@ -1,7 +1,7 @@
 import { action, makeObservable, observable, runInAction } from 'mobx'
 import BaseStore from 'share/renderer/store/BaseStore'
-import * as rclone from '../../lib/rclone'
-import { Provider, Config } from '../../lib/rclone'
+import * as rclone from '../../../common/rclone'
+import { Provider, Config } from '../../../common/rclone'
 import map from 'licia/map'
 import { t } from '../../../common/util'
 import { Remote } from './remote'
@@ -15,7 +15,7 @@ import isEmpty from 'licia/isEmpty'
 import { Job, JobStatus, JobType } from './job'
 import filter from 'licia/filter'
 import each from 'licia/each'
-import { notify, setMemStore } from 'share/renderer/lib/util'
+import { notify } from 'share/renderer/lib/util'
 import { Settings } from '../../store/settings'
 import types from 'licia/types'
 import isStr from 'licia/isStr'
@@ -120,10 +120,6 @@ class Store extends BaseStore {
       }
 
       this.openRemote(this.configs[0])
-
-      if (this.settings.autoMount) {
-        this.autoMount()
-      }
     }
   }
   addJob(job: Job) {
@@ -314,34 +310,6 @@ class Store extends BaseStore {
     runInAction(() => {
       this.providers = providers
     })
-  }
-  private async autoMount() {
-    const autoMounted = await main.getMemStore('autoMounted')
-    if (autoMounted) {
-      return
-    }
-
-    const mounts = (await main.getMainStore('mounts')) || []
-    const mountedMounts = await rclone.listMounts()
-    for (let i = 0, len = mounts.length; i < len; i++) {
-      const mount = mounts[i]
-      if (
-        some(
-          mountedMounts,
-          (m) => m.Fs === mount.fs && m.MountPoint === mount.mountPoint
-        )
-      ) {
-        continue
-      }
-
-      try {
-        await rclone.createMount(mount.fs, mount.mountPoint)
-      } catch {
-        // ignore
-      }
-    }
-
-    setMemStore('autoMounted', true)
   }
 }
 

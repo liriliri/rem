@@ -108,5 +108,6 @@
   "fileNotSelected": "File not selected",
   "noPreview": "No preview",
   "configPath": "Config Path",
-  "show": "Show"
+  "show": "Show",
+  "openAtLogin": "Open at login"
 }

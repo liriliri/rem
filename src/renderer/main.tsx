@@ -4,6 +4,7 @@ import { lazy } from 'react'
 import { createRoot } from 'react-dom/client'
 import log from 'share/common/log'
 import LunaModal from 'luna-modal'
+import * as rclone from '../common/rclone'
 import 'share/renderer/main'
 import 'luna-toolbar/css'
 import 'luna-setting/css'
@@ -19,6 +20,10 @@ import 'share/renderer/luna.scss'
 import './luna.scss'
 import 'share/renderer/main.scss'
 import './icon.css'
+import isWindows from 'licia/isWindows'
+import contain from 'licia/contain'
+import isMac from 'licia/isMac'
+import { notify } from 'share/renderer/lib/util'
 
 const logger = log('renderer')
 logger.info('start')
@@ -64,6 +69,44 @@ function renderApp() {
     ok: t('ok'),
     cancel: t('cancel'),
   })
+
+  const rclonePort = await main.getRclonePort()
+  const rcloneAuth = await main.getRcloneAuth()
+  const api = rclone.init(rclonePort, rcloneAuth)
+
+  api.interceptors.response.use(
+    (response) => response,
+    async (error) => {
+      const url = error.config?.url || ''
+      if (url === '/core/version') {
+        return Promise.reject(error)
+      }
+
+      if (url === '/mount/mount') {
+        const err = error.response.data.error
+        if (isWindows && contain(err, 'cannot find winfsp')) {
+          const result = await LunaModal.confirm(t('winfspNotFound'))
+          if (result) {
+            main.openExternal('https://winfsp.dev/')
+          }
+        } else if (isMac && contain(err, 'cannot find FUSE')) {
+          const result = await LunaModal.confirm(t('macfuseNotFound'))
+          if (result) {
+            main.openExternal('https://macfuse.github.io/')
+          }
+        } else {
+          const data = JSON.parse(error.config?.data || '{}')
+          notify(t('mountErr', { mountPoint: data.mountPoint || '' }), {
+            icon: 'error',
+          })
+        }
+      } else {
+        notify(t('reqErr'), { icon: 'error' })
+      }
+
+      return Promise.reject(error)
+    }
+  )
 
   renderApp()
 })()

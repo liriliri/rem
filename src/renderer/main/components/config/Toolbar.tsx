@@ -9,7 +9,7 @@ import store from '../../store'
 import LunaModal from 'luna-modal'
 import AddConfigModal from './AddConfigModal'
 import { useState } from 'react'
-import * as rclone from '../../../lib/rclone'
+import * as rclone from '../../../../common/rclone'
 
 export default observer(function Toolbar() {
   const [addConfigModalVisible, setAddConfigModalVisible] = useState(false)

@@ -1,8 +1,9 @@
 import unique from 'licia/unique'
 import { setMainStore } from './util'
-import * as rclone from './rclone'
+import * as rclone from '../../common/rclone'
 import remove from 'licia/remove'
 import some from 'licia/some'
+import isWindows from 'licia/isWindows'
 
 export interface IMountRaw {
   fs: string
@@ -38,4 +39,25 @@ export async function deleteMount(
     return false
   })
   setMainStore('mounts', mounts)
+}
+
+export async function createMount(
+  fs: string,
+  mountPoint: string
+): Promise<void> {
+  if (node.existsSync(mountPoint)) {
+    if (isWindows) {
+      if (
+        (await node.isDir(mountPoint)) &&
+        (await node.isEmptyDir(mountPoint))
+      ) {
+        await node.rmdir(mountPoint)
+      }
+    }
+  } else {
+    if (!isWindows) {
+      await node.mkdir(mountPoint, { recursive: true })
+    }
+  }
+  await rclone.createMount(fs, mountPoint)
 }

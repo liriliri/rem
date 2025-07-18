@@ -52,6 +52,11 @@ export default observer(function App() {
       <LunaSettingSeparator />
       <LunaSettingTitle title={t('startup')} />
       <LunaSettingCheckbox
+        keyName="openAtLogin"
+        value={store.settings.openAtLogin}
+        description={t('openAtLogin')}
+      />
+      <LunaSettingCheckbox
         keyName="autoMount"
         value={store.settings.autoMount}
         description={t('autoMount')}

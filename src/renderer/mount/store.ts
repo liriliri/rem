@@ -1,10 +1,10 @@
 import { action, makeObservable, observable, runInAction } from 'mobx'
 import BaseStore from 'share/renderer/store/BaseStore'
-import * as rclone from '../lib/rclone'
+import * as rclone from '../../common/rclone'
 import map from 'licia/map'
 import some from 'licia/some'
 import { setMainStore } from '../lib/util'
-import { deleteMount, IMountRaw } from '../lib/mount'
+import { createMount, deleteMount, IMountRaw } from '../lib/mount'
 
 interface IMount extends IMountRaw {
   mounted: boolean
@@ -54,7 +54,7 @@ class Store extends BaseStore {
       return
     }
 
-    await rclone.createMount(mount.fs, mount.mountPoint)
+    await createMount(mount.fs, mount.mountPoint)
     this.getMounts()
   }
   async unmountSelected() {

@@ -1,7 +1,6 @@
-import { getMainStore, getSettingsStore } from '../lib/store'
+import { getMainStore } from '../lib/store'
 import * as window from 'share/main/lib/window'
 import log from 'share/common/log'
-import { IpcGetStore, IpcSetStore } from 'share/common/types'
 import { handleEvent } from 'share/main/lib/util'
 import once from 'licia/once'
 import uuid from 'licia/uuid'
@@ -27,7 +26,6 @@ import last from 'licia/last'
 const logger = log('mainWin')
 
 const store = getMainStore()
-const settingsStore = getSettingsStore()
 
 let focusedWin: BrowserWindow | null = null
 const wins: BrowserWindow[] = []
@@ -157,13 +155,6 @@ const initIpc = once(() => {
     return fileIcons[ext]
   }
 
-  handleEvent('setMainStore', <IpcSetStore>(
-    ((name, val) => store.set(name, val))
-  ))
-  handleEvent('getMainStore', <IpcGetStore>((name) => store.get(name)))
-  store.on('change', (name, val) => {
-    window.sendAll('changeMainStore', name, val)
-  })
   handleEvent('newWindow', <IpcNewWindow>((name) => {
     const bounds = store.get('bounds')
     if (bounds.x) {
@@ -177,10 +168,4 @@ const initIpc = once(() => {
   handleEvent('getWindowsDrives', getWindowsDrives)
   handleEvent('getFileIcon', getFileIcon)
   handleEvent('showMount', () => mount.showWin())
-  handleEvent('setSettingsStore', <IpcSetStore>((name, val) => {
-    settingsStore.set(name, val)
-  }))
-  handleEvent('getSettingsStore', <IpcGetStore>(
-    ((name) => settingsStore.get(name))
-  ))
 })

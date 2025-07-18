@@ -1,12 +1,7 @@
 import axios from 'axios'
 import types from 'licia/types'
 import singleton from 'licia/singleton'
-import { notify } from 'share/renderer/lib/util'
-import { t } from '../../common/util'
-import contain from 'licia/contain'
-import LunaModal from 'luna-modal'
-import isWindows from 'licia/isWindows'
-import isMac from 'licia/isMac'
+import isBrowser from 'licia/isBrowser'
 
 export type Config = {
   type: string
@@ -294,21 +289,6 @@ export async function getFsInfo(fs: string): Promise<FsInfo> {
 }
 
 export async function createMount(fs: string, mountPoint: string) {
-  if (node.existsSync(mountPoint)) {
-    if (isWindows) {
-      if (
-        (await node.isDir(mountPoint)) &&
-        (await node.isEmptyDir(mountPoint))
-      ) {
-        await node.rmdir(mountPoint)
-      }
-    }
-  } else {
-    if (!isWindows) {
-      await node.mkdir(mountPoint, { recursive: true })
-    }
-  }
-
   await api.post('/mount/mount', {
     fs,
     mountPoint,
@@ -328,7 +308,7 @@ export async function unmountAll() {
 export async function listMounts(): Promise<Mount[]> {
   const response = await api.post<{
     mountPoints: Mount[]
-  }>('/mount/listmounts')
+  }>('/mount/listmounts', {})
 
   return response.data.mountPoints
 }
@@ -366,18 +346,21 @@ export async function getConfigPaths(): Promise<ConfigPaths> {
 }
 
 export async function getRcloneVersion(): Promise<string> {
-  const response = await api.post<{ version: string }>('/core/version')
+  const response = await api.post<{ version: string }>('/core/version', {})
 
   return response.data.version
 }
 
 export const wait = singleton(async function (checkInterval = 5) {
-  await init()
-
   return new Promise((resolve) => {
     async function check() {
-      if (!(await main.isRcloneRunning())) {
-        return resolve(false)
+      if (isBrowser) {
+        if (!(await main.isRcloneRunning())) {
+          return resolve(false)
+        }
+      }
+      if (!isInit) {
+        return
       }
       try {
         await getRcloneVersion()
@@ -392,45 +375,11 @@ export const wait = singleton(async function (checkInterval = 5) {
 })
 
 let isInit = false
-async function init() {
-  if (!isInit) {
-    const port = await main.getRclonePort()
-    api.defaults.baseURL = `http://127.0.0.1:${port}`
-    const auth = await main.getRcloneAuth()
-    api.defaults.headers.common['Authorization'] = `Basic ${auth}`
-    api.interceptors.response.use(
-      (response) => response,
-      async (error) => {
-        const url = error.config?.url || ''
-        if (url === '/core/version') {
-          return Promise.reject(error)
-        }
+export function init(port: number, auth: string) {
+  isInit = true
 
-        if (url === '/mount/mount') {
-          const err = error.response.data.error
-          if (isWindows && contain(err, 'cannot find winfsp')) {
-            const result = await LunaModal.confirm(t('winfspNotFound'))
-            if (result) {
-              main.openExternal('https://winfsp.dev/')
-            }
-          } else if (isMac && contain(err, 'cannot find FUSE')) {
-            const result = await LunaModal.confirm(t('macfuseNotFound'))
-            if (result) {
-              main.openExternal('https://macfuse.github.io/')
-            }
-          } else {
-            const data = JSON.parse(error.config?.data || '{}')
-            notify(t('mountErr', { mountPoint: data.mountPoint || '' }), {
-              icon: 'error',
-            })
-          }
-        } else {
-          notify(t('reqErr'), { icon: 'error' })
-        }
+  api.defaults.baseURL = `http://127.0.0.1:${port}`
+  api.defaults.headers.common['Authorization'] = `Basic ${auth}`
 
-        return Promise.reject(error)
-      }
-    )
-    isInit = true
-  }
+  return api
 }

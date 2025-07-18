@@ -108,5 +108,6 @@
   "fileNotSelected": "未选择文件",
   "noPreview": "没有预览",
   "configPath": "配置路径",
-  "show": "显示"
+  "show": "显示",
+  "openAtLogin": "开机自动启动"
 }

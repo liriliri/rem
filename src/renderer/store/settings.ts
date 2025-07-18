@@ -7,6 +7,7 @@ export class Settings {
   rclonePath = ''
   configPath = ''
   autoMount = false
+  openAtLogin = false
   constructor() {
     makeObservable(this, {
       language: observable,
@@ -14,13 +15,21 @@ export class Settings {
       rclonePath: observable,
       configPath: observable,
       autoMount: observable,
+      openAtLogin: observable,
       set: action,
     })
 
     this.init()
   }
   async init() {
-    const names = ['language', 'theme', 'rclonePath', 'configPath', 'autoMount']
+    const names = [
+      'language',
+      'theme',
+      'rclonePath',
+      'configPath',
+      'autoMount',
+      'openAtLogin',
+    ]
     for (let i = 0, len = names.length; i < len; i++) {
       const name = names[i]
       const val = await main.getSettingsStore(name)
