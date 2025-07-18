@@ -119,6 +119,7 @@ const api = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
+  proxy: false,
 })
 
 export async function getConfigDump(): Promise<ConfigDump> {
@@ -359,14 +360,13 @@ export const wait = singleton(async function (checkInterval = 5) {
           return resolve(false)
         }
       }
-      if (!isInit) {
-        return
-      }
-      try {
-        await getRcloneVersion()
-        return resolve(true)
-      } catch {
-        // ignore
+      if (isInit) {
+        try {
+          await getRcloneVersion()
+          return resolve(true)
+        } catch {
+          // ignore
+        }
       }
       setTimeout(check, checkInterval * 1000)
     }
