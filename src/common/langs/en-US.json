@@ -107,5 +107,6 @@
   "preview": "Preview",
   "fileNotSelected": "File not selected",
   "noPreview": "No preview",
-  "configPath": "Config Path"
+  "configPath": "Config Path",
+  "show": "Show"
 }

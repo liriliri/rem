@@ -1,8 +1,56 @@
-import { nativeImage, Tray } from 'electron'
+import { app, Menu, nativeImage, Tray } from 'electron'
 import { resolveResources } from 'share/main/lib/util'
+import * as main from '../window/main'
+import isMac from 'licia/isMac'
+import * as settings from '../window/settings'
+import { t } from '../../common/util'
 
 export function init() {
-  const icon = nativeImage.createFromPath(resolveResources('tray.png'))
+  const iconPath = isMac ? 'tray-template.png' : 'tray.png'
+  const icon = nativeImage.createFromPath(resolveResources(iconPath))
+  if (isMac) {
+    icon.setTemplateImage(true)
+  }
   const tray = new Tray(icon)
   tray.setToolTip(`${PRODUCT_NAME} ${VERSION}`)
+  if (!isMac) {
+    tray.on('click', () => {
+      if (!main.showFocusedWin()) {
+        main.showWin()
+      }
+    })
+  }
+  const contextMenu = Menu.buildFromTemplate([
+    {
+      label: t('show'),
+      click() {
+        if (!main.showFocusedWin()) {
+          main.showWin()
+        }
+      },
+    },
+    {
+      label: t('hideRem'),
+      role: 'hide',
+    },
+    {
+      type: 'separator',
+    },
+    {
+      label: `${t('settings')}...`,
+      click() {
+        settings.showWin()
+      },
+    },
+    {
+      type: 'separator',
+    },
+    {
+      label: t('quitRem'),
+      click() {
+        app.quit()
+      },
+    },
+  ])
+  tray.setContextMenu(contextMenu)
 }

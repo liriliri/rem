@@ -365,6 +365,12 @@ export async function getConfigPaths(): Promise<ConfigPaths> {
   return response.data
 }
 
+export async function getRcloneVersion(): Promise<string> {
+  const response = await api.post<{ version: string }>('/core/version')
+
+  return response.data.version
+}
+
 export const wait = singleton(async function (checkInterval = 5) {
   await init()
 
@@ -374,7 +380,7 @@ export const wait = singleton(async function (checkInterval = 5) {
         return resolve(false)
       }
       try {
-        await stats()
+        await getRcloneVersion()
         return resolve(true)
       } catch {
         // ignore
@@ -396,6 +402,10 @@ async function init() {
       (response) => response,
       async (error) => {
         const url = error.config?.url || ''
+        if (url === '/core/version') {
+          return Promise.reject(error)
+        }
+
         if (url === '/mount/mount') {
           const err = error.response.data.error
           if (isWindows && contain(err, 'cannot find winfsp')) {

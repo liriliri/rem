@@ -107,5 +107,6 @@
   "preview": "预览",
   "fileNotSelected": "未选择文件",
   "noPreview": "没有预览",
-  "configPath": "配置路径"
+  "configPath": "配置路径",
+  "show": "显示"
 }

@@ -20,6 +20,9 @@ import path from 'path'
 import os from 'os'
 import isMac from 'licia/isMac'
 import * as mount from './mount'
+import remove from 'licia/remove'
+import isEmpty from 'licia/isEmpty'
+import last from 'licia/last'
 
 const logger = log('mainWin')
 
@@ -27,6 +30,7 @@ const store = getMainStore()
 const settingsStore = getSettingsStore()
 
 let focusedWin: BrowserWindow | null = null
+const wins: BrowserWindow[] = []
 
 export function showWin(name?: string) {
   logger.info('show')
@@ -43,13 +47,18 @@ export function showWin(name?: string) {
     onSavePos: () => window.savePos(win, store, true),
     menu: true,
   })
+  wins.push(win)
 
   win.on('focus', () => (focusedWin = win))
   win.on('close', () => {
+    remove(wins, (w) => w === win)
+    win?.destroy()
     if (focusedWin === win) {
       focusedWin = null
     }
-    win?.destroy()
+    if (!isEmpty(wins)) {
+      focusedWin = last(wins)
+    }
   })
 
   if (name) {
@@ -59,6 +68,15 @@ export function showWin(name?: string) {
   } else {
     window.loadPage(win)
   }
+}
+
+export function showFocusedWin() {
+  if (focusedWin) {
+    focusedWin.show()
+    return true
+  }
+
+  return false
 }
 
 const init = once(() => {

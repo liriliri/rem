@@ -35,3 +35,13 @@ app.on('ready', () => {
   tray.init()
   updater.init()
 })
+
+app.on('window-all-closed', () => {
+  logger.info('all windows closed')
+})
+
+app.on('activate', () => {
+  if (!main.showFocusedWin()) {
+    main.showWin()
+  }
+})
