@@ -53,3 +53,10 @@ app.on('browser-window-created', () => {
     app.dock.show()
   }
 })
+
+app.on('second-instance', () => {
+  logger.info('second instance')
+  if (!main.showFocusedWin()) {
+    main.showWin()
+  }
+})
