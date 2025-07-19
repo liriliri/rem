@@ -14,7 +14,7 @@ import * as updater from 'share/main/lib/updater'
 import isMac from 'licia/isMac'
 
 const logger = log('main')
-logger.info('start')
+logger.info('start', process.argv)
 
 if (!app.requestSingleInstanceLock()) {
   app.quit()

@@ -13,7 +13,7 @@ export function showWin() {
   }
 
   const width = 480
-  const height = 600
+  const height = 640
 
   win = window.create({
     name: 'settings',

@@ -2,12 +2,13 @@ import { app } from 'electron'
 import { getSettingsStore } from './store'
 import memoize from 'licia/memoize'
 import isMac from 'licia/isMac'
-import parseArgs from 'licia/parseArgs'
+import contain from 'licia/contain'
 
 const settingsStore = getSettingsStore()
 
+const OPENED_AT_LOGIN_ARG = '--opened-at-login=1'
 const LOGIN_SETTING_OPTIONS = {
-  args: ['--opened-at-login=1'],
+  args: [OPENED_AT_LOGIN_ARG],
 }
 
 export const wasOpenedAtLogin = memoize(function () {
@@ -15,14 +16,7 @@ export const wasOpenedAtLogin = memoize(function () {
     return app.getLoginItemSettings(LOGIN_SETTING_OPTIONS).wasOpenedAtLogin
   }
 
-  const args = parseArgs(process.argv, {
-    names: {
-      openedAtLogin: 'number',
-    },
-    shorthands: {},
-  })
-
-  return args.openedAtLogin === 1
+  return contain(process.argv, OPENED_AT_LOGIN_ARG)
 })
 
 export function isEnabled() {

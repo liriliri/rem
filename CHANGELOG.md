@@ -1,3 +1,9 @@
+## v0.7.0 (19 Jul 2025)
+
+* feat: rclone config path setting [#4](https://github.com/liriliri/rem/issues/4)
+* feat: system tray
+* feat: open at login
+
 ## v0.6.0 (16 Jul 2025)
 
 * feat: image preview
