@@ -9,12 +9,13 @@ import startWith from 'licia/startWith'
 import LunaImageViewer from 'luna-image-viewer/react'
 import LunaVideoPlayer from 'luna-video-player/react'
 import store from '../../store'
+import { observer } from 'mobx-react-lite'
 
 interface IProps {
   file: IFile | null
 }
 
-export default function Preview(props: IProps) {
+export default observer(function Preview(props: IProps) {
   const { file } = props
   const { remote } = store
 
@@ -22,23 +23,27 @@ export default function Preview(props: IProps) {
     <div className={Style.noPreview}>{t('noPreview')}</div>
   )
 
-  if (!file) {
-    preview = <div className={Style.noPreview}>{t('fileNotSelected')}</div>
-  } else if (!file.directory) {
-    const { name } = file
-    const url = remote.getUrl(remote.remote + '/' + name)
-    const ext = splitPath(file.name).ext
-    if (ext) {
-      const mimeType = mime(lowerCase(ext.slice(1)))
-      if (mimeType) {
-        if (startWith(mimeType, 'image/')) {
-          preview = <LunaImageViewer image={url} />
-        } else if (startWith(mimeType, 'video/')) {
-          preview = <LunaVideoPlayer className={Style.videoPlayer} url={url} />
+  if (store.showPreview) {
+    if (!file) {
+      preview = <div className={Style.noPreview}>{t('fileNotSelected')}</div>
+    } else if (!file.directory) {
+      const { name } = file
+      const url = remote.getUrl(remote.remote + '/' + name)
+      const ext = splitPath(file.name).ext
+      if (ext) {
+        const mimeType = mime(lowerCase(ext.slice(1)))
+        if (mimeType) {
+          if (startWith(mimeType, 'image/')) {
+            preview = <LunaImageViewer image={url} />
+          } else if (startWith(mimeType, 'video/')) {
+            preview = (
+              <LunaVideoPlayer className={Style.videoPlayer} url={url} />
+            )
+          }
         }
       }
     }
   }
 
   return <div className={Style.container}>{preview}</div>
-}
+})
