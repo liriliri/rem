@@ -41,22 +41,23 @@ app.on('ready', () => {
   updater.init()
 })
 
-app.on('window-all-closed', () => {
-  logger.info('all windows closed')
-  if (isMac) {
-    app.dock.hide()
-  }
-})
-
-app.on('browser-window-created', () => {
-  if (isMac) {
-    app.dock.show()
-  }
-})
-
-app.on('second-instance', () => {
-  logger.info('second instance')
+function showWin() {
   if (!main.showFocusedWin()) {
     main.showWin()
   }
-})
+}
+if (isMac) {
+  app.on('window-all-closed', () => {
+    if (isMac) {
+      app.dock.hide()
+    }
+  })
+  app.on('browser-window-created', () => {
+    if (isMac) {
+      app.dock.show()
+    }
+  })
+  app.on('activate', showWin)
+} else {
+  app.on('second-instance', showWin)
+}
