@@ -46,12 +46,13 @@ function showWin() {
     main.showWin()
   }
 }
+
+app.on('window-all-closed', () => {
+  if (isMac) {
+    app.dock.hide()
+  }
+})
 if (isMac) {
-  app.on('window-all-closed', () => {
-    if (isMac) {
-      app.dock.hide()
-    }
-  })
   app.on('browser-window-created', () => {
     if (isMac) {
       app.dock.show()
