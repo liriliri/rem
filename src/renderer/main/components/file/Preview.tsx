@@ -1,4 +1,4 @@
-import { JSX } from 'react'
+import { JSX, useEffect, useState } from 'react'
 import Style from './Preview.module.scss'
 import { IFile } from 'luna-file-list'
 import { t } from '../../../../common/util'
@@ -9,8 +9,12 @@ import startWith from 'licia/startWith'
 import LunaImageViewer from 'luna-image-viewer/react'
 import LunaVideoPlayer from 'luna-video-player/react'
 import LunaMusicPlayer from 'luna-music-player/react'
+import LunaTextViewer from 'luna-text-viewer/react'
 import store from '../../store'
 import { observer } from 'mobx-react-lite'
+import axios from 'axios'
+import isStr from 'licia/isStr'
+import truncate from 'licia/truncate'
 
 interface IProps {
   file: IFile | null
@@ -47,6 +51,8 @@ export default observer(function Preview(props: IProps) {
                 audio={{ title: file.name, url }}
               />
             )
+          } else if (startWith(mimeType, 'text/')) {
+            preview = <TextViewer url={url} />
           }
         }
       }
@@ -55,3 +61,27 @@ export default observer(function Preview(props: IProps) {
 
   return <div className={Style.container}>{preview}</div>
 })
+
+interface ITextViewerProps {
+  url: string
+}
+
+function TextViewer(props: ITextViewerProps) {
+  const [text, setText] = useState('')
+
+  useEffect(() => {
+    axios.get(props.url).then((response) => {
+      if (isStr(response.data)) {
+        let text = response.data
+        if (text.length > 100000) {
+          text = truncate(text, 100000)
+        }
+        setText(text)
+      } else {
+        setText(t('commonErr'))
+      }
+    })
+  }, [props.url])
+
+  return <LunaTextViewer text={text} className={Style.textViewer} />
+}
