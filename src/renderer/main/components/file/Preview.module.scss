@@ -1,6 +1,9 @@
 .container {
   height: 100%;
   border-left: 1px solid var(--color-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
   :global(.luna-image-viewer) {
     background-color: transparent;
     width: 100%;
@@ -19,4 +22,15 @@
 .video-player {
   width: 100%;
   height: 100%;
+}
+
+.music-player {
+  width: 100%;
+  :global(.luna-music-player-body) {
+    border-left: none;
+    border-right: none;
+  }
+  :global(.luna-music-player-icon-file) {
+    display: none;
+  }
 }

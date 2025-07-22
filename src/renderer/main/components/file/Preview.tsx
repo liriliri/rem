@@ -8,6 +8,7 @@ import splitPath from 'licia/splitPath'
 import startWith from 'licia/startWith'
 import LunaImageViewer from 'luna-image-viewer/react'
 import LunaVideoPlayer from 'luna-video-player/react'
+import LunaMusicPlayer from 'luna-music-player/react'
 import store from '../../store'
 import { observer } from 'mobx-react-lite'
 
@@ -38,6 +39,13 @@ export default observer(function Preview(props: IProps) {
           } else if (startWith(mimeType, 'video/')) {
             preview = (
               <LunaVideoPlayer className={Style.videoPlayer} url={url} />
+            )
+          } else if (startWith(mimeType, 'audio/')) {
+            preview = (
+              <LunaMusicPlayer
+                className={Style.musicPlayer}
+                audio={{ title: file.name, url }}
+              />
             )
           }
         }
