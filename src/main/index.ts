@@ -41,23 +41,23 @@ app.on('ready', () => {
   updater.init()
 })
 
-function showWin() {
-  if (!main.showFocusedWin()) {
-    main.showWin()
-  }
-}
-
 app.on('window-all-closed', () => {
   if (isMac) {
     app.dock.hide()
   }
 })
+app.on('browser-window-created', () => {
+  if (isMac) {
+    app.dock.show()
+  }
+})
+
+function showWin() {
+  if (!main.showFocusedWin()) {
+    main.showWin()
+  }
+}
 if (isMac) {
-  app.on('browser-window-created', () => {
-    if (isMac) {
-      app.dock.show()
-    }
-  })
   app.on('activate', showWin)
 } else {
   app.on('second-instance', showWin)

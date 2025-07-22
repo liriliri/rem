@@ -1,4 +1,10 @@
-import { app, Menu, nativeImage, Tray } from 'electron'
+import {
+  app,
+  Menu,
+  MenuItemConstructorOptions,
+  nativeImage,
+  Tray,
+} from 'electron'
 import { resolveResources } from 'share/main/lib/util'
 import * as main from '../window/main'
 import * as mount from '../window/mount'
@@ -21,6 +27,14 @@ export function init() {
       }
     })
   }
+  const hideMenu: MenuItemConstructorOptions[] = isMac
+    ? [
+        {
+          label: t('hideRem'),
+          role: 'hide',
+        },
+      ]
+    : []
   const contextMenu = Menu.buildFromTemplate([
     {
       label: t('show'),
@@ -30,10 +44,7 @@ export function init() {
         }
       },
     },
-    {
-      label: t('hideRem'),
-      role: 'hide',
-    },
+    ...hideMenu,
     {
       type: 'separator',
     },
