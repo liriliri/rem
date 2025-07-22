@@ -1,3 +1,9 @@
+## v0.8.0 (22 Jul 2025)
+
+* feat: audio preview
+* feat: text preview
+* fix: preview loading in background
+
 ## v0.7.0 (19 Jul 2025)
 
 * feat: rclone config path setting [#4](https://github.com/liriliri/rem/issues/4)
