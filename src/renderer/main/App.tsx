@@ -2,6 +2,7 @@ import Toolbar from './components/toolbar/Toolbar'
 import Config from './components/config/Config'
 import File from './components/file/File'
 import Job from './components/job/Job'
+import Statusbar from './components/statusbar/Statusbar'
 import Style from './App.module.scss'
 import LunaSplitPane, { LunaSplitPaneItem } from 'luna-split-pane/react'
 import store from './store'
@@ -56,6 +57,7 @@ export default observer(function App() {
           </LunaSplitPaneItem>
         </LunaSplitPane>
       </div>
+      <Statusbar />
     </>
   )
 })

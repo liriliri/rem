@@ -13,7 +13,7 @@
         }
       }
       tr:nth-child(even) {
-        background-color: if($class == ':root', #f1f1f1, #2c363e) !important;
+        background-color: if($class == ':root', #f1f1f1, #2c2c2c) !important;
       }
     }
     .luna-data-grid {

@@ -39,16 +39,6 @@ export default observer(function Toolbar() {
             store.toggleJob()
           }}
         />
-        <ToolbarIcon
-          icon="mount"
-          title={t('mountManager')}
-          onClick={() => main.showMount()}
-        />
-        <ToolbarIcon
-          icon="terminal"
-          title={t('rcloneCli')}
-          onClick={() => main.openRcloneCli()}
-        />
         <LunaToolbarSeparator />
         <ToolbarIcon
           icon="arrow-left"
@@ -70,6 +60,12 @@ export default observer(function Toolbar() {
           onClick={() => remote.up()}
           disabled={!remote.remote || remote.isLoading}
         />
+        <ToolbarIcon
+          icon="refresh"
+          title={t('refresh')}
+          onClick={() => remote.refresh()}
+          disabled={remote.isLoading}
+        />
         <LunaToolbarHtml
           className={className(Style.path, 'luna-toolbar-item-input')}
         >
@@ -85,12 +81,6 @@ export default observer(function Toolbar() {
             }}
           />
         </LunaToolbarHtml>
-        <ToolbarIcon
-          icon="refresh"
-          title={t('refresh')}
-          onClick={() => remote.refresh()}
-          disabled={remote.isLoading}
-        />
         <LunaToolbarInput
           keyName="filter"
           value={store.remote.filter}

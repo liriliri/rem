@@ -1,0 +1,28 @@
+.container {
+  position: absolute;
+  height: 22px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-top: 1px solid var(--color-border);
+  display: flex;
+  font-size: 12px;
+  line-height: 22px;
+}
+
+.item {
+  display: inline-block;
+  line-height: 20px;
+  height: 100%;
+  padding: 0 5px;
+  font-variant-numeric: tabular-nums;
+  &.button {
+    &:hover {
+      background-color: var(--color-bg-text-hover);
+    }
+  }
+}
+
+.space {
+  flex-grow: 1;
+}

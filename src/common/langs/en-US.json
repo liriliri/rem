@@ -110,5 +110,6 @@
   "configPath": "Config Path",
   "show": "Show",
   "openAtLogin": "Open at login",
-  "commonErr": "Something went wrong"
+  "commonErr": "Something went wrong",
+  "totalItem": "{{total}} items"
 }
