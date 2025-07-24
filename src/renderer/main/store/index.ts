@@ -30,7 +30,7 @@ class Store extends BaseStore {
   listView = false
   showConfig = true
   configWeight = 25
-  showJob = false 
+  showJob = false
   jobWeight = 30
   showPreview = false
   fileWeights = [70, 30]

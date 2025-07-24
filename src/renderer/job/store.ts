@@ -1,6 +1,7 @@
 import {
   clearMemJobs,
   deleteMemJob,
+  getMemJobs,
   IJobOptions,
   Job,
   JobStatus,
@@ -38,7 +39,7 @@ class Store extends BaseStore {
     clearMemJobs()
   }
   private async init() {
-    const jobs = (await main.getMemStore('jobs')) || []
+    const jobs = await getMemJobs()
     this.updateJobs(jobs)
   }
   private async updateJobs(jobOptions: IJobOptions[]) {

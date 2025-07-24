@@ -101,7 +101,7 @@ export class Job extends Emitter {
 }
 
 export async function addMemJob(options: IJobOptions) {
-  const jobs = (await main.getMemStore('jobs')) || []
+  const jobs = await getMemJobs()
   jobs.push(options)
   await setMemStore('jobs', jobs)
 }
@@ -111,7 +111,7 @@ export async function getMemJobs(): Promise<IJobOptions[]> {
 }
 
 export async function deleteMemJob(id: number) {
-  const jobs = await main.getMainStore('jobs')
+  const jobs = await getMemJobs()
   remove(jobs, (job: IJobOptions) => job.id === id)
   await setMemStore('jobs', jobs)
 }
