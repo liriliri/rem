@@ -111,5 +111,6 @@
   "show": "Show",
   "openAtLogin": "Open at login",
   "commonErr": "Something went wrong",
-  "totalItem": "{{total}} items"
+  "totalItem": "{{total}} items",
+  "jobManager": "Job Manager"
 }

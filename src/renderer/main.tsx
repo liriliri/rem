@@ -55,6 +55,10 @@ function renderApp() {
       App = lazy(() => import('./mount/App.js') as Promise<any>)
       title = t('mountManager')
       break
+    case 'job':
+      App = lazy(() => import('./job/App.js') as Promise<any>)
+      title = t('jobManager')
+      break
   }
 
   preload.setTitle(title)

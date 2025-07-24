@@ -12,9 +12,8 @@ import getUrlParam from 'licia/getUrlParam'
 import find from 'licia/find'
 import isWindows from 'licia/isWindows'
 import isEmpty from 'licia/isEmpty'
-import { Job, JobStatus, JobType } from './job'
+import { addMemJob, Job, JobStatus, JobType } from '../../store/job'
 import filter from 'licia/filter'
-import each from 'licia/each'
 import { notify } from 'share/renderer/lib/util'
 import { Settings } from '../../store/settings'
 import types from 'licia/types'
@@ -145,19 +144,18 @@ class Store extends BaseStore {
       }
     })
     this.jobs.push(job)
+    addMemJob({
+      id: job.id,
+      type: job.type,
+      pair: job.pair,
+    })
   }
   deleteJob(id: number) {
-    const job = this.getJob(id)
+    const job = find(this.jobs, (job) => job.id === id)
     if (job) {
       job.stop()
       this.jobs = filter(this.jobs, (job) => job.id !== id)
     }
-  }
-  getJob(id: number): Job | void {
-    return find(this.jobs, (job) => job.id === id)
-  }
-  stopAllJobs() {
-    each(this.jobs, (job) => job.stop())
   }
   clearFinishedJobs() {
     this.jobs = filter(this.jobs, (job) => {

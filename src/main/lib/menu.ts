@@ -3,6 +3,7 @@ import * as window from 'share/main/lib/window'
 import * as terminal from 'share/main/window/terminal'
 import * as settings from '../window/settings'
 import * as about from 'share/main/window/about'
+import * as job from '../window/job'
 import isMac from 'licia/isMac'
 import { t } from '../../common/util'
 import upperCase from 'licia/upperCase'
@@ -102,6 +103,12 @@ function getTemplate(): MenuItemConstructorOptions[] {
         label: t('terminal'),
         click() {
           terminal.showWin()
+        },
+      },
+      {
+        label: t('jobManager'),
+        click() {
+          job.showWin()
         },
       },
     ],

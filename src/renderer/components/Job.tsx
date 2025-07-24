@@ -1,19 +1,32 @@
 import { observer } from 'mobx-react-lite'
 import Style from './Job.module.scss'
 import LunaDataGrid from 'luna-data-grid/react'
-import { t } from '../../../../common/util'
+import { t } from '../../common/util'
 import { useRef } from 'react'
 import DataGrid, { DataGridNode } from 'luna-data-grid'
 import { useResizeSensor } from 'share/renderer/lib/hooks'
 import map from 'licia/map'
-import store from '../../store'
 import durationFormat from 'licia/durationFormat'
-import { JobStatus, JobType } from '../../store/job'
+import {
+  Job,
+  JobStatus,
+  getJobStatusText,
+  getJobTypeText,
+  jobColumns,
+} from '../store/job'
 import dateFormat from 'licia/dateFormat'
 import fileSize from 'licia/fileSize'
 import contextMenu from 'share/renderer/lib/contextMenu'
+import find from 'licia/find'
+import each from 'licia/each'
 
-export default observer(function Job() {
+interface IProps {
+  jobs: Job[]
+  onDeleteJob: (id: number) => void
+  onClearFinishedJobs: () => void
+}
+
+export default observer(function Job(props: IProps) {
   const containerRef = useRef<HTMLDivElement>(null)
   const dataGridRef = useRef<DataGrid>(null)
 
@@ -21,15 +34,15 @@ export default observer(function Job() {
     dataGridRef.current?.fit()
   })
 
-  const data = map(store.jobs, (job) => {
+  const data = map(props.jobs, (job) => {
     const { pair } = job
 
     return {
       id: job.id,
       source: `${pair.srcFs}${pair.srcRemote}`,
       destination: `${pair.dstFs}${pair.dstRemote}`,
-      status: getStatusText(job.status),
-      type: getTypeText(job.type),
+      status: getJobStatusText(job.status),
+      type: getJobTypeText(job.type),
       duration: durationFormat(Math.round(job.duration * 1000), 'h:m:s:l'),
       file: `${job.transferredFiles}/${job.totalFiles}`,
       size: `${fileSize(job.transferredBytes)}B/${fileSize(job.totalBytes)}B`,
@@ -42,12 +55,12 @@ export default observer(function Job() {
     const template: any[] = []
 
     if (jobId) {
-      const job = store.getJob(jobId)
+      const job = find(props.jobs, (job) => job.id === jobId)
       if (job) {
         template.push({
           label: t('delete'),
           click() {
-            store.deleteJob(jobId)
+            props.onDeleteJob(jobId)
           },
         })
         if (job.status === JobStatus.Running) {
@@ -68,13 +81,13 @@ export default observer(function Job() {
       {
         label: t('stopAll'),
         click() {
-          store.stopAllJobs()
+          each(props.jobs, (job) => job.stop())
         },
       },
       {
         label: t('clearFinished'),
         click() {
-          store.clearFinishedJobs()
+          props.onClearFinishedJobs()
         },
       }
     )
@@ -93,7 +106,7 @@ export default observer(function Job() {
       <LunaDataGrid
         data={data}
         uniqueId="id"
-        columns={columns}
+        columns={jobColumns}
         selectable={true}
         onContextMenu={(e: MouseEvent, node: DataGridNode) => {
           onContextMenu(e, (node.data as any).id)
@@ -106,86 +119,3 @@ export default observer(function Job() {
     </div>
   )
 })
-
-function getTypeText(type: JobType) {
-  switch (type) {
-    case JobType.Move:
-      return t('move')
-    case JobType.Sync:
-      return t('sync')
-  }
-
-  return t('copy')
-}
-
-function getStatusText(status: JobStatus) {
-  switch (status) {
-    case JobStatus.Fail:
-      return t('fail')
-    case JobStatus.Success:
-      return t('success')
-    case JobStatus.Cancel:
-      return t('cancel')
-  }
-
-  return t('running')
-}
-
-const columns = [
-  {
-    id: 'id',
-    title: t('jobId'),
-    weight: 5,
-    sortable: true,
-  },
-  {
-    id: 'type',
-    title: t('type'),
-    weight: 5,
-    sortable: true,
-  },
-  {
-    id: 'source',
-    title: t('source'),
-    weight: 10,
-    sortable: true,
-  },
-  {
-    id: 'destination',
-    title: t('destination'),
-    weight: 10,
-    sortable: true,
-  },
-  {
-    id: 'startTime',
-    title: t('startTime'),
-    weight: 10,
-  },
-  {
-    id: 'duration',
-    title: t('duration'),
-    weight: 5,
-  },
-  {
-    id: 'file',
-    title: t('file'),
-    weight: 5,
-  },
-  {
-    id: 'size',
-    title: t('size'),
-    weight: 10,
-    sortable: true,
-  },
-  {
-    id: 'speed',
-    title: t('speed'),
-    weight: 5,
-  },
-  {
-    id: 'status',
-    title: t('status'),
-    weight: 5,
-    sortable: true,
-  },
-]

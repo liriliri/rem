@@ -10,7 +10,7 @@ import Style from './Toolbar.module.scss'
 import className from 'licia/className'
 import store from '../../store'
 import some from 'licia/some'
-import { JobStatus } from '../../store/job'
+import { JobStatus } from '../../../store/job'
 
 export default observer(function Toolbar() {
   const { remote } = store

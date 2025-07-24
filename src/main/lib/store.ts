@@ -38,3 +38,12 @@ export const getMountStore = memoize(function () {
     },
   })
 })
+
+export const getJobStore = memoize(function () {
+  return new FileStore(getUserDataPath('data/job.json'), {
+    bounds: {
+      width: 960,
+      height: 640,
+    },
+  })
+})

@@ -1,7 +1,7 @@
 import Toolbar from './components/toolbar/Toolbar'
 import Config from './components/config/Config'
 import File from './components/file/File'
-import Job from './components/job/Job'
+import Job from '../components/Job'
 import Statusbar from './components/statusbar/Statusbar'
 import Style from './App.module.scss'
 import LunaSplitPane, { LunaSplitPaneItem } from 'luna-split-pane/react'
@@ -34,14 +34,14 @@ export default observer(function App() {
               }}
             >
               <LunaSplitPaneItem
-                minSize={200}
+                minSize={190}
                 visible={store.showConfig}
                 weight={store.configWeight}
               >
                 <Config />
               </LunaSplitPaneItem>
               <LunaSplitPaneItem
-                minSize={720}
+                minSize={640}
                 weight={100 - store.configWeight}
               >
                 <File />
@@ -53,7 +53,11 @@ export default observer(function App() {
             weight={store.jobWeight}
             visible={store.showJob}
           >
-            <Job />
+            <Job
+              jobs={store.jobs}
+              onClearFinishedJobs={() => store.clearFinishedJobs()}
+              onDeleteJob={(id) => store.deleteJob(id)}
+            />
           </LunaSplitPaneItem>
         </LunaSplitPane>
       </div>

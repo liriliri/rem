@@ -123,7 +123,7 @@ const api = axios.create({
 })
 
 export async function getConfigDump(): Promise<ConfigDump> {
-  const response = await api.post<ConfigDump>('/config/dump')
+  const response = await api.post<ConfigDump>('/config/dump', {})
 
   return response.data
 }

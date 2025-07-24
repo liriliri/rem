@@ -77,6 +77,16 @@ export function showFocusedWin() {
   return false
 }
 
+export const newWin: IpcNewWindow = function (name) {
+  if (focusedWin) {
+    const bounds = store.get('bounds')
+    const winBounds = focusedWin.getBounds()
+    bounds.x = winBounds.x + 50
+    bounds.y = winBounds.y + 50
+  }
+  showWin(name)
+}
+
 const init = once(() => {
   autoUpdater.on('update-not-available', () => {
     alert('info', t('updateNotAvailable'))
@@ -155,16 +165,7 @@ const initIpc = once(() => {
     return fileIcons[ext]
   }
 
-  handleEvent('newWindow', <IpcNewWindow>((name) => {
-    const bounds = store.get('bounds')
-    if (bounds.x) {
-      bounds.x += 50
-    }
-    if (bounds.y) {
-      bounds.y += 50
-    }
-    showWin(name)
-  }))
+  handleEvent('newWindow', newWin)
   handleEvent('getWindowsDrives', getWindowsDrives)
   handleEvent('getFileIcon', getFileIcon)
   handleEvent('showMount', () => mount.showWin())
