@@ -2,9 +2,6 @@ import { JSX, useEffect, useState } from 'react'
 import Style from './Preview.module.scss'
 import { IFile } from 'luna-file-list'
 import { t } from '../../../../common/util'
-import mime from 'licia/mime'
-import lowerCase from 'licia/lowerCase'
-import splitPath from 'licia/splitPath'
 import startWith from 'licia/startWith'
 import LunaImageViewer from 'luna-image-viewer/react'
 import LunaVideoPlayer from 'luna-video-player/react'
@@ -34,24 +31,23 @@ export default observer(function Preview(props: IProps) {
     } else if (!file.directory) {
       const { name } = file
       const url = remote.getUrl(remote.remote + '/' + name)
-      const ext = splitPath(file.name).ext
-      if (ext) {
-        const mimeType = mime(lowerCase(ext.slice(1)))
-        if (mimeType) {
-          if (startWith(mimeType, 'image/')) {
+      const mime = file.mime
+      if (mime) {
+        if (mime) {
+          if (startWith(mime, 'image/')) {
             preview = <LunaImageViewer image={url} />
-          } else if (startWith(mimeType, 'video/')) {
+          } else if (startWith(mime, 'video/')) {
             preview = (
               <LunaVideoPlayer className={Style.videoPlayer} url={url} />
             )
-          } else if (startWith(mimeType, 'audio/')) {
+          } else if (startWith(mime, 'audio/')) {
             preview = (
               <LunaMusicPlayer
                 className={Style.musicPlayer}
                 audio={{ title: file.name, url }}
               />
             )
-          } else if (startWith(mimeType, 'text/')) {
+          } else if (startWith(mime, 'text/')) {
             preview = <TextViewer url={url} />
           }
         }

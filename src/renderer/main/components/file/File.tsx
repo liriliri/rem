@@ -16,8 +16,6 @@ import PublicLinkModal from './PublicLinkModal'
 import MountModal from './MountModal'
 import LunaSplitPane, { LunaSplitPaneItem } from 'luna-split-pane/react'
 import Preview from './Preview'
-import splitPath from 'licia/splitPath'
-import mime from 'licia/mime'
 import startWith from 'licia/startWith'
 
 export default observer(function File() {
@@ -35,14 +33,14 @@ export default observer(function File() {
       name: file.Name,
       directory: file.IsDir,
       mtime: new Date(file.ModTime),
+      mime: file.MimeType,
     }
     if (file.Size > 0 || !file.IsDir) {
       ret.size = file.Size
     }
 
     if (file.Metadata && file.Metadata.thumbnail) {
-      const ext = splitPath(file.Name).ext
-      const type = mime(ext.slice(1))
+      const type = file.MimeType
       if (
         !type ||
         (!startWith(type, 'image') &&
