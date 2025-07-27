@@ -18,7 +18,7 @@
     "start": "electron ./dist/main/index.js",
     "lint": "eslint \"src/**/*.{ts,tsx}\"",
     "format": "lsla prettier \"src/**/*.{ts,tsx,scss,css,json}\" \"*.{js,ts,json}\" \"script/*.mjs\" --write",
-    "genIcon": "lsla genIcon --input src/renderer/ --output src/renderer/icon.css --name rem-icon --source src/share/renderer/icon/",
+    "genIcon": "lsla genIcon --input src/renderer/ --output src/renderer/icon.css --name rem-icon --source src/renderer/icon/",
     "genTheme": "lsla genTheme --input src/common/theme.json --output src/renderer/theme.scss && lsla genTheme --input src/common/theme.json --output src/common/theme.ts"
   },
   "repository": {
