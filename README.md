@@ -31,7 +31,7 @@ Rclone desktop app.
 
 ## Installation
 
-Click [here](https://github.com/liriliri/rem/releases/) to download and install REM. Windows x64, Mac arm64 and Linux x86_64 are supported.
+Click [here](https://github.com/liriliri/rem/releases/) to download and install REM. Windows x64, Mac arm64, Mac x64 and Linux x86_64 are supported.
 
 ## Features
 
