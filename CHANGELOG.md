@@ -1,7 +1,7 @@
 ## v0.9.0 (27 Jul 2025)
 
 * feat: global job manager
-feat: support macos intel chip [#6](https://github.com/liriliri/rem/issues/6)
+* feat: support macos intel chip [#6](https://github.com/liriliri/rem/issues/6)
 
 ## v0.8.0 (22 Jul 2025)
 
