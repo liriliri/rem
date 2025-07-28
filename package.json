@@ -1,6 +1,7 @@
 {
   "name": "rem",
   "productName": "REM",
+  "appId": "io.liriliri.rem",
   "version": "0.9.0",
   "description": "Rclone desktop app",
   "main": "dist/main/index.js",
