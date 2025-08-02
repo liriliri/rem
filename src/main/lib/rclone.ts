@@ -44,6 +44,8 @@ export async function start() {
     user,
     '--rc-pass',
     pass,
+    '--rc-job-expire-duration',
+    `24h`,
   ]
 
   const configPath = settingsStore.get('configPath')
