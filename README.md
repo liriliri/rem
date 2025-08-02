@@ -39,7 +39,7 @@ Click [here](https://github.com/liriliri/rem/releases/) to download and install 
 * Rclone config management
 * Auto mount cloud storage as a local drive
 * Multi-window support
-* Image and video preview
+* Text, image, audio and video preview
 
 ## Related Projects
 
