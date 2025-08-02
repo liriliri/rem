@@ -19,6 +19,7 @@ import fileSize from 'licia/fileSize'
 import contextMenu from 'share/renderer/lib/contextMenu'
 import find from 'licia/find'
 import each from 'licia/each'
+import toEl from 'licia/toEl'
 
 interface IProps {
   jobs: Job[]
@@ -37,11 +38,16 @@ export default observer(function Job(props: IProps) {
   const data = map(props.jobs, (job) => {
     const { pair } = job
 
+    const status = toEl(`<span>${getJobStatusText(job.status)}</span>`)
+    if (job.status === JobStatus.Fail) {
+      status.setAttribute('title', job.error)
+    }
+
     return {
       id: job.id,
       source: `${pair.srcFs}${pair.srcRemote}`,
       destination: `${pair.dstFs}${pair.dstRemote}`,
-      status: getJobStatusText(job.status),
+      status,
       type: getJobTypeText(job.type),
       duration: durationFormat(Math.round(job.duration * 1000), 'h:m:s:l'),
       file: `${job.transferredFiles}/${job.totalFiles}`,

@@ -32,6 +32,7 @@ export class Job extends Emitter {
   duration = 0
   startTime = new Date()
   status = JobStatus.Running
+  error = ''
   pair: TargetPair
   totalBytes = 0
   transferredBytes = 0
@@ -71,13 +72,14 @@ export class Job extends Emitter {
         if (this.status !== JobStatus.Cancel) {
           if (status.success) {
             this.status = JobStatus.Success
-            this.emit('success', this)
+            this.emit('success')
           } else {
             this.status = JobStatus.Fail
-            this.emit('fail', this)
+            this.error = status.error
+            this.emit('fail')
           }
         }
-        this.emit('finish', this)
+        this.emit('finish')
       }
       this.startTime = new Date(status.startTime)
       if (!status.duration) {

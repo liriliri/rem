@@ -87,6 +87,7 @@ type JobStatus = {
   success: boolean
   startTime: string
   duration: number
+  error: string
 }
 
 type ProviderOption = {
