@@ -110,7 +110,7 @@ export default observer(function Toolbar() {
         />
         <LunaToolbarSeparator />
         <ToolbarIcon
-          icon="info"
+          icon="eye"
           title={t('preview')}
           state={store.showPreview ? 'hover' : ''}
           onClick={() => store.togglePreview()}
