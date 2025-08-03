@@ -81,6 +81,24 @@ export default observer(function File() {
   }
 
   async function onContextMenu(e: MouseEvent, file?: IFile) {
+    async function syncConfirm(r?: string) {
+      const targetPair = await remote.getSyncTargetPair(r)
+      if (!targetPair) {
+        return false
+      }
+      const result = await LunaModal.confirm(
+        t('syncFolderConfirm', {
+          src: targetPair.srcFs + targetPair.srcRemote,
+          dst: targetPair.dstFs + targetPair.dstRemote,
+        })
+      )
+      if (!result) {
+        return false
+      }
+
+      return true
+    }
+
     if (file) {
       const template: any[] = [
         {
@@ -111,6 +129,9 @@ export default observer(function File() {
           template.push({
             label: t('sync'),
             click: async () => {
+              if (!(await syncConfirm(resolvePath(file.name)))) {
+                return
+              }
               const job = await remote.syncFolder(resolvePath(file.name))
               store.addJob(job)
             },
@@ -234,6 +255,9 @@ export default observer(function File() {
         template.push({
           label: t('sync'),
           click: async () => {
+            if (!(await syncConfirm())) {
+              return
+            }
             const job = await remote.syncFolder()
             store.addJob(job)
           },

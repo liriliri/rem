@@ -255,6 +255,22 @@ export class Remote {
 
     return this.syncFrom(syncData.target, remote || this.remote)
   }
+  async getSyncTargetPair(remote?: string): Promise<TargetPair | null> {
+    const syncData = await main.getMemStore('sync')
+
+    if (!syncData) {
+      return null
+    }
+
+    return genTargetPair(
+      syncData.target,
+      {
+        fs: this.fs,
+        remote: remote || this.remote,
+      },
+      false
+    )
+  }
   async pasteFiles(remote?: string) {
     const clipboardData = await main.getMemStore('clipboard')
 
