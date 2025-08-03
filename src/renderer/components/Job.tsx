@@ -40,7 +40,16 @@ export default observer(function Job(props: IProps) {
 
     const status = toEl(`<span>${getJobStatusText(job.status)}</span>`)
     if (job.status === JobStatus.Fail) {
+      status.classList.add(Style.fail)
+      status.addEventListener('mouseover', () => {
+        status.textContent = job.error
+      })
+      status.addEventListener('mouseout', () => {
+        status.textContent = getJobStatusText(job.status)
+      })
       status.setAttribute('title', job.error)
+    } else if (job.status === JobStatus.Success) {
+      status.classList.add(Style.success)
     }
 
     return {
