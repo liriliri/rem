@@ -18,10 +18,10 @@
     }
     .luna-data-grid {
       .luna-data-grid-node.luna-data-grid-selectable.luna-data-grid-selected {
+        background-color: var(--color-primary) !important;
         * {
           color: #fff;
         }
-        background-color: var(--color-primary) !important;
       }
     }
   }

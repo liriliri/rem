@@ -1,3 +1,9 @@
+## v0.10.0 (3 Aug 2025)
+
+* feat: synchronization confirm [#15](https://github.com/liriliri/rem/issues/15)
+* feat: show fail error message
+* fix: global job manager error
+
 ## v0.9.0 (27 Jul 2025)
 
 * feat: global job manager
