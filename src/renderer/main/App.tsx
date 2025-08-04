@@ -50,6 +50,7 @@ export default observer(function App() {
           </LunaSplitPaneItem>
           <LunaSplitPaneItem
             minSize={150}
+            className={Style.job}
             weight={store.jobWeight}
             visible={store.showJob}
           >
