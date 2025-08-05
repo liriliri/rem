@@ -26,6 +26,7 @@ import isWindows from 'licia/isWindows'
 import contain from 'licia/contain'
 import isMac from 'licia/isMac'
 import { notify } from 'share/renderer/lib/util'
+import pkg from '../../package.json'
 
 const logger = log('renderer')
 logger.info('start')
@@ -36,7 +37,7 @@ function renderApp() {
   const container: HTMLElement = document.getElementById('app') as HTMLElement
 
   let App = lazy(() => import('./main/App.js') as Promise<any>)
-  let title = 'REM'
+  let title = pkg.productName
 
   switch (getUrlParam('page')) {
     case 'terminal':

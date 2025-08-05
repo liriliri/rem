@@ -4,9 +4,6 @@ const globals = require('globals')
 const eslintConfigPrettier = require('eslint-config-prettier')
 
 module.exports = tseslint.config(
-  {
-    ignores: ['**/wire.d.ts'],
-  },
   eslint.configs.recommended,
   ...tseslint.configs.recommended,
   eslintConfigPrettier,
