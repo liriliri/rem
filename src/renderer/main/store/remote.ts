@@ -9,7 +9,6 @@ import {
 import { action, makeObservable, observable, runInAction } from 'mobx'
 import splitPath from 'licia/splitPath'
 import normalizePath from 'licia/normalizePath'
-import trim from 'licia/trim'
 import isEmpty from 'licia/isEmpty'
 import { genTargetPair, parseLocalPath } from '../lib/util'
 import { Job, JobType } from '../../store/job'
@@ -25,7 +24,6 @@ export class Remote {
   remote = ''
   name = ''
   type = ''
-  customRemote = ''
   files: File[] = []
   history: string[] = []
   historyIdx = -1
@@ -49,7 +47,6 @@ export class Remote {
 
     makeObservable(this, {
       remote: observable,
-      customRemote: observable,
       history: observable,
       historyIdx: observable,
       files: observable,
@@ -57,7 +54,6 @@ export class Remote {
       filter: observable,
       about: observable,
       features: observable,
-      setCustomRemote: action,
       setFilter: action,
     })
 
@@ -65,9 +61,6 @@ export class Remote {
   }
   setFilter(filter: string) {
     this.filter = filter
-  }
-  setCustomRemote(customRemote: string) {
-    this.customRemote = customRemote
   }
   async back() {
     const { historyIdx } = this
@@ -114,11 +107,6 @@ export class Remote {
   }
   getUrl(remote: string) {
     return `${rclone.getBaseURL()}/[${this.fs}]/${remote}`
-  }
-  async goCustomRemote() {
-    const p = normalizePath(this.customRemote)
-
-    this.go(trim(p, '/'))
   }
   async refresh(targets?: Target[] | Target) {
     if (targets) {
@@ -456,7 +444,6 @@ export class Remote {
       runInAction(() => {
         this.files = fileList
         this.remote = remote
-        this.customRemote = this.remote
         this.setFilter('')
       })
 

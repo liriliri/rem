@@ -11,6 +11,9 @@ import className from 'licia/className'
 import store from '../../store'
 import some from 'licia/some'
 import { JobStatus } from '../../../store/job'
+import LunaPathBar from 'luna-path-bar/react'
+import normalizePath from 'licia/normalizePath'
+import trim from 'licia/trim'
 
 export default observer(function Toolbar() {
   const { remote } = store
@@ -66,18 +69,14 @@ export default observer(function Toolbar() {
           onClick={() => remote.refresh()}
           disabled={remote.isLoading}
         />
-        <LunaToolbarHtml
-          className={className(Style.path, 'luna-toolbar-item-input')}
-        >
-          <input
-            value={remote.customRemote}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-              remote.setCustomRemote(e.target.value)
-            }}
-            onKeyDown={async (e) => {
-              if (e.key === 'Enter') {
-                store.remote.goCustomRemote()
-              }
+        <LunaToolbarHtml className={Style.pathContainer}>
+          <LunaPathBar
+            className={Style.path}
+            path={remote.remote}
+            onChange={(path) => {
+              console.log('onChange', path)
+              const p = normalizePath(path)
+              remote.go(trim(p, '/'))
             }}
           />
         </LunaToolbarHtml>
