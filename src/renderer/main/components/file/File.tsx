@@ -17,6 +17,9 @@ import MountModal from './MountModal'
 import LunaSplitPane, { LunaSplitPaneItem } from 'luna-split-pane/react'
 import Preview from './Preview'
 import startWith from 'licia/startWith'
+import LunaGallery from 'luna-gallery/react'
+import filter from 'licia/filter'
+import toBool from 'licia/toBool'
 
 export default observer(function File() {
   const [publicLinkModalVisible, setPublicLinkModalVisible] = useState(false)
@@ -24,6 +27,11 @@ export default observer(function File() {
   const [mountModalVisible, setMountModalVisible] = useState(false)
   const [dropHighlight, setDropHighlight] = useState(false)
   const [selected, setSelected] = useState<IFile | null>(null)
+  const [galleryVisible, setGalleryVisible] = useState(false)
+  const [images, setImages] = useState<Array<{ src: string; title?: string }>>(
+    []
+  )
+  const [currentImageIdx, setCurrentImageIdx] = useState(0)
   const draggingRef = useRef(0)
 
   const { remote } = store
@@ -58,10 +66,34 @@ export default observer(function File() {
   async function open(file: IFile) {
     if (file.directory) {
       remote.go(resolvePath(file.name))
-    } else {
-      const job = await remote.openFile(resolvePath(file.name))
-      store.addJob(job)
+      return
     }
+
+    if (file.mime) {
+      if (startWith(file.mime, 'image')) {
+        const images = filter(files, (f) =>
+          toBool(f.mime && startWith(f.mime, 'image'))
+        )
+        let currentImageIdx = 0
+        setImages(
+          map(images, (f, idx) => {
+            if (f.name === file.name) {
+              currentImageIdx = idx
+            }
+            return {
+              src: remote.getUrl(remote.remote + '/' + f.name),
+              title: f.name,
+            }
+          })
+        )
+        setCurrentImageIdx(currentImageIdx)
+        setGalleryVisible(true)
+        return
+      }
+    }
+
+    const job = await remote.openFile(resolvePath(file.name))
+    store.addJob(job)
   }
 
   async function onDrop(e: React.DragEvent) {
@@ -282,65 +314,73 @@ export default observer(function File() {
   }
 
   return (
-    <LunaSplitPane onResize={(weights) => store.setFileWeights(weights)}>
-      <LunaSplitPaneItem minSize={400} weight={store.fileWeights[0]}>
-        <div
-          onDrop={onDrop}
-          onDragEnter={() => {
-            draggingRef.current++
-          }}
-          onDragLeave={() => {
-            draggingRef.current--
-            if (draggingRef.current === 0) {
-              setDropHighlight(false)
-            }
-          }}
-          onDragOver={(e) => {
-            if (!isFileDrop(e)) {
-              return
-            }
-            e.preventDefault()
-            if (!remote.isLoading) {
-              setDropHighlight(true)
-            }
-          }}
-          className={className(Style.container, {
-            [Style.highlight]: dropHighlight,
-          })}
-        >
-          <LunaFileList
-            className={Style.fileList}
-            files={files}
-            filter={remote.filter}
-            listView={store.listView}
-            onDoubleClick={(e: MouseEvent, file: IFile) => open(file)}
-            onContextMenu={onContextMenu}
-            onSelect={(file: IFile) => setSelected(file)}
-            onDeselect={() => setSelected(null)}
+    <>
+      <LunaSplitPane onResize={(weights) => store.setFileWeights(weights)}>
+        <LunaSplitPaneItem minSize={400} weight={store.fileWeights[0]}>
+          <div
+            onDrop={onDrop}
+            onDragEnter={() => {
+              draggingRef.current++
+            }}
+            onDragLeave={() => {
+              draggingRef.current--
+              if (draggingRef.current === 0) {
+                setDropHighlight(false)
+              }
+            }}
+            onDragOver={(e) => {
+              if (!isFileDrop(e)) {
+                return
+              }
+              e.preventDefault()
+              if (!remote.isLoading) {
+                setDropHighlight(true)
+              }
+            }}
+            className={className(Style.container, {
+              [Style.highlight]: dropHighlight,
+            })}
+          >
+            <LunaFileList
+              className={Style.fileList}
+              files={files}
+              filter={remote.filter}
+              listView={store.listView}
+              onDoubleClick={(e: MouseEvent, file: IFile) => open(file)}
+              onContextMenu={onContextMenu}
+              onSelect={(file: IFile) => setSelected(file)}
+              onDeselect={() => setSelected(null)}
+            />
+            {remote.isLoading && (
+              <div className={Style.loading}>
+                <LoadingBar />
+              </div>
+            )}
+          </div>
+          <PublicLinkModal
+            visible={publicLinkModalVisible}
+            onClose={() => setPublicLinkModalVisible(false)}
+            url={publicLink}
           />
-          {remote.isLoading && (
-            <div className={Style.loading}>
-              <LoadingBar />
-            </div>
-          )}
-        </div>
-        <PublicLinkModal
-          visible={publicLinkModalVisible}
-          onClose={() => setPublicLinkModalVisible(false)}
-          url={publicLink}
-        />
-        <MountModal
-          visible={mountModalVisible}
-          onClose={() => setMountModalVisible(false)}
-        />
-      </LunaSplitPaneItem>
-      <LunaSplitPaneItem
-        minSize={180}
-        weight={store.fileWeights[1]}
-        visible={store.showPreview}
-      >
-        <Preview file={selected} />
-      </LunaSplitPaneItem>
-    </LunaSplitPane>
+          <MountModal
+            visible={mountModalVisible}
+            onClose={() => setMountModalVisible(false)}
+          />
+        </LunaSplitPaneItem>
+        <LunaSplitPaneItem
+          minSize={180}
+          weight={store.fileWeights[1]}
+          visible={store.showPreview}
+        >
+          <Preview file={selected} />
+        </LunaSplitPaneItem>
+      </LunaSplitPane>
+      <LunaGallery
+        images={images}
+        current={currentImageIdx}
+        visible={galleryVisible}
+        onClose={() => setGalleryVisible(false)}
+      />
+    </>
   )
 })
