@@ -22,6 +22,7 @@ import { IConfig } from './'
 
 export class Remote {
   remote = ''
+  customRemote = ''
   name = ''
   type = ''
   files: File[] = []
@@ -42,11 +43,13 @@ export class Remote {
     this.name = name
     this.fs = fs
     this.type = config.type
+    this.customRemote = name
 
     this.updateTitle()
 
     makeObservable(this, {
       remote: observable,
+      customRemote: observable,
       history: observable,
       historyIdx: observable,
       files: observable,
@@ -55,12 +58,16 @@ export class Remote {
       about: observable,
       features: observable,
       setFilter: action,
+      setCustomRemote: action,
     })
 
     this.init()
   }
   setFilter(filter: string) {
     this.filter = filter
+  }
+  setCustomRemote(remote: string) {
+    this.customRemote = remote
   }
   async back() {
     const { historyIdx } = this
@@ -444,6 +451,7 @@ export class Remote {
       runInAction(() => {
         this.files = fileList
         this.remote = remote
+        this.customRemote = this.name + '/' + remote
         this.setFilter('')
       })
 

@@ -72,11 +72,19 @@ export default observer(function Toolbar() {
         <LunaToolbarHtml className={Style.pathContainer}>
           <LunaPathBar
             className={Style.path}
-            path={remote.remote}
-            onChange={(path) => {
-              console.log('onChange', path)
-              const p = normalizePath(path)
-              remote.go(trim(p, '/'))
+            path={remote.customRemote}
+            onChange={async (path) => {
+              const { customRemote } = remote
+              remote.setCustomRemote(path)
+              const p = trim(normalizePath(path.replace(remote.name, '')), '/')
+              if (p === remote.remote) {
+                return
+              }
+              try {
+                await remote.go(p)
+              } catch {
+                remote.setCustomRemote(customRemote)
+              }
             }}
           />
         </LunaToolbarHtml>
