@@ -1,3 +1,8 @@
+## v0.11.0 (8 Aug 2025)
+
+* feat: refactor file address bar
+* feat: image gallery viewer
+
 ## v0.10.0 (3 Aug 2025)
 
 * feat: synchronization confirm [#15](https://github.com/liriliri/rem/issues/15)
