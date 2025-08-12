@@ -1,8 +1,5 @@
 import { BrowserWindow } from 'electron'
-import { getMountStore } from '../lib/store'
 import * as window from 'share/main/lib/window'
-
-const store = getMountStore()
 
 let win: BrowserWindow | null = null
 
@@ -16,9 +13,8 @@ export function showWin() {
     name: 'mount',
     minWidth: 640,
     minHeight: 480,
-    ...store.get('bounds'),
-    maximized: store.get('maximized'),
-    onSavePos: () => window.savePos(win, store, true),
+    width: 640,
+    height: 480,
   })
 
   win.on('close', () => {
