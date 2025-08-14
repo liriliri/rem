@@ -70,6 +70,7 @@ export default observer(function File() {
     }
 
     if (file.mime) {
+      const url = remote.getUrl(remote.remote + '/' + file.name)
       if (startWith(file.mime, 'image')) {
         const images = filter(files, (f) =>
           toBool(f.mime && startWith(f.mime, 'image'))
@@ -81,13 +82,16 @@ export default observer(function File() {
               currentImageIdx = idx
             }
             return {
-              src: remote.getUrl(remote.remote + '/' + f.name),
+              src: url,
               title: f.name,
             }
           })
         )
         setCurrentImageIdx(currentImageIdx)
         setGalleryVisible(true)
+        return
+      } else if (startWith(file.mime, 'video')) {
+        main.showVideo(url)
         return
       }
     }

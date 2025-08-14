@@ -5,6 +5,7 @@ import {
   IpcGetWindowsDrives,
   IpcIsRcloneRunning,
   IpcNewWindow,
+  IpcShowVideo,
 } from 'common/types'
 import { IpcGetStore, IpcSetStore } from 'share/common/types'
 import mainObj from 'share/preload/main'
@@ -23,4 +24,5 @@ export default Object.assign(mainObj, {
   getWindowsDrives: invoke<IpcGetWindowsDrives>('getWindowsDrives'),
   getFileIcon: invoke<IpcGetFileIcon>('getFileIcon'),
   showMount: invoke('showMount'),
+  showVideo: invoke<IpcShowVideo>('showVideo'),
 })

@@ -63,6 +63,9 @@ function renderApp() {
       App = lazy(() => import('./job/App.js') as Promise<any>)
       title = t('jobManager')
       break
+    case 'video':
+      App = lazy(() => import('./video/App.js') as Promise<any>)
+      break
   }
 
   preload.setTitle(title)
