@@ -1,7 +1,7 @@
 import LunaModal from 'luna-modal/react'
 import { createPortal } from 'react-dom'
 import { t } from '../../../../common/util'
-import { Input, Row, Select } from 'share/renderer/components/setting'
+import { Checkbox, Input, Row, Select } from 'share/renderer/components/setting'
 import { JSX, useEffect, useState } from 'react'
 import types from 'licia/types'
 import each from 'licia/each'
@@ -11,8 +11,9 @@ import isStrBlank from 'licia/isStrBlank'
 import find from 'licia/find'
 import map from 'licia/map'
 import filter from 'licia/filter'
-import { Provider } from '../../../lib/rclone'
+import { Provider } from '../../../../common/rclone'
 import { notify } from 'share/renderer/lib/util'
+import isUndef from 'licia/isUndef'
 
 interface IProps {
   visible: boolean
@@ -51,7 +52,7 @@ export default function AddConfigModal(props: IProps) {
       }),
       (option) => {
         let el: JSX.Element | null = null
-        const { Type, Examples, Help } = option
+        const { Type, Examples, Help, Default } = option
 
         function getValue() {
           return parameters[option.Name]
@@ -79,8 +80,31 @@ export default function AddConfigModal(props: IProps) {
               />
             )
           } else {
-            el = <Input title={title} value={getValue()} onChange={setValue} />
+            el = (
+              <Input
+                title={title}
+                value={getValue() || Default}
+                onChange={setValue}
+              />
+            )
           }
+        } else if (Type === 'bool') {
+          let val = getValue()
+          if (isUndef(val)) {
+            val = Default
+          }
+          let description = ''
+          if (Examples) {
+            description = Examples[val ? 0 : 1].Help
+          }
+          el = (
+            <Checkbox
+              title={title}
+              value={val}
+              description={description}
+              onChange={setValue}
+            />
+          )
         }
 
         return (

@@ -97,7 +97,7 @@ type ProviderOption = {
   Required: boolean
   Default: string | boolean | number
   DefaultStr: string
-  Type: 'string'
+  Type: 'string' | 'bool'
   Provider?: string
   Examples?: Array<{
     Value: string
