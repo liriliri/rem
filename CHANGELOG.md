@@ -1,3 +1,8 @@
+## v1.0.0 (18 Aug 2025)
+
+* feat: open video
+* feat: support config bool type
+
 ## v0.11.0 (8 Aug 2025)
 
 * feat: refactor file address bar
