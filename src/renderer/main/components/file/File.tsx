@@ -82,7 +82,7 @@ export default observer(function File() {
               currentImageIdx = idx
             }
             return {
-              src: url,
+              src: remote.getUrl(remote.remote + '/' + f.name),
               title: f.name,
             }
           })
