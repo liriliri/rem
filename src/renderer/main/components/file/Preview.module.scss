@@ -24,11 +24,21 @@
   height: 100%;
 }
 
+.music-player-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.music-visualizer {
+  flex: 1;
+}
+
 .music-player {
   width: 100%;
   :global(.luna-music-player-body) {
-    border-left: none;
-    border-right: none;
+    border: none;
   }
   :global(.luna-music-player-icon-file) {
     display: none;

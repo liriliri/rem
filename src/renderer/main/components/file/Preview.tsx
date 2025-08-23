@@ -7,6 +7,7 @@ import LunaImageViewer from 'luna-image-viewer/react'
 import LunaVideoPlayer from 'luna-video-player/react'
 import LunaMusicPlayer from 'luna-music-player/react'
 import LunaTextViewer from 'luna-text-viewer/react'
+import LunaMusicVisualizer from 'luna-music-visualizer/react'
 import store from '../../store'
 import { observer } from 'mobx-react-lite'
 import axios from 'axios'
@@ -20,6 +21,7 @@ interface IProps {
 export default observer(function Preview(props: IProps) {
   const { file } = props
   const { remote } = store
+  const [audioObj, setAudioObj] = useState<HTMLAudioElement>(new Audio())
 
   let preview: JSX.Element = (
     <div className={Style.noPreview}>{t('noPreview')}</div>
@@ -42,10 +44,20 @@ export default observer(function Preview(props: IProps) {
             )
           } else if (startWith(mime, 'audio/')) {
             preview = (
-              <LunaMusicPlayer
-                className={Style.musicPlayer}
-                audio={{ title: file.name, url }}
-              />
+              <div className={Style.musicPlayerContainer}>
+                <LunaMusicVisualizer
+                  className={Style.musicVisualizer}
+                  audio={audioObj}
+                  fftSize={256}
+                />
+                <LunaMusicPlayer
+                  className={Style.musicPlayer}
+                  audio={{ title: file.name, url }}
+                  onCreate={(musicPlayer) => {
+                    setAudioObj(musicPlayer.getAudio())
+                  }}
+                />
+              </div>
             )
           } else if (startWith(mime, 'text/')) {
             preview = <TextViewer url={url} />
