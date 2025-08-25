@@ -1,3 +1,8 @@
+## v1.1.0 (25 Aug 2025)
+
+* feat: music visualizer
+* fix: image gallery viewer 
+
 ## v1.0.0 (18 Aug 2025)
 
 * feat: open video
