@@ -115,6 +115,12 @@ export class Remote {
   getUrl(remote: string) {
     return `${rclone.getBaseURL()}/[${this.fs}]/${remote}`
   }
+  async getSize(remote: string) {
+    return await rclone.getSize({
+      fs: this.fs,
+      remote,
+    })
+  }
   async refresh(targets?: Target[] | Target) {
     if (targets) {
       if (!isArr(targets)) {

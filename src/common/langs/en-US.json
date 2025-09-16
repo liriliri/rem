@@ -115,5 +115,6 @@
   "jobManager": "Job Manager",
   "syncFolderConfirm": "Are you sure you want to synchronize the folder? Files in {{dst}} will be updated to match {{src}}.",
   "on": "On",
-  "off": "Off"
+  "off": "Off",
+  "getSize": "Get Size"
 }

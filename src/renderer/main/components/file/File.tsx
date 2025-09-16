@@ -20,6 +20,7 @@ import startWith from 'licia/startWith'
 import LunaGallery from 'luna-gallery/react'
 import filter from 'licia/filter'
 import toBool from 'licia/toBool'
+import fileSize from 'licia/fileSize'
 
 export default observer(function File() {
   const [publicLinkModalVisible, setPublicLinkModalVisible] = useState(false)
@@ -239,20 +240,33 @@ export default observer(function File() {
           },
         }
       )
-      if (remote.features.PublicLink) {
-        template.push(
-          {
-            type: 'separator',
-          },
-          {
+      if (remote.features.PublicLink || file.directory) {
+        template.push({
+          type: 'separator',
+        })
+        if (file.directory) {
+          template.push({
+            label: t('getSize'),
+            click: async () => {
+              const size = await remote.getSize(resolvePath(file.name))
+              LunaModal.alert(
+                `${t('totalItem', { total: size.count })} ${fileSize(
+                  size.bytes
+                )}B`
+              )
+            },
+          })
+        }
+        if (remote.features.PublicLink) {
+          template.push({
             label: t('getPublicLink'),
             click: async () => {
               const url = await remote.getPublicLink(resolvePath(file.name))
               setPublicLinkModalVisible(true)
               setPublicLink(url)
             },
-          }
-        )
+          })
+        }
       }
       contextMenu(e, template)
     } else {

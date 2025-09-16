@@ -46,6 +46,7 @@ export async function start() {
     pass,
     '--rc-job-expire-duration',
     `24h`,
+    '--copy-links',
   ]
 
   const configPath = settingsStore.get('configPath')

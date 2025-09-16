@@ -353,6 +353,19 @@ export async function getRcloneVersion(): Promise<string> {
   return response.data.version
 }
 
+type Size = {
+  count: number
+  bytes: number
+}
+
+export async function getSize(target: Target): Promise<Size> {
+  const response = await api.post<Size>('/operations/size', {
+    fs: target.fs + target.remote,
+  })
+
+  return response.data
+}
+
 export const wait = singleton(async function (checkInterval = 5) {
   return new Promise((resolve) => {
     async function check() {

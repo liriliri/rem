@@ -115,5 +115,6 @@
   "jobManager": "任务管理器",
   "syncFolderConfirm": "确定要同步文件夹吗？{{dst}} 中的文件将更新为与 {{src}} 相同。",
   "on": "开启",
-  "off": "关闭"
+  "off": "关闭",
+  "getSize": "获取大小"
 }
