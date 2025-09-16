@@ -71,7 +71,15 @@ export default observer(function File() {
 
     if (file.mime) {
       const url = remote.getUrl(remote.remote + '/' + file.name)
-      if (startWith(file.mime, 'image')) {
+      if (file.mime === 'application/pdf') {
+        main.openWindow(url, 'pdf', {
+          minHeight: 640,
+          minWidth: 450,
+          width: 450,
+          height: 640,
+        })
+        return
+      } else if (startWith(file.mime, 'image')) {
         const images = filter(files, (f) =>
           toBool(f.mime && startWith(f.mime, 'image'))
         )

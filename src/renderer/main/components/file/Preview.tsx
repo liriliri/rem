@@ -36,7 +36,9 @@ export default observer(function Preview(props: IProps) {
       const mime = file.mime
       if (mime) {
         if (mime) {
-          if (startWith(mime, 'image/')) {
+          if (mime === 'application/pdf') {
+            preview = <iframe className={Style.pdfViewer} src={url} />
+          } else if (startWith(mime, 'image/')) {
             preview = <LunaImageViewer image={url} />
           } else if (startWith(mime, 'video/')) {
             preview = (
