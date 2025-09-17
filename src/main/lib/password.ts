@@ -59,7 +59,7 @@ async function promptPassword(): Promise<string | null> {
 
 async function isConfigEncrypted(password?: string) {
   try {
-    const args = ['config', 'show']
+    const args = ['config', 'show', '--ask-password=false']
     const rclonePath = getRclonePath()
     const configPath = settingsStore.get('configPath')
     if (!isStrBlank(configPath)) {
