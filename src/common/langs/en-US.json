@@ -116,5 +116,8 @@
   "syncFolderConfirm": "Are you sure you want to synchronize the folder? Files in {{dst}} will be updated to match {{src}}.",
   "on": "On",
   "off": "Off",
-  "getSize": "Get Size"
+  "getSize": "Get Size",
+  "enterPassword": "Enter Password",
+  "decryptConfig": "Decrypt Config",
+  "invalidPassword": "Invalid password"
 }

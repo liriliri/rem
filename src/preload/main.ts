@@ -6,7 +6,8 @@ import {
   IpcIsRcloneRunning,
   IpcNewWindow,
   IpcShowVideo,
-} from 'common/types'
+  IpcValidatePassword,
+} from '../common/types'
 import { IpcGetStore, IpcSetStore } from 'share/common/types'
 import mainObj from 'share/preload/main'
 import { invoke } from 'share/preload/util'
@@ -25,4 +26,6 @@ export default Object.assign(mainObj, {
   getFileIcon: invoke<IpcGetFileIcon>('getFileIcon'),
   showMount: invoke('showMount'),
   showVideo: invoke<IpcShowVideo>('showVideo'),
+  validatePassword: invoke<IpcValidatePassword>('validatePassword'),
+  closePassword: invoke('closePassword'),
 })

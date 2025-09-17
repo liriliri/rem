@@ -12,6 +12,7 @@ import { setupTitlebar } from 'custom-electron-titlebar/main'
 import log from 'share/common/log'
 import * as updater from 'share/main/lib/updater'
 import isMac from 'licia/isMac'
+import { checkPassword } from './lib/password'
 
 const logger = log('main')
 logger.info('start', process.argv)
@@ -23,7 +24,7 @@ if (!app.requestSingleInstanceLock()) {
 
 app.setName('Rem')
 
-app.on('ready', () => {
+app.on('ready', async () => {
   logger.info('app ready')
 
   setupTitlebar()
@@ -32,6 +33,10 @@ app.on('ready', () => {
   language.init()
   theme.init()
   ipc.init()
+  if (!(await checkPassword())) {
+    app.quit()
+    return
+  }
   rclone.start()
   if (!autoLaunch.wasOpenedAtLogin()) {
     main.showWin()
@@ -39,6 +44,17 @@ app.on('ready', () => {
   menu.init()
   tray.init()
   updater.init()
+
+  function showWin() {
+    if (!main.showFocusedWin()) {
+      main.showWin()
+    }
+  }
+  if (isMac) {
+    app.on('activate', showWin)
+  } else {
+    app.on('second-instance', showWin)
+  }
 })
 
 app.on('window-all-closed', () => {
@@ -51,14 +67,3 @@ app.on('browser-window-created', () => {
     app.dock.show()
   }
 })
-
-function showWin() {
-  if (!main.showFocusedWin()) {
-    main.showWin()
-  }
-}
-if (isMac) {
-  app.on('activate', showWin)
-} else {
-  app.on('second-instance', showWin)
-}

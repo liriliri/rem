@@ -5,3 +5,4 @@ export type IpcNewWindow = (name?: string) => void
 export type IpcGetWindowsDrives = () => Promise<string[]>
 export type IpcGetFileIcon = (ext: string) => Promise<string>
 export type IpcShowVideo = (url: string) => void
+export type IpcValidatePassword = (password: string) => Promise<boolean>

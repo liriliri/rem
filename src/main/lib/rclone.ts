@@ -82,7 +82,7 @@ export async function start() {
   }
 }
 
-function getRclonePath() {
+export function getRclonePath() {
   let bin = isWindows
     ? resolveResources('rclone/rclone.exe')
     : resolveResources('rclone/rclone')
