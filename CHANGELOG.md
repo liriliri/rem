@@ -1,3 +1,9 @@
+## v1.2.0 (17 Sep 2025)
+
+* feat: get folder size [#17](https://github.com/liriliri/rem/issues/17)
+* feat: prompt for password if config is encrypted [#18](https://github.com/liriliri/rem/issues/18)
+* feat: pdf preview
+
 ## v1.1.0 (25 Aug 2025)
 
 * feat: music visualizer
