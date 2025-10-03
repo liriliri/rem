@@ -16,7 +16,7 @@
     "build": "zx script/build.mjs",
     "pack": "zx script/pack.mjs",
     "rclone": "zx script/rclone.mjs",
-    "start": "electron ./dist/main/index.js",
+    "start": "electron ./dist/main/index.js --inspect=9229",
     "lint": "eslint \"src/**/*.{ts,tsx}\"",
     "format": "lsla prettier \"src/**/*.{ts,tsx,scss,css,json}\" \"*.{js,ts,json}\" \"script/*.mjs\" --write",
     "genIcon": "lsla genIcon --input src/renderer/ --output src/renderer/icon.css --name rem-icon --source src/renderer/icon/",

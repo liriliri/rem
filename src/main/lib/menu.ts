@@ -1,6 +1,7 @@
 import { Menu, MenuItemConstructorOptions, app, shell } from 'electron'
 import * as window from 'share/main/lib/window'
 import * as terminal from 'share/main/window/terminal'
+import * as process from 'share/main/window/process'
 import * as settings from '../window/settings'
 import * as about from 'share/main/window/about'
 import * as job from '../window/job'
@@ -8,8 +9,9 @@ import isMac from 'licia/isMac'
 import { t } from '../../common/util'
 import upperCase from 'licia/upperCase'
 import isWindows from 'licia/isWindows'
-import { handleEvent } from 'share/main/lib/util'
+import { getUserDataPath, handleEvent } from 'share/main/lib/util'
 import * as updater from 'share/main/lib/updater'
+import { isDev } from 'share/common/util'
 
 function getTemplate(): MenuItemConstructorOptions[] {
   const hideMenu = isMac
@@ -100,15 +102,24 @@ function getTemplate(): MenuItemConstructorOptions[] {
     label: t('tools'),
     submenu: [
       {
+        label: t('jobManager'),
+        click() {
+          job.showWin()
+        },
+      },
+      {
+        type: 'separator',
+      },
+      {
         label: t('terminal'),
         click() {
           terminal.showWin()
         },
       },
       {
-        label: t('jobManager'),
+        label: t('processManager'),
         click() {
-          job.showWin()
+          process.showWin()
         },
       },
     ],
@@ -133,6 +144,22 @@ function getTemplate(): MenuItemConstructorOptions[] {
       {
         type: 'separator',
       },
+      ...(isDev()
+        ? [
+            {
+              label: t('openUserDataDir'),
+              click() {
+                shell.openPath(getUserDataPath(''))
+              },
+            },
+            {
+              label: t('debugMainProcess'),
+              click() {
+                process.debugMainProcess()
+              },
+            },
+          ]
+        : []),
       {
         role: 'toggledevtools',
         label: t('toggleDevtools'),
