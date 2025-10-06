@@ -18,6 +18,8 @@ import trim from 'licia/trim'
 export default observer(function Toolbar() {
   const { remote } = store
 
+  console.log(remote.name)
+
   return (
     <LunaToolbar>
       <ToolbarIcon
@@ -71,11 +73,12 @@ export default observer(function Toolbar() {
       <LunaToolbarHtml className={Style.pathContainer}>
         <LunaPathBar
           className={Style.path}
+          rootLabel={remote.name}
           path={remote.customRemote}
           onChange={async (path) => {
             const { customRemote } = remote
             remote.setCustomRemote(path)
-            const p = trim(normalizePath(path.replace(remote.name, '')), '/')
+            const p = trim(normalizePath(path), '/')
             if (p === remote.remote) {
               return
             }

@@ -43,7 +43,7 @@ export class Remote {
     this.name = name
     this.fs = fs
     this.type = config.type
-    this.customRemote = name
+    this.customRemote = ''
 
     this.updateTitle()
 
@@ -457,7 +457,7 @@ export class Remote {
       runInAction(() => {
         this.files = fileList
         this.remote = remote
-        this.customRemote = this.name + '/' + remote
+        this.customRemote = remote
         this.setFilter('')
       })
 
