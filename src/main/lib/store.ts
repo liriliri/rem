@@ -26,5 +26,6 @@ export const getSettingsStore = memoize(function () {
     configPath: '',
     autoMount: true,
     openAtLogin: false,
+    silentStart: false,
   })
 })

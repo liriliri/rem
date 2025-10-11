@@ -61,6 +61,11 @@ export default observer(function App() {
         value={store.settings.autoMount}
         description={t('autoMount')}
       />
+      <LunaSettingCheckbox
+        keyName="silentStart"
+        value={store.settings.silentStart}
+        description={t('silentStart')}
+      />
       <LunaSettingSeparator />
       <LunaSettingTitle title="Rclone" />
       <SettingPath

@@ -89,5 +89,6 @@
   "getSize": "获取大小",
   "enterPassword": "输入密码",
   "decryptConfig": "解密配置",
-  "invalidPassword": "密码无效"
+  "invalidPassword": "密码无效",
+  "silentStart": "静默启动，启动时不显示主窗口"
 }

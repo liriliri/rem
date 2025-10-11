@@ -13,6 +13,7 @@ import log from 'share/common/log'
 import * as updater from 'share/main/lib/updater'
 import isMac from 'licia/isMac'
 import { checkPassword } from './lib/password'
+import { getSettingsStore } from './lib/store'
 
 const logger = log('main')
 logger.info('start', process.argv)
@@ -23,6 +24,8 @@ if (!app.requestSingleInstanceLock()) {
 }
 
 app.setName('Rem')
+
+const settingsStore = getSettingsStore()
 
 app.on('ready', async () => {
   logger.info('app ready')
@@ -38,7 +41,7 @@ app.on('ready', async () => {
     return
   }
   rclone.start()
-  if (!autoLaunch.wasOpenedAtLogin()) {
+  if (!autoLaunch.wasOpenedAtLogin() && !settingsStore.get('silentStart')) {
     main.showWin()
   }
   menu.init()

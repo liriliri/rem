@@ -8,6 +8,7 @@ export class Settings {
   configPath = ''
   autoMount = false
   openAtLogin = false
+  silentStart = false
   constructor() {
     makeObservable(this, {
       language: observable,
@@ -16,6 +17,7 @@ export class Settings {
       configPath: observable,
       autoMount: observable,
       openAtLogin: observable,
+      silentStart: observable,
       set: action,
     })
 
@@ -29,6 +31,7 @@ export class Settings {
       'configPath',
       'autoMount',
       'openAtLogin',
+      'silentStart',
     ]
     for (let i = 0, len = names.length; i < len; i++) {
       const name = names[i]

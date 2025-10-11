@@ -86,5 +86,6 @@
   "getSize": "Get Size",
   "enterPassword": "Enter Password",
   "decryptConfig": "Decrypt Config",
-  "invalidPassword": "Invalid password"
+  "invalidPassword": "Invalid password",
+  "silentStart": "Silent start, do not show the main window on startup"
 }
