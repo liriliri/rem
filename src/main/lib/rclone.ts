@@ -15,6 +15,8 @@ import isStrBlank from 'licia/isStrBlank'
 import path from 'path'
 import * as rclone from '../../common/rclone'
 import some from 'licia/some'
+import * as processWindow from 'share/main/window/process'
+import pidusage from 'pidusage'
 
 const logger = log('rclone')
 
@@ -80,6 +82,26 @@ export async function start() {
       autoMount()
     }
   }
+
+  processWindow.addProcess(() => {
+    return new Promise((resolve) => {
+      if (!isDead && subprocess.pid) {
+        pidusage(subprocess.pid, (err, stats) => {
+          if (!err) {
+            resolve({
+              cpu: stats.cpu / 100,
+              memory: stats.memory / 1024,
+              name: 'Rclone',
+              pid: subprocess.pid!,
+              type: 'Utility',
+            })
+          }
+        })
+      } else {
+        resolve()
+      }
+    })
+  })
 }
 
 export function getRclonePath() {
