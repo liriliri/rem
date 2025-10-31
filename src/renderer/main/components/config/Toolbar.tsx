@@ -19,7 +19,7 @@ export default observer(function Toolbar() {
       <LunaToolbar>
         <ToolbarIcon
           icon="add"
-          title={t('delete')}
+          title={t('add')}
           onClick={async () => setAddConfigModalVisible(true)}
         />
         <ToolbarIcon
