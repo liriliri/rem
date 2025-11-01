@@ -89,7 +89,7 @@ export async function start() {
         pidusage(subprocess.pid, (err, stats) => {
           if (!err) {
             resolve({
-              cpu: stats.cpu / 100,
+              cpu: stats.cpu,
               memory: stats.memory / 1024,
               name: 'Rclone',
               pid: subprocess.pid!,
