@@ -1,3 +1,8 @@
+## v1.3.0 (8 Nov 2025)
+
+* feat: silent start [#22](https://github.com/liriliri/rem/issues/22)
+* fix: windows create config [#21](https://github.com/liriliri/rem/issues/21)
+
 ## v1.2.0 (17 Sep 2025)
 
 * feat: get folder size [#17](https://github.com/liriliri/rem/issues/17)

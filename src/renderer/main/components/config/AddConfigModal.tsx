@@ -95,7 +95,10 @@ export default function AddConfigModal(props: IProps) {
           }
           let description = ''
           if (Examples) {
-            description = Examples[val ? 0 : 1].Help
+            const example = find(Examples, (ex) => ex.Value === val)
+            if (example) {
+              description = example.Help
+            }
           }
           el = (
             <Checkbox
