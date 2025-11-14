@@ -1,12 +1,12 @@
 import { observer } from 'mobx-react-lite'
 import LunaToolbar, { LunaToolbarSeparator } from 'luna-toolbar/react'
 import ToolbarIcon from 'share/renderer/components/ToolbarIcon'
-import { t } from '../../../../common/util'
+import { t } from 'common/util'
 import store from '../../store'
 import LunaModal from 'luna-modal'
 import AddConfigModal from './AddConfigModal'
 import { useState } from 'react'
-import * as rclone from '../../../../common/rclone'
+import * as rclone from 'common/rclone'
 import Style from './Toolbar.module.scss'
 
 export default observer(function Toolbar() {

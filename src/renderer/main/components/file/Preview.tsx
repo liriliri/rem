@@ -1,7 +1,7 @@
 import { JSX, useEffect, useState } from 'react'
 import Style from './Preview.module.scss'
 import { IFile } from 'luna-file-list'
-import { t } from '../../../../common/util'
+import { t } from 'common/util'
 import startWith from 'licia/startWith'
 import LunaImageViewer from 'luna-image-viewer/react'
 import LunaVideoPlayer from 'luna-video-player/react'

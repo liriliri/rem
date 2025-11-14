@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react-lite'
 import Style from './Statusbar.module.scss'
 import className from 'licia/className'
-import { t } from '../../../../common/util'
+import { t } from 'common/util'
 import store from '../../store'
 
 export default observer(function Statusbar() {

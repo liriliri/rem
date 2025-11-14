@@ -1,9 +1,9 @@
 import { makeObservable, observable, runInAction } from 'mobx'
-import * as rclone from '../../common/rclone'
-import { TargetPair } from '../../common/rclone'
+import * as rclone from 'common/rclone'
+import { TargetPair } from 'common/rclone'
 import now from 'licia/now'
 import Emitter from 'licia/Emitter'
-import { t } from '../../common/util'
+import { t } from 'common/util'
 import remove from 'licia/remove'
 import { setMemStore } from 'share/renderer/lib/util'
 

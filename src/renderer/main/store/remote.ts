@@ -1,11 +1,5 @@
-import * as rclone from '../../../common/rclone'
-import {
-  File,
-  Target,
-  TargetPair,
-  About,
-  Features,
-} from '../../../common/rclone'
+import * as rclone from 'common/rclone'
+import { File, Target, TargetPair, About, Features } from 'common/rclone'
 import { action, makeObservable, observable, runInAction } from 'mobx'
 import splitPath from 'licia/splitPath'
 import normalizePath from 'licia/normalizePath'

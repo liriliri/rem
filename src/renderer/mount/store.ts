@@ -1,6 +1,6 @@
 import { action, makeObservable, observable, runInAction } from 'mobx'
 import BaseStore from 'share/renderer/store/BaseStore'
-import * as rclone from '../../common/rclone'
+import * as rclone from 'common/rclone'
 import map from 'licia/map'
 import some from 'licia/some'
 import { setMainStore } from '../lib/util'

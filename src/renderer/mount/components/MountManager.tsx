@@ -1,6 +1,6 @@
 import LunaDataGrid from 'luna-data-grid/react'
 import { observer } from 'mobx-react-lite'
-import { t } from '../../../common/util'
+import { t } from 'common/util'
 import Style from './MountManager.module.scss'
 import { useWindowResize } from 'share/renderer/lib/hooks'
 import DataGrid from 'luna-data-grid'

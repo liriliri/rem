@@ -1,6 +1,6 @@
 import { createPortal } from 'react-dom'
 import LunaModal from 'luna-modal/react'
-import { t } from '../../../../common/util'
+import { t } from 'common/util'
 import Style from './PublicLinkModal.module.scss'
 import className from 'licia/className'
 import copy from 'licia/copy'

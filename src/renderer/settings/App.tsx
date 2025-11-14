@@ -6,7 +6,7 @@ import LunaSetting, {
   LunaSettingSeparator,
   LunaSettingTitle,
 } from 'luna-setting/react'
-import { t } from '../../common/util'
+import { t } from 'common/util'
 import store from './store'
 import Style from './App.module.scss'
 import contain from 'licia/contain'

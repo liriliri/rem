@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import Style from './App.module.scss'
-import { t } from '../../common/util'
+import { t } from 'common/util'
 import className from 'licia/className'
 import { notify } from 'share/renderer/lib/util'
 

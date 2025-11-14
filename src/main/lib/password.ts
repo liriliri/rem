@@ -6,7 +6,7 @@ import childProcess from 'node:child_process'
 import contain from 'licia/contain'
 import noop from 'licia/noop'
 import { handleEvent } from 'share/main/lib/util'
-import { IpcValidatePassword } from '../../common/types'
+import { IpcValidatePassword } from 'common/types'
 
 const settingsStore = getSettingsStore()
 

@@ -14,7 +14,7 @@ import SftpIcon from '../../../assets/config-icon/sftp.svg'
 import JianGuoYunIcon from '../../../assets/config-icon/jianguoyun.svg'
 import className from 'licia/className'
 import About from './About'
-import { t } from '../../../../common/util'
+import { t } from 'common/util'
 
 export default observer(function Config() {
   const configs = map(store.configs, (config) => {

@@ -1,6 +1,6 @@
 import { observer } from 'mobx-react-lite'
 import Style from './About.module.scss'
-import { t } from '../../../../common/util'
+import { t } from 'common/util'
 import store from '../../store'
 import fileSize from 'licia/fileSize'
 

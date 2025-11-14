@@ -1,6 +1,6 @@
 import LunaModal from 'luna-modal/react'
 import { createPortal } from 'react-dom'
-import { t } from '../../../../common/util'
+import { t } from 'common/util'
 import Style from './MountModal.module.scss'
 import { useEffect, useState } from 'react'
 import isEmpty from 'licia/isEmpty'

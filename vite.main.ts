@@ -3,6 +3,7 @@ import { resolve } from 'path'
 import { builtinModules } from 'node:module'
 import fs from 'fs-extra'
 import path from 'path'
+import { alias } from './vite.config'
 
 const builtins = builtinModules.filter((e) => !e.startsWith('_'))
 builtins.push('electron', ...builtins.map((m) => `node:${m}`))
@@ -24,9 +25,7 @@ export default defineConfig(async (): Promise<UserConfig> => {
     },
     resolve: {
       mainFields: ['main', 'module'],
-      alias: {
-        share: resolve(__dirname, 'src/share'),
-      },
+      alias,
     },
     define: {
       PRODUCT_NAME: JSON.stringify(pkg.productName),
