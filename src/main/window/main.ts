@@ -4,7 +4,7 @@ import log from 'share/common/log'
 import { handleEvent } from 'share/main/lib/util'
 import once from 'licia/once'
 import uuid from 'licia/uuid'
-import { IpcGetWindowsDrives, IpcNewWindow, IpcShowVideo } from 'common/types'
+import { IpcGetWindowsDrives, IpcNewWindow } from 'common/types'
 import childProcess from 'node:child_process'
 import map from 'licia/map'
 import trim from 'licia/trim'
@@ -14,7 +14,6 @@ import { BrowserWindow, dialog, shell } from 'electron'
 import { autoUpdater } from 'electron-updater'
 import { t } from 'common/util'
 import * as mount from './mount'
-import * as video from './video'
 import remove from 'licia/remove'
 import isEmpty from 'licia/isEmpty'
 import last from 'licia/last'
@@ -137,5 +136,4 @@ const initIpc = once(() => {
   handleEvent('newWindow', newWin)
   handleEvent('getWindowsDrives', getWindowsDrives)
   handleEvent('showMount', () => mount.showWin())
-  handleEvent('showVideo', <IpcShowVideo>((url) => video.showWin(url)))
 })

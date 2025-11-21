@@ -4,7 +4,6 @@ import {
   IpcGetWindowsDrives,
   IpcIsRcloneRunning,
   IpcNewWindow,
-  IpcShowVideo,
   IpcValidatePassword,
 } from '../common/types'
 import { IpcGetStore, IpcSetStore } from 'share/common/types'
@@ -23,7 +22,6 @@ export default Object.assign(mainObj, {
   newWindow: invoke<IpcNewWindow>('newWindow'),
   getWindowsDrives: invoke<IpcGetWindowsDrives>('getWindowsDrives'),
   showMount: invoke('showMount'),
-  showVideo: invoke<IpcShowVideo>('showVideo'),
   validatePassword: invoke<IpcValidatePassword>('validatePassword'),
   closePassword: invoke('closePassword'),
 })

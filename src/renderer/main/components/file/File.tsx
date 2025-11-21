@@ -15,7 +15,7 @@ import each from 'licia/each'
 import PublicLinkModal from './PublicLinkModal'
 import MountModal from './MountModal'
 import LunaSplitPane, { LunaSplitPaneItem } from 'luna-split-pane/react'
-import Preview from './Preview'
+import FilePreview from 'share/renderer/components/FilePreview'
 import startWith from 'licia/startWith'
 import LunaGallery from 'luna-gallery/react'
 import filter from 'licia/filter'
@@ -27,7 +27,7 @@ export default observer(function File() {
   const [publicLink, setPublicLink] = useState('')
   const [mountModalVisible, setMountModalVisible] = useState(false)
   const [dropHighlight, setDropHighlight] = useState(false)
-  const [selected, setSelected] = useState<IFile | null>(null)
+  const [selected, setSelected] = useState<IFile | undefined>()
   const [galleryVisible, setGalleryVisible] = useState(false)
   const [images, setImages] = useState<Array<{ src: string; title?: string }>>(
     []
@@ -375,7 +375,7 @@ export default observer(function File() {
               onDoubleClick={(e: MouseEvent, file: IFile) => open(file)}
               onContextMenu={onContextMenu}
               onSelect={(file: IFile) => setSelected(file)}
-              onDeselect={() => setSelected(null)}
+              onDeselect={() => setSelected(undefined)}
             />
             {remote.isLoading && (
               <div className={Style.loading}>
@@ -398,7 +398,12 @@ export default observer(function File() {
           weight={store.fileWeights[1]}
           visible={store.showPreview}
         >
-          <Preview file={selected} />
+          <FilePreview
+            file={store.showPreview ? selected : undefined}
+            url={
+              selected ? remote.getUrl(remote.remote + '/' + selected.name) : ''
+            }
+          />
         </LunaSplitPaneItem>
       </LunaSplitPane>
       <LunaGallery

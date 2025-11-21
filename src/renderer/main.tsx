@@ -70,7 +70,7 @@ function renderApp() {
       title = t('jobManager')
       break
     case 'video':
-      App = lazy(() => import('./video/App.js') as Promise<any>)
+      App = lazy(() => import('share/renderer/video/App.js') as Promise<any>)
       break
     case 'password':
       App = lazy(() => import('./password/App.js') as Promise<any>)
