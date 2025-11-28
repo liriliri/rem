@@ -3,38 +3,29 @@ import * as menu from './lib/menu'
 import * as tray from './lib/tray'
 import * as ipc from './lib/ipc'
 import * as main from './window/main'
-import * as language from 'share/main/lib/language'
-import * as theme from 'share/main/lib/theme'
 import * as terminal from 'share/main/window/terminal'
 import * as rclone from './lib/rclone'
 import * as autoLaunch from 'share/main/lib/autoLaunch'
-import { setupTitlebar } from 'custom-electron-titlebar/main'
+import * as window from 'share/main/lib/window'
 import log from 'share/common/log'
-import * as updater from 'share/main/lib/updater'
 import isMac from 'licia/isMac'
 import { checkPassword } from './lib/password'
 import { getSettingsStore } from './lib/store'
+import 'share/main'
 
 const logger = log('main')
 logger.info('start', process.argv)
 
-if (!app.requestSingleInstanceLock()) {
-  app.quit()
-  process.exit(0)
-}
-
-app.setName('Rem')
-
 const settingsStore = getSettingsStore()
+window.setDefaultOptions({
+  customTitlebar: !settingsStore.get('useNativeTitlebar'),
+})
 
 app.on('ready', async () => {
   logger.info('app ready')
 
-  setupTitlebar()
   autoLaunch.init()
   terminal.init()
-  language.init()
-  theme.init()
   ipc.init()
   if (!(await checkPassword())) {
     app.quit()
@@ -46,7 +37,6 @@ app.on('ready', async () => {
   }
   menu.init()
   tray.init()
-  updater.init()
 
   function showWin() {
     if (!main.showFocusedWin()) {

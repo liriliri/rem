@@ -1,4 +1,3 @@
-import * as ipc from 'share/main/lib/ipc'
 import { handleEvent } from 'share/main/lib/util'
 import { getMainStore, getSettingsStore } from './store'
 import { IpcGetStore, IpcSetStore } from 'share/common/types'
@@ -9,8 +8,6 @@ const store = getMainStore()
 const settingsStore = getSettingsStore()
 
 export function init() {
-  ipc.init()
-
   handleEvent('setMainStore', <IpcSetStore>(
     ((name, val) => store.set(name, val))
   ))

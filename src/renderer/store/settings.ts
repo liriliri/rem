@@ -9,6 +9,7 @@ export class Settings {
   autoMount = false
   openAtLogin = false
   silentStart = false
+  useNativeTitlebar = false
   constructor() {
     makeObservable(this, {
       language: observable,
@@ -18,6 +19,7 @@ export class Settings {
       autoMount: observable,
       openAtLogin: observable,
       silentStart: observable,
+      useNativeTitlebar: observable,
       set: action,
     })
 
@@ -32,6 +34,7 @@ export class Settings {
       'autoMount',
       'openAtLogin',
       'silentStart',
+      'useNativeTitlebar',
     ]
     for (let i = 0, len = names.length; i < len; i++) {
       const name = names[i]
