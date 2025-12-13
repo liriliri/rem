@@ -76,8 +76,6 @@
   "noPreview": "No preview",
   "configPath": "Config Path",
   "show": "Show",
-  "openAtLogin": "Open at login",
-  "commonErr": "Something went wrong",
   "totalItem": "{{total}} items",
   "jobManager": "Job Manager",
   "syncFolderConfirm": "Are you sure you want to synchronize the folder? Files in {{dst}} will be updated to match {{src}}.",

@@ -79,8 +79,6 @@
   "noPreview": "没有预览",
   "configPath": "配置路径",
   "show": "显示",
-  "openAtLogin": "开机自动启动",
-  "commonErr": "出错了",
   "totalItem": "共 {{total}} 项",
   "jobManager": "任务管理器",
   "syncFolderConfirm": "确定要同步文件夹吗？{{dst}} 中的文件将更新为与 {{src}} 相同。",
