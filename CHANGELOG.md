@@ -1,3 +1,8 @@
+## v1.4.0 (22 Dec 2025)
+
+* feat: use native titlebar setting
+* feat: zoom level setting [#28](https://github.com/liriliri/rem/issues/28)
+
 ## v1.3.0 (8 Nov 2025)
 
 * feat: silent start [#22](https://github.com/liriliri/rem/issues/22)

@@ -2,7 +2,7 @@
   "name": "rem",
   "productName": "REM",
   "appId": "io.liriliri.rem",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "description": "Rclone desktop app",
   "main": "dist/main/index.js",
   "scripts": {
