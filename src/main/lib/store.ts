@@ -28,5 +28,6 @@ export const getSettingsStore = memoize(function () {
     openAtLogin: false,
     silentStart: false,
     useNativeTitlebar: false,
+    zoomFactor: 1,
   })
 })

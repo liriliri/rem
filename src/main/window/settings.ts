@@ -9,16 +9,11 @@ export function showWin() {
     return
   }
 
-  const width = 480
-  const height = 640
-
   win = window.create({
     name: 'settings',
     resizable: false,
-    minWidth: width,
-    minHeight: height,
-    width,
-    height,
+    width: 480,
+    height: 420,
   })
 
   win.on('close', () => {

@@ -7,10 +7,23 @@
 
 .settings {
   width: 400px;
-  margin: 0 auto;
-  padding: #{$padding-x-s}px 0;
+  padding: #{$padding-x-s}px;
+  position: absolute;
+  top: 30px;
+  bottom: 50px;
+  overflow: auto;
+  width: 100%;
   :global(.luna-setting-item) {
     padding-left: 0;
     padding-right: 0;
   }
+}
+
+.footer {
+  position: absolute;
+  bottom: 0;
+  height: 50px;
+  width: 100%;
+  border-top: 1px solid var(--color-border);
+  padding: #{$padding-x-s}px;
 }

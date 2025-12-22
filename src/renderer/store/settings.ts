@@ -10,6 +10,7 @@ export class Settings {
   openAtLogin = false
   silentStart = false
   useNativeTitlebar = false
+  zoomFactor = 1
   constructor() {
     makeObservable(this, {
       language: observable,
@@ -20,6 +21,7 @@ export class Settings {
       openAtLogin: observable,
       silentStart: observable,
       useNativeTitlebar: observable,
+      zoomFactor: observable,
       set: action,
     })
 
@@ -35,6 +37,7 @@ export class Settings {
       'openAtLogin',
       'silentStart',
       'useNativeTitlebar',
+      'zoomFactor',
     ]
     for (let i = 0, len = names.length; i < len; i++) {
       const name = names[i]
