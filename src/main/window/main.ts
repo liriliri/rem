@@ -120,16 +120,30 @@ const init = once(() => {
 const initIpc = once(() => {
   const getWindowsDrives: IpcGetWindowsDrives = function () {
     return new Promise((resolve, reject) => {
-      childProcess.exec('wmic logicaldisk get caption', (err, stdout) => {
-        if (err) {
-          reject(err)
-          return
+      const parseDrives = (stdout: string) => {
+        const lines = map(stdout.split(/\r?\n/), (line) => trim(line))
+
+        return filter(lines, (line) => endWith(line, ':'))
+      }
+
+      childProcess.exec(
+        'powershell.exe -NoProfile -NonInteractive -Command "[System.IO.DriveInfo]::GetDrives() | ForEach-Object { $_.Name.Substring(0,2) }"',
+        (err, stdout) => {
+          if (!err) {
+            resolve(parseDrives(stdout))
+            return
+          }
+
+          childProcess.exec('wmic logicaldisk get caption', (wmicErr, wmicStdout) => {
+            if (wmicErr) {
+              reject(err)
+              return
+            }
+
+            resolve(parseDrives(wmicStdout))
+          })
         }
-
-        const lines = map(stdout.split('\n'), (line) => trim(line))
-
-        resolve(filter(lines, (line) => endWith(line, ':')))
-      })
+      )
     })
   }
 

@@ -33,6 +33,12 @@ Rclone desktop app.
 
 Click [here](https://github.com/liriliri/rem/releases/) to download and install REM. Windows x64, Mac arm64, Mac x64 and Linux x86_64 are supported.
 
+## Troubleshooting (Windows 25H2 and newer)
+
+Some newer Windows builds (including 25H2) no longer include WMIC by default.
+
+REM now uses a PowerShell-based drive detection command first, and falls back to WMIC if needed. This keeps drive detection working on both newer builds without WMIC and older builds that still provide it.
+
 ## Features
 
 * Browse, organize, and transfer files across multiple cloud providers
