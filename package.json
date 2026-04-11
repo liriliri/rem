@@ -13,10 +13,13 @@
     "build:main": "vite build --config vite.main.ts",
     "build:preload": "vite build --config vite.preload.ts",
     "build:renderer": "vite build",
+    "build:all": "npm run build:main && npm run build:preload && npm run build:renderer",
+    "build:win:portable": "npm run build:all && node script/build-win-portable.mjs",
     "build": "zx script/build.mjs",
     "pack": "zx script/pack.mjs",
     "rclone": "zx script/rclone.mjs",
     "start": "electron ./dist/main/index.js --inspect=9229",
+    "test:unit": "vitest run",
     "lint": "eslint \"src/**/*.{ts,tsx}\"",
     "format": "lsla prettier \"src/**/*.{ts,tsx,scss,css,json}\" \"*.{js,ts,json}\" \"script/*.mjs\" --write",
     "genIcon": "lsla genIcon --input src/renderer/ --output src/renderer/icon.css --name rem-icon --source src/renderer/icon/",
@@ -84,6 +87,7 @@
     "sass": "^1.89.2",
     "typescript-eslint": "^8.34.0",
     "vite": "^5.4.19",
+    "vitest": "^2.1.9",
     "zx": "^8.5.5"
   }
 }

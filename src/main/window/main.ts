@@ -5,11 +5,6 @@ import { handleEvent } from 'share/main/lib/util'
 import once from 'licia/once'
 import uuid from 'licia/uuid'
 import { IpcGetWindowsDrives, IpcNewWindow } from 'common/types'
-import childProcess from 'node:child_process'
-import map from 'licia/map'
-import trim from 'licia/trim'
-import filter from 'licia/filter'
-import endWith from 'licia/endWith'
 import { BrowserWindow, dialog, shell } from 'electron'
 import { autoUpdater } from 'electron-updater'
 import { t } from 'common/util'
@@ -17,6 +12,7 @@ import * as mount from './mount'
 import remove from 'licia/remove'
 import isEmpty from 'licia/isEmpty'
 import last from 'licia/last'
+import { getWindowsDrives as listWindowsDrives } from '../lib/windowsDrives'
 
 const logger = log('mainWin')
 
@@ -119,32 +115,7 @@ const init = once(() => {
 
 const initIpc = once(() => {
   const getWindowsDrives: IpcGetWindowsDrives = function () {
-    return new Promise((resolve, reject) => {
-      const parseDrives = (stdout: string) => {
-        const lines = map(stdout.split(/\r?\n/), (line) => trim(line))
-
-        return filter(lines, (line) => endWith(line, ':'))
-      }
-
-      childProcess.exec(
-        'powershell.exe -NoProfile -NonInteractive -Command "[System.IO.DriveInfo]::GetDrives() | ForEach-Object { $_.Name.Substring(0,2) }"',
-        (err, stdout) => {
-          if (!err) {
-            resolve(parseDrives(stdout))
-            return
-          }
-
-          childProcess.exec('wmic logicaldisk get caption', (wmicErr, wmicStdout) => {
-            if (wmicErr) {
-              reject(err)
-              return
-            }
-
-            resolve(parseDrives(wmicStdout))
-          })
-        }
-      )
-    })
+    return listWindowsDrives()
   }
 
   handleEvent('newWindow', newWin)
