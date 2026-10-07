@@ -1,7 +1,7 @@
 import once from 'licia/once'
 import childProcess, { ChildProcessByStdio } from 'node:child_process'
 import { Readable } from 'node:stream'
-import { handleEvent, resolveResources } from 'share/main/lib/util'
+import { handleEvent } from 'share/main/lib/util'
 import getPort from 'licia/getPort'
 import log from 'share/common/log'
 import { app, session } from 'electron'
@@ -17,6 +17,8 @@ import * as rclone from 'common/rclone'
 import some from 'licia/some'
 import * as processWindow from 'share/main/window/process'
 import pidusage from 'pidusage'
+import rcloneStatic from 'rclone-static'
+import { isDev } from 'share/common/util'
 
 const logger = log('rclone')
 
@@ -104,10 +106,16 @@ export async function start() {
   })
 }
 
+function getBundledRclonePath() {
+  let bin = rcloneStatic || 'rclone'
+  if (!isDev()) {
+    bin = bin.replace('app.asar', 'app.asar.unpacked')
+  }
+  return bin
+}
+
 export function getRclonePath() {
-  let bin = isWindows
-    ? resolveResources('rclone/rclone.exe')
-    : resolveResources('rclone/rclone')
+  let bin = getBundledRclonePath()
   const rclonePath = settingsStore.get('rclonePath')
   if (
     rclonePath === 'rclone' ||
@@ -119,7 +127,7 @@ export function getRclonePath() {
 }
 
 async function openRcloneCli() {
-  let cwd = resolveResources('rclone')
+  let cwd = path.dirname(getBundledRclonePath())
   const rclonePath = settingsStore.get('rclonePath')
   if (!isStrBlank(rclonePath) && fs.existsSync(rclonePath)) {
     cwd = path.dirname(rclonePath)

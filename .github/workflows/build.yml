@@ -2,6 +2,18 @@ name: Build
 
 on:
   workflow_dispatch:
+    inputs:
+      platform:
+        description: 'Platform'
+        required: true
+        default: 'all'
+        type: choice
+        options:
+          - all
+          - windows
+          - macos
+          - macos-intel
+          - linux
 
 jobs:
   build:
@@ -10,32 +22,39 @@ jobs:
 
     strategy:
       matrix:
-        os: [windows-latest, macos-latest, macos-15-intel, ubuntu-latest]
+        os: ${{ fromJSON(
+          github.event.inputs.platform == 'all' && '["windows-2022","macos-15","macos-15-intel","ubuntu-latest"]' ||
+          github.event.inputs.platform == 'windows' && '["windows-2022"]' ||
+          github.event.inputs.platform == 'macos' && '["macos-15"]' ||
+          github.event.inputs.platform == 'macos-intel' && '["macos-15-intel"]' ||
+          github.event.inputs.platform == 'linux' && '["ubuntu-latest"]' ||
+          '["windows-2022","macos-15","macos-15-intel","ubuntu-latest"]'
+          ) }}
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
       with:
         submodules: true
-    - uses: actions/setup-node@v4
+    - uses: actions/setup-node@v5
       with:
-        node-version: '18.x'
+        node-version: '22.x'
     - run: |
         npm i
-        npm run rclone
         npm run build
         npm run pack
       env:
         APPLE_ID: ${{ secrets.APPLE_ID }}
         APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
         APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
-        CSC_LINK: ${{ secrets.CSC_LINK }}
-        CSC_KEY_PASSWORD: ${{ secrets.CSC_KEY_PASSWORD }}
-    - uses: actions/upload-artifact@v4
+        CSC_LINK: ${{ startsWith(matrix.os, 'macos') && secrets.CSC_LINK || '' }}
+        CSC_KEY_PASSWORD: ${{ startsWith(matrix.os, 'macos') && secrets.CSC_KEY_PASSWORD || '' }}
+    - uses: actions/upload-artifact@v5
       with:
         name: ${{ matrix.os }}
         path: |
           release/**/*.dmg
           release/**/*.exe
-          release/**/*.AppImage
+          release/**/*.deb
+          release/**/*.rpm
           release/**/*-lates*.yml
           !release/**/win-unpacked/

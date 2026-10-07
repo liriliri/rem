@@ -15,7 +15,6 @@
     "build:renderer": "vite build",
     "build": "zx script/build.mjs",
     "pack": "zx script/pack.mjs",
-    "rclone": "zx script/rclone.mjs",
     "start": "electron ./dist/main/index.js --inspect=9229",
     "lint": "eslint \"src/**/*.{ts,tsx}\"",
     "format": "lsla prettier \"src/**/*.{ts,tsx,scss,css,json}\" \"*.{js,ts,json}\" \"script/*.mjs\" --write",
@@ -35,6 +34,9 @@
     "url": "https://github.com/liriliri/rem/issues"
   },
   "homepage": "https://github.com/liriliri/rem#readme",
+  "dependencies": {
+    "rclone-static": "^0.1.0"
+  },
   "devDependencies": {
     "@types/node": "^24.0.0",
     "@types/react": "^19.1.7",
@@ -49,7 +51,7 @@
     "concurrently": "^9.1.2",
     "custom-electron-titlebar": "^4.2.8",
     "electron": "37.10.3",
-    "electron-builder": "^25.1.8",
+    "electron-builder": "26.15.3",
     "electron-updater": "^6.6.2",
     "eslint": "^9.28.0",
     "eslint-config-prettier": "^10.1.5",

@@ -33,6 +33,18 @@ const config = {
       },
     ],
   },
+  linux: {
+    category: 'Utility',
+    executableArgs: ['--no-sandbox'],
+    target: [
+      {
+        target: 'deb',
+      },
+      {
+        target: 'rpm',
+      },
+    ],
+  },
   mac: {
     electronLanguages: ['zh_CN', 'en'],
     target: [

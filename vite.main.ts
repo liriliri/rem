@@ -10,6 +10,7 @@ builtins.push('electron', ...builtins.map((m) => `node:${m}`))
 
 export default defineConfig(async (): Promise<UserConfig> => {
   const pkg = await fs.readJSON(path.resolve(__dirname, 'package.json'))
+  const external = [...builtins, ...Object.keys(pkg.dependencies || {})]
   return {
     build: {
       outDir: 'dist/main',
@@ -20,7 +21,8 @@ export default defineConfig(async (): Promise<UserConfig> => {
         formats: ['cjs'],
       },
       rollupOptions: {
-        external: builtins,
+        external: (id) =>
+          external.some((name) => id === name || id.startsWith(name + '/')),
       },
     },
     resolve: {
