@@ -7,7 +7,9 @@ import contain from 'licia/contain'
 import noop from 'licia/noop'
 import { handleEvent } from 'share/main/lib/util'
 import { IpcValidatePassword } from 'common/types'
+import log from 'share/common/log'
 
+const logger = log('password')
 const settingsStore = getSettingsStore()
 
 export async function checkPassword() {
@@ -57,11 +59,12 @@ async function promptPassword(): Promise<string | null> {
   })
 }
 
-async function isConfigEncrypted(password?: string) {
+function isConfigEncrypted(password?: string): boolean {
+  const configPath = settingsStore.get('configPath')
+
   try {
     const args = ['config', 'show', '--ask-password=false']
     const rclonePath = getRclonePath()
-    const configPath = settingsStore.get('configPath')
     if (!isStrBlank(configPath)) {
       args.push('--config', configPath)
     }
@@ -74,10 +77,26 @@ async function isConfigEncrypted(password?: string) {
 
     childProcess.execSync(`"${rclonePath}" ${args.join(' ')}`, {
       env,
+      stdio: ['pipe', 'pipe', 'pipe'],
     })
 
     return false
   } catch (e: any) {
-    return contain(e.message, 'password')
+    const stderr = e.stderr ? e.stderr.toString() : ''
+    if (contain(stderr, 'unable to decrypt configuration')) {
+      return true
+    }
+
+    if (!password && !isStrBlank(configPath)) {
+      logger.warn(
+        'failed to load custom config, fallback to default',
+        configPath,
+        stderr.trim()
+      )
+      settingsStore.set('configPath', '')
+      return isConfigEncrypted()
+    }
+
+    return false
   }
 }

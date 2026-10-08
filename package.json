@@ -2,7 +2,7 @@
   "name": "rem",
   "productName": "REM",
   "appId": "io.liriliri.rem",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "description": "Rclone desktop app",
   "main": "dist/main/index.js",
   "scripts": {
@@ -59,7 +59,7 @@
     "globals": "^16.2.0",
     "licia": "^1.48.0",
     "luna-carousel": "^0.3.0",
-    "luna-data-grid": "^2.1.0",
+    "luna-data-grid": "^2.1.1",
     "luna-drag-selector": "^0.2.0",
     "luna-file-list": "^0.6.0",
     "luna-gallery": "^1.1.2",

@@ -1,3 +1,7 @@
+## v1.5.0 (8 Oct 2026)
+
+* feat: multiple selections
+
 ## v1.4.0 (22 Dec 2025)
 
 * feat: use native titlebar setting
