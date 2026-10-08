@@ -144,21 +144,20 @@ export class Remote {
     await rclone.mkdir(target)
     await this.refresh(target)
   }
-  async deleteFile(remote: string) {
-    const target = {
-      fs: this.fs,
-      remote,
+  async deleteFiles(files: Array<{ remote: string; directory?: boolean }>) {
+    for (let i = 0, len = files.length; i < len; i++) {
+      const file = files[i]
+      const target = {
+        fs: this.fs,
+        remote: file.remote,
+      }
+      if (file.directory) {
+        await rclone.purge(target)
+      } else {
+        await rclone.deleteFile(target)
+      }
     }
-    await rclone.deleteFile(target)
-    await this.refresh(target)
-  }
-  async deleteFolder(remote: string) {
-    const target = {
-      fs: this.fs,
-      remote,
-    }
-    await rclone.purge(target)
-    await this.refresh(target)
+    await this.refresh()
   }
   async uploadFiles(files?: string[]) {
     if (!files) {

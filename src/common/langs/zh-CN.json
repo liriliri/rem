@@ -23,6 +23,7 @@
   "newFolder": "新建文件夹",
   "newFolderName": "新文件夹名称",
   "deleteFileConfirm": "确定要删除文件 {{name}} 吗？",
+  "deleteFilesConfirm": "确定要删除 {{count}} 个项目吗？",
   "job": "任务",
   "source": "源",
   "destination": "目标",

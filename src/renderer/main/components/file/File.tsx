@@ -12,6 +12,7 @@ import { useRef, useState } from 'react'
 import className from 'licia/className'
 import { isFileDrop } from 'share/renderer/lib/util'
 import each from 'licia/each'
+import toArr from 'licia/toArr'
 import PublicLinkModal from './PublicLinkModal'
 import MountModal from './MountModal'
 import LunaSplitPane, { LunaSplitPaneItem } from 'luna-split-pane/react'
@@ -21,6 +22,10 @@ import LunaGallery from 'luna-gallery/react'
 import filter from 'licia/filter'
 import toBool from 'licia/toBool'
 import fileSize from 'licia/fileSize'
+
+function toFiles(file?: IFile | IFile[]): IFile[] {
+  return file ? toArr(file) : []
+}
 
 export default observer(function File() {
   const [publicLinkModalVisible, setPublicLinkModalVisible] = useState(false)
@@ -125,7 +130,7 @@ export default observer(function File() {
     return remote.remote + (remote.remote ? '/' : '') + name
   }
 
-  async function onContextMenu(e: MouseEvent, file?: IFile) {
+  async function onContextMenu(e: PointerEvent, file?: IFile | IFile[]) {
     async function syncConfirm(r?: string) {
       const targetPair = await remote.getSyncTargetPair(r)
       if (!targetPair) {
@@ -144,21 +149,26 @@ export default observer(function File() {
       return true
     }
 
-    if (file) {
-      const template: any[] = [
-        {
+    const selectedFiles = toFiles(file)
+    if (selectedFiles.length > 0) {
+      const single = selectedFiles.length === 1 ? selectedFiles[0] : undefined
+      const paths = map(selectedFiles, (f) => resolvePath(f.name))
+      const template: any[] = []
+      if (single) {
+        template.push({
           label: t('open'),
-          click: () => open(file),
+          click: () => open(single),
+        })
+      }
+      template.push({
+        label: t('download'),
+        click: async () => {
+          const jobs = await remote.downloadFiles(paths)
+          each(jobs, (job) => store.addJob(job))
         },
-        {
-          label: t('download'),
-          click: async () => {
-            const jobs = await remote.downloadFiles([resolvePath(file.name)])
-            each(jobs, (job) => store.addJob(job))
-          },
-        },
-      ]
-      if (file.directory) {
+      })
+      if (single?.directory) {
+        const path = paths[0]
         template.push(
           {
             type: 'separator',
@@ -166,7 +176,7 @@ export default observer(function File() {
           {
             label: t('selectForSync'),
             click: () => {
-              remote.selectSyncFolder(resolvePath(file.name))
+              remote.selectSyncFolder(path)
             },
           }
         )
@@ -174,10 +184,10 @@ export default observer(function File() {
           template.push({
             label: t('sync'),
             click: async () => {
-              if (!(await syncConfirm(resolvePath(file.name)))) {
+              if (!(await syncConfirm(path))) {
                 return
               }
-              const job = await remote.syncFolder(resolvePath(file.name))
+              const job = await remote.syncFolder(path)
               store.addJob(job)
             },
           })
@@ -190,65 +200,67 @@ export default observer(function File() {
         {
           label: t('copy'),
           click() {
-            remote.copyFiles([resolvePath(file.name)])
+            remote.copyFiles(paths)
           },
         },
         {
           label: t('cut'),
           click() {
-            remote.cutFiles([resolvePath(file.name)])
+            remote.cutFiles(paths)
           },
         }
       )
-      if (file.directory && (await remote.canPaste())) {
+      if (single?.directory && (await remote.canPaste())) {
         template.push({
           label: t('paste'),
           click: async () => {
-            const jobs = await remote.pasteFiles(resolvePath(file.name))
+            const jobs = await remote.pasteFiles(paths[0])
             each(jobs, (job) => store.addJob(job))
           },
         })
       }
-      template.push(
-        {
-          label: t('delete'),
-          click: async () => {
-            const result = await LunaModal.confirm(
-              t('deleteFileConfirm', { name: file.name })
+      template.push({
+        label: t('delete'),
+        click: async () => {
+          const result = await LunaModal.confirm(
+            single
+              ? t('deleteFileConfirm', { name: single.name })
+              : t('deleteFilesConfirm', { count: selectedFiles.length })
+          )
+          if (result) {
+            await remote.deleteFiles(
+              map(selectedFiles, (f, idx) => ({
+                remote: paths[idx],
+                directory: f.directory,
+              }))
             )
-            if (result) {
-              const filePath = resolvePath(file.name)
-              if (file.directory) {
-                remote.deleteFolder(filePath)
-              } else {
-                remote.deleteFile(filePath)
-              }
-            }
-          },
+          }
         },
-        {
+      })
+      if (single) {
+        template.push({
           label: t('rename'),
           click: async () => {
             const name = await LunaModal.prompt(
-              t(file.directory ? 'newFolderName' : 'newFileName'),
-              file.name
+              t(single.directory ? 'newFolderName' : 'newFileName'),
+              single.name
             )
-            if (name && name !== file.name) {
-              const job = await remote.renameFile(resolvePath(file.name), name)
+            if (name && name !== single.name) {
+              const job = await remote.renameFile(paths[0], name)
               store.addJob(job)
             }
           },
-        }
-      )
-      if (remote.features.PublicLink || file.directory) {
+        })
+      }
+      if (single && (remote.features.PublicLink || single.directory)) {
         template.push({
           type: 'separator',
         })
-        if (file.directory) {
+        if (single.directory) {
           template.push({
             label: t('getSize'),
             click: async () => {
-              const size = await remote.getSize(resolvePath(file.name))
+              const size = await remote.getSize(paths[0])
               LunaModal.alert(
                 `${t('totalItem', { total: size.count })} ${fileSize(
                   size.bytes
@@ -261,7 +273,7 @@ export default observer(function File() {
           template.push({
             label: t('getPublicLink'),
             click: async () => {
-              const url = await remote.getPublicLink(resolvePath(file.name))
+              const url = await remote.getPublicLink(paths[0])
               setPublicLinkModalVisible(true)
               setPublicLink(url)
             },
@@ -372,9 +384,18 @@ export default observer(function File() {
               files={files}
               filter={remote.filter}
               listView={store.listView}
-              onDoubleClick={(e: MouseEvent, file: IFile) => open(file)}
+              multiSelections={true}
+              onDoubleClick={(_e: MouseEvent, file: IFile | IFile[]) => {
+                const selectedFiles = toFiles(file)
+                if (selectedFiles.length === 1) {
+                  open(selectedFiles[0])
+                }
+              }}
               onContextMenu={onContextMenu}
-              onSelect={(file: IFile) => setSelected(file)}
+              onSelect={(file: IFile | IFile[]) => {
+                const selectedFiles = toFiles(file)
+                setSelected(selectedFiles[selectedFiles.length - 1])
+              }}
               onDeselect={() => setSelected(undefined)}
             />
             {remote.isLoading && (
