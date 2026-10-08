@@ -4,13 +4,14 @@ import fs from 'fs-extra'
 import { fileURLToPath } from 'url'
 import path from 'path'
 
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
+
 export const alias = {
   common: path.resolve(__dirname, 'src/common'),
   share: path.resolve(__dirname, 'src/share'),
 }
 
 export default defineConfig(async (): Promise<UserConfig> => {
-  const __dirname = path.dirname(fileURLToPath(import.meta.url))
   const pkg = await fs.readJSON(path.resolve(__dirname, 'package.json'))
   return {
     base: '',
@@ -27,15 +28,13 @@ export default defineConfig(async (): Promise<UserConfig> => {
       modules: {
         localsConvention: 'camelCaseOnly',
       },
-      preprocessorOptions: {
-        scss: {
-          api: 'modern',
-        },
-      },
     },
     server: {
       hmr: false,
       port: 8080,
+      watch: {
+        ignored: ['**/node_modules/**', '**/references/**'],
+      },
     },
     define: {
       PRODUCT_NAME: JSON.stringify(pkg.productName),

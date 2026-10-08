@@ -3,7 +3,10 @@ import { resolve } from 'path'
 import { builtinModules } from 'node:module'
 import fs from 'fs-extra'
 import path from 'path'
+import { fileURLToPath } from 'url'
 import { alias } from './vite.config'
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 const builtins = builtinModules.filter((e) => !e.startsWith('_'))
 builtins.push('electron', ...builtins.map((m) => `node:${m}`))
