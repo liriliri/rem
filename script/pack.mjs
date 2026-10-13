@@ -38,6 +38,9 @@ const config = {
     executableArgs: ['--no-sandbox'],
     target: [
       {
+        target: 'AppImage',
+      },
+      {
         target: 'deb',
       },
       {
