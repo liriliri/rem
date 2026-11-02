@@ -1,5 +1,11 @@
+import isWindows from 'licia/isWindows.js'
+
 const pkg = await fs.readJson('package.json')
 const electron = pkg.devDependencies.electron
+if (isWindows && pkg.optionalDependencies?.['eris-windrive']) {
+  pkg.dependencies['eris-windrive'] = pkg.optionalDependencies['eris-windrive']
+}
+delete pkg.optionalDependencies
 delete pkg.devDependencies
 pkg.devDependencies = {
   electron,
@@ -23,3 +29,4 @@ await fs.writeJson('package.json', pkg, {
 })
 
 await $`npm i --production`
+await $`../node_modules/.bin/electron-builder install-app-deps`

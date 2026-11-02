@@ -5,11 +5,8 @@ import { handleEvent } from 'share/main/lib/util'
 import once from 'licia/once'
 import uuid from 'licia/uuid'
 import { IpcGetWindowsDrives, IpcNewWindow } from 'common/types'
-import childProcess from 'node:child_process'
+import isWindows from 'licia/isWindows'
 import map from 'licia/map'
-import trim from 'licia/trim'
-import filter from 'licia/filter'
-import endWith from 'licia/endWith'
 import { BrowserWindow, dialog, shell } from 'electron'
 import { autoUpdater } from 'electron-updater'
 import { t } from 'common/util'
@@ -118,19 +115,16 @@ const init = once(() => {
 })
 
 const initIpc = once(() => {
-  const getWindowsDrives: IpcGetWindowsDrives = function () {
-    return new Promise((resolve, reject) => {
-      childProcess.exec('wmic logicaldisk get caption', (err, stdout) => {
-        if (err) {
-          reject(err)
-          return
-        }
-
-        const lines = map(stdout.split('\n'), (line) => trim(line))
-
-        resolve(filter(lines, (line) => endWith(line, ':')))
-      })
-    })
+  const getWindowsDrives: IpcGetWindowsDrives = async () => {
+    if (!isWindows) {
+      return []
+    }
+    try {
+      const { getDriveLetters } = await import('eris-windrive')
+      return map(getDriveLetters(), (name) => name.replace(/\\$/, ''))
+    } catch {
+      return []
+    }
   }
 
   handleEvent('newWindow', newWin)
