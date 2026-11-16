@@ -22,6 +22,7 @@ import LunaGallery from 'luna-gallery/react'
 import filter from 'licia/filter'
 import toBool from 'licia/toBool'
 import fileSize from 'licia/fileSize'
+import last from 'licia/last'
 
 function toFiles(file?: IFile | IFile[]): IFile[] {
   return file ? toArr(file) : []
@@ -117,11 +118,9 @@ export default observer(function File() {
   async function onDrop(e: React.DragEvent) {
     e.preventDefault()
     setDropHighlight(false)
-    const files = e.dataTransfer.files
-    const filePaths: string[] = []
-    for (let i = 0, len = files.length; i < len; i++) {
-      filePaths.push(preload.getPathForFile(files[i]))
-    }
+    const filePaths = map(e.dataTransfer.files, (file) =>
+      preload.getPathForFile(file)
+    )
     const jobs = await remote.uploadFiles(filePaths)
     each(jobs, (job) => store.addJob(job))
   }
@@ -393,8 +392,7 @@ export default observer(function File() {
               }}
               onContextMenu={onContextMenu}
               onSelect={(file: IFile | IFile[]) => {
-                const selectedFiles = toFiles(file)
-                setSelected(selectedFiles[selectedFiles.length - 1])
+                setSelected(last(toFiles(file)))
               }}
               onDeselect={() => setSelected(undefined)}
             />

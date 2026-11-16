@@ -11,6 +11,7 @@ import some from 'licia/some'
 import { makeObservable, observable, runInAction } from 'mobx'
 import find from 'licia/find'
 import filter from 'licia/filter'
+import each from 'licia/each'
 
 class Store extends BaseStore {
   jobs: Job[] = []
@@ -45,14 +46,12 @@ class Store extends BaseStore {
   private async updateJobs(jobOptions: IJobOptions[]) {
     const { jobs } = this
 
-    for (let i = 0; i < jobOptions.length; i++) {
-      const options = jobOptions[i]
+    each(jobOptions, (options) => {
       if (some(jobs, (job) => job.id === options.id)) {
-        continue
+        return
       }
-      const job = new Job(options.id, options.type, options.pair)
-      jobs.push(job)
-    }
+      jobs.push(new Job(options.id, options.type, options.pair))
+    })
 
     runInAction(() => {
       this.jobs = jobs

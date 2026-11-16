@@ -1,5 +1,7 @@
 import { action, makeObservable, observable, runInAction } from 'mobx'
 import isUndef from 'licia/isUndef'
+import map from 'licia/map'
+import each from 'licia/each'
 
 export class Settings {
   language = 'en-US'
@@ -39,13 +41,15 @@ export class Settings {
       'useNativeTitlebar',
       'zoomFactor',
     ]
-    for (let i = 0, len = names.length; i < len; i++) {
-      const name = names[i]
-      const val = await main.getSettingsStore(name)
+    const vals = await Promise.all(
+      map(names, (name) => main.getSettingsStore(name))
+    )
+    each(names, (name, i) => {
+      const val = vals[i]
       if (!isUndef(val)) {
         runInAction(() => (this[name] = val))
       }
-    }
+    })
   }
   async set(name: string, val: any) {
     runInAction(() => {

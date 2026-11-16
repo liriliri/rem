@@ -90,7 +90,7 @@ export class Remote {
     })
   }
   async up() {
-    await this.go(this.remote.split('/').slice(0, -1).join('/'))
+    await this.go(rtrim(splitPath(this.remote).dir, '/'))
   }
   async go(remote: string) {
     await this.getFileList(remote)

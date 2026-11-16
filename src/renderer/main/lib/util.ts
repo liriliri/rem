@@ -1,12 +1,12 @@
 import splitPath from 'licia/splitPath'
-import { Target, TargetPair } from '../../lib/rclone'
+import { Target, TargetPair } from 'common/rclone'
 
 export function parseLocalPath(path: string): Target {
-  const parts = path.split('/')
+  const [fs, ...remote] = path.split('/')
 
   return {
-    fs: parts.shift() + '/',
-    remote: parts.join('/'),
+    fs: fs + '/',
+    remote: remote.join('/'),
   }
 }
 
